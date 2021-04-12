@@ -10,18 +10,27 @@ config.read("settings.ini")
 
 #################### Variables #######################
 firstTime = True
+clear = '' # clear function. Later in the code it will be changed to either 'clear' or 'cls' based on the system.
+manual = open("manual.txt")
+
+# Coordinates and location
+X = config["Player"]["X"]
+Y = config["Player"]["Y"]
+area = config["Player"]["area"]
+
 # Basic stats
-hunger = config["Stats"]["hunger"] # The level of hunger. Read the manual for more info.
+hunger = config["Stats"]["hunger"] # The level of hunger. Read the help menu for more info.
 health = config["Stats"]["health"] # Health.
-water = config["Stats"]["water"] # The level of water. Read the manual for more info.
+water = config["Stats"]["water"] # The level of water. Read the help menu for more info.
 xp = config["Stats"]["xp"] # XP. The more XP you have, the higher the level.
 
 # Materials, resources, etc.
-coins = config["Stats"]["coins"] # Coins. Read the manual for more info.
-gold = config["Stats"]["gold"] # Gold. Read the manual for more info.
-iron = config["Stats"]["iron"] # Iron. Read the manual for more info.
-emeralds = config["Stats"]["emeralds"] # Emeralds. Read the manual for more info.
-carbonCrystals = config["Stats"]["carbonCrystals"] # Carbon crystals. Read the manual for more info.
+coins = config["Stats"]["coins"] # Coins. Read the help menu for more info.
+gold = config["Stats"]["gold"] # Gold. Read the help menu for more info.
+iron = config["Stats"]["iron"] # Iron. Read the help menu for more info.
+emeralds = config["Stats"]["emeralds"] # Emeralds. Read the help menu for more info.
+bronze = config["Stats"]["bronze"] # Carbon crystals. Read the help menu for more info.
+coal = config["Stats"]["coal"] # Coal. Read the help menu for more info.
 
 ## Checks if the player is playing for the 1st time ##
 if int(config["Player"]["firstTime"]) == 1:
@@ -29,24 +38,34 @@ if int(config["Player"]["firstTime"]) == 1:
 else:
     firstTime = False
 
-###################### Test area #####################
-
-
+## Checks the player's operating system ##
+if platform == "linux" or platform == "linux2" or platform == "darwin":
+    clear = 'clear'
+elif platform == "win32":
+    clear = 'cls'
+else:
+    Clear = str(input("Your OS isn't supported. In order to play the game, please enter the clear function of your console: "))
+    clear = Clear
 
 ##################### Functions ######################
 
 # Save function. If you call it, the changes are written to the .ini file.
 def save():
-    config["Stats"]["Coins"] = coins
-    config["Stats"]["Gold"] = gold
-    config["Stats"]["Iron"] = iron
-    config["Stats"]["Emeralds"] = emeralds
-    config["Stats"]["CarbonCrystals"] = carbonCrystals
+    config["SavedData"]["Coins"] = coins
+    config["SavedData"]["Gold"] = gold
+    config["SavedData"]["Iron"] = iron
+    config["SavedData"]["Emeralds"] = emeralds
+    config["SavedData"]["Bronze"] = bronze
+    config["SavedData"]["Coal"] = coal
 
-    config["Stats"]["Health"] = health
-    config["Stats"]["Hunger"] = hunger
-    config["Stats"]["Water"] = water
-    config["Stats"]["Xp"] = xp
+    config["SavedData"]["Health"] = health
+    config["SavedData"]["Hunger"] = hunger
+    config["SavedData"]["Water"] = water
+    config["SavedData"]["Xp"] = xp
+
+    config["SavedData"]["x"] = X
+    config["SavedData"]["y"] = Y
+    config["SavedData"]["Area"] = area
 
 # A function that lets the player see their stats.
 def getStats():
@@ -54,47 +73,56 @@ def getStats():
     print("Hunger: ", config["Stats"]["hunger"])
     print("Water: ", config["Stats"]["water"])
 
-def referenceManual():
-    print('''
-    This is the game's reference manual. Here you will find the
-    information about different stuff inside the game.
-    Choose a chapter:
-        1. Starting out and levels,
-        2. Resources and materials,
-        3. Animals,
-        4. Quests,
-        5. Money and coins,
-        6. Villages
-    ''')
-    Choice = int(input("> "))
-    if Choice == 1:
-        sys('clear')
-        print('''
-        Chapter 1 of the reference manual: STARTING OUT.
+def help():
+    system(clear)
+    print(manual.read())
 
-        1 - When you spawn for the first time, you get a starter pack which
-            contains some useful stuff. For example, a few pieces of iron and 10 coins.
-        1.1 - When you leave the house, you get 10 XP. XP shows how much you have
-              played the game. The more XP you have, the higher your level is. For example:
-              level 2 is 100 XP. Level 5 is 300 XP and so on and so forth. At the start of
-              the game you have 0 XP.
-        1.2 - You can go to different locations. You can view the locations by typing
-              viewLocations() while playing the game.
-        ''')
+def surroundings():
+    print('foo')
+
+def play():
+    print('bar')
+
+def viewStats():
+    print("========== Character info ==========")
+    print("     Health: " + str(health))
+    print("     Hunger: " + str(hunger))
+    print("     Water: " + str(water))
+    print("     XP: " + str(xp))
+    print("     Coordinates: (" + str(X) + ", " + str(Y) + ")")
+    print("====================================")
+
+    print("============ Inventory ============")
+    print("     Coins: " + str(coins))
+    print("     Iron: " + str(iron))
+    print("     Coal: " + str(coal))
+    print("     Bronze: " + str(bronze))
+    print("     Gold: " + str(gold))
+    print("     Emeralds: " + str(emeralds))
+    print("===================================")
 
 def start():
-    
-    while firstTime == True:
-        if firstTime == True:
-            print("Hello! This is an adventure game called john cena bobux.")
-            print("Choose an option:")
-            print("1. Start playing the game,")
-            print("2. Open the reference manual (help menu),")
-            print("3. View your statistics and inventory")
-            choice = iny(input("> "))
-            if choice == 1:
-                # start the game
-                print('ok')
-            elif choice == 2:
-                # bruh
-                print('ok')
+    print("Hello! This is an adventure game called john cena bobux.")
+    print("Choose an option:")
+    print("1. Start playing the game,")
+    print("2. Open the help menu,")
+    print("3. View your statistics and inventory,")
+    print("4. Open commands reference manual.")
+    choice = 0
+    f = False
+    while f == False:
+        choice = int(input("> "))
+        if choice == 1:
+            play()
+            f = True
+        elif choice == 2:
+            help()
+        elif choice == 3:
+            viewStats()
+        elif choice == 4:
+            # I'll make the function soon
+            print('foo')
+        else:
+            print('Please enter a valid number!')
+
+start()

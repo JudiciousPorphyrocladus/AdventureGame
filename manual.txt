@@ -1,0 +1,63 @@
+Chapter 1 of the help menu: STARTING OUT.
+
+        1 - STARTER PACK
+            When you spawn for the first time, you get a starter pack which
+            contains some useful stuff. For example, a few pieces of iron and 10 coins.
+
+        1.1 - XP AND LEVELS
+              When you leave the house, you get 10 XP. XP shows how much you have
+              played the game. The more XP you have, the higher your level is. For example:
+              level 2 is 100 XP. Level 5 is 300 XP and so on and so forth. At the start of
+              the game you have 0 XP. You can view your amount of XP by typing xp().
+
+Chapter 2 of the help menu: RESOURCES AND MATERIALS.
+
+        2 - TYPES OF MATERIALS
+            There are three classes of materials: ordinary, rare and extraordinary.
+            The ordinary materials are iron and coal.
+            The rare material is gold and bronze.
+            The only extraordinary material is emeralds.
+
+        2.1 - PURPOSES OF DIFFERENT MATERIALS
+              Basic materials:
+                Iron - with iron you can craft armor and tools. Also, you can repair them.
+                       It can be sold to a merchant for 3 coins each.
+                Coal - with coal you can use ovens. Ovens give you the ability to cook
+                       food and therefore boost up your hunger. IMPORTANT NOTICE: the more
+                       hunger you have, the less you are actually hungry. If your hunger is
+                       at 20, this means that you don't need to eat AT ALL.
+                       It can be sold to a merchant for 2 coins each.
+
+              Rare materials:
+                Gold - with gold you can make jewelry. Jewelry does nothing and serves no 
+                       purpose at all. You can also FORGE COINS with gold but there is a 1 to 3 
+                       chance that you will be caught. Gold can be sold to a merchant for 10 coins 
+                       and bought for 20 each.
+                Bronze - bronze can be used in armor and weapons. However, bronze weapons and
+                         armor are not as durable as the iron ones because iron is much harder.
+                         Bronze can be sold to a merchant for 7 coins and bought for 15 coins each.
+
+              Extraordinary materials:
+                Emeralds - emeralds are precious gemstones. They can be traded for tools and
+                           other materials. They are completely cosmetic and don't have any
+                           purpose besides trading.
+                           Each can be sold to a merchant for 15 coins and bought for 25.
+
+
+        2.2 - LOCATIONS WHERE THE MATERIALS APPEAR
+              Basic materials:
+                Iron - can be found in caves, however you steel need to melt the iron ore in an
+                       oven with coal in order to get iron.
+                Coal - can be found in caves as well. It appears more often than iron does. You
+                       can use it as soon as you mine it.
+
+              Rare materials:
+                Gold - can be found in caves and bandit hideouts. It is thrice as rare as iron.
+                       It can be used as soon as you mine it.
+                Bronze - can be found in caves, more specifically in copper alloy. Also, it can
+                         be found in doors, entrances, fountains, handrails, etc.
+              
+              Extraordinary materials:
+                Emeralds - they can be found in mountain region caves. They can also be found in
+                           jewelry stores.
+

@@ -3,6 +3,7 @@
 
 import configparser
 import os
+import random
 from os import system
 from sys import platform
 
@@ -25,21 +26,28 @@ bronze = config["Stats"]["bronze"] # Carbon crystals. Read the help menu for mor
 coal = config["Stats"]["coal"] # Coal. Read the help menu for more info.
 
 # Food - meat
-beef = config["Stats"]["beef"]
-pork = config["Stats"]["pork"]
-chicken = config["Stats"]["chicken"]
+beef = int(config["Stats"]["beef"])
+pork = int(config["Stats"]["pork"])
+chicken = int(config["Stats"]["chicken"])
 # Food - vegetables
-carrot = config["Stats"]["carrot"]
-potato = config["Stats"]["potato"]
-broccoli = config["Stats"]["broccoli"]
+carrot = int(config["Stats"]["carrot"])
+potato = int(config["Stats"]["potato"])
+broccoli = int(config["Stats"]["broccoli"])
 # Food - fruits
-oranges = config["Stats"]["oranges"]
-mango = config["Stats"]["mango"]
-banana = config["Stats"]["banana"]
+oranges = int(config["Stats"]["oranges"])
+mango = int(config["Stats"]["mango"])
+banana = int(config["Stats"]["banana"])
+
+int(beef); int(pork); int(chicken); int(carrot); int(potato); int(broccoli); int(oranges); int(mango); int(banana); int(iron); int(gold); int(coins); int(emeralds); int(coal); int(bronze)
 
 ### Variables #######################
 firstTime = True
-startInputActive = False
+playing = True
+startInputActive = True
+startChoice = 0
+Play = False
+playFreezed = False
+houseChest = False
 clear = '' # Later in the code it will be changed to either 'clear' or 'cls' based on the system.
 
 # HELP AND COMMANDS 
@@ -65,7 +73,6 @@ helpInput = False
 X = config["Player"]["x"]
 Y = config["Player"]["y"]
 area = config["Player"]["area"]
-
 
 ## Checks if the player is playing for the 1st time ##
 if int(config["Player"]["firstTime"]) == 1:
@@ -120,29 +127,34 @@ def getStats():
     print("Water: ", config["Stats"]["water"])
 
 # A function that shows the player 1st chapter of the manual.
-def manual1():
+def Manual1():
+    system(clear)
     print(manual1)
     print("Type either 'back' to choose a chapter you want to view or 'menu' to exit the manual.")
     manual1Input = True
     while manual1Input == True:
-        choice1 = input("> ").lower
+        choice1 = ''
+        choice1 = input("> ").lower()
         if choice1 == 'back':
             manual1Input = False
             help()
+            helpInput = True
         elif choice1 == 'menu':
             manual1Input = False
             start()
         else:
             print("Please enter a valid choice. ")
 
-def manual2():
+def Manual2():
+    system(clear)
     print(manual2)
     print("Type either 'back' to choose a chapter you want to view or 'menu' to exit the manual.")
     manual2Input = True
     while manual2Input == True:
-        choice2 = input("> ").lower
+        choice2 = input("> ").lower()
         if str(choice2) == 'back':
             help()
+            helpInput = True
             manual2Input = False
         elif str(choice2) == 'menu':
             start()
@@ -150,14 +162,16 @@ def manual2():
         else:
             print("Please enter a valid choice. ")
 
-def manual3():
+def Manual3():
+    system(clear)
     print(manual3)
     print("Type either 'back' to choose a chapter you want to view or 'menu' to exit the manual.")
     manual3Input = True
     while manual3Input == True:
-        choice3 = input("> ").lower
+        choice3 = input("> ").lower()
         if str(choice3) == 'back':
             help()
+            helpInput = True
             manual3Input = False
         elif str(choice3) == 'menu':
             start()
@@ -165,14 +179,17 @@ def manual3():
         else:
             print("Please enter a valid choice. ")
 
-def manual4():
+def Manual4():
+    system(clear)
     print(manual4)
     print("Type either 'back' to choose a chapter you want to view or 'menu' to exit the manual.")
     manual4Input = True
     while manual4Input == True:
-        choice4 = input("> ").lower
+        choice4 = ''
+        choice4 = input("> ").lower()
         if str(choice4) == 'back':
             help()
+            helpInput = True
             manual4Input = False
         elif str(choice4) == 'menu':
             start()
@@ -187,25 +204,32 @@ def help():
     print("============== Chapters ===============")
     print(" Chapter 1 - STARTING OUT\n Chapter 2 - RESOURCES AND MATERIALS\n Chapter 3 - FOOD\n Chapter 4 - LOCATIONS")
     print(" Please choose a chapter")
-    print(" To go back type 'back' and press enter")
+    print(" To go back press enter")
     helpInput = True
     while helpInput == True:
+        helpChoice = 0
         helpChoice = input("> ")
+
         if helpChoice == '1':
-            manual1()
-            helpInput = True
-        elif helpChoice == '2':
-            manual2()
-            helpInput = True
-        elif helpChoice == '3':
-            manual3()
-            helpInput = True
-        elif helpChoice == '4':
-            manual4()
-            helpInput = True
-        elif helpChoice == 'back':
-            start()
+            Manual1()
             helpInput = False
+        elif helpChoice == '2':
+            Manual2()
+            helpInput = False
+        elif helpChoice == '3':
+            Manual3()
+            helpInput = False
+        elif helpChoice == '4':
+            Manual4()
+            helpInput = False
+        elif helpChoice == '' and playFreezed == False:
+            start()
+            startInputActive = True
+            helpInput = False
+        elif helpChoice == '' and playFreezed == True:
+            Play = True
+            helpInput = False
+            play()
         else:
             print("Please enter a valid choice.")
 
@@ -216,8 +240,69 @@ def commands():
     system(clear)
     print(commands)
 
+def commonChest(chanceNum1, chanceNum2):
+    global chicken
+    global iron
+    global carrot
+    Play = False
+    playFreezed = True
+    chestOpening = True
+
+    chestchance = random.randint(chanceNum1, chanceNum2)
+    if chestchance == 1:
+        print("There is a common chest inside the house. Would you like to open it? (Y/n)")
+        chestChoice = ''
+        while chestChoice != 'y' or chestChoice != 'yes' or chestChoice != 'n' or chestChoice != 'no' or chestChoice != '':
+            chestChoice = input("> ").lower()
+            if chestChoice == 'y' or chestChoice == 'yes' or chestChoice == '':
+                IRON = random.randint(1, 3)
+                if IRON == 1:
+                    print("You have found 1 iron! Chance: 33%")
+                    iron = iron + 1
+                else:
+                    pass
+                del IRON
+                    
+                CARROT = random.randint(1, 2)
+                if CARROT == 1:
+                    print("You have found a carrot! Chance: 50%")
+                    carrot = carrot + 1
+                else:
+                    pass
+                del CARROT
+
+                CHICKEN = random.randint(1, 3)
+                if CHICKEN == 1:
+                    print("You have found a chicken! Chance: 33%")
+                    chicken = chicken + 1
+                else:
+                    pass
+                del CHICKEN
+            else:
+                print("Sorry, but you haven't found anything in the chest. You will be lucky next time!")
+                pass
+    else:
+        print("Sorry, but you haven't found any chests in the house. The chance was: 50%. You will be lucky next time!")
+    del chestchance
+    Play = False
+    playFreezed = False
+    chestOpening = False
+    play()
+
 def play():
-    print('foo')
+    system(clear)
+    startInputActive = False
+    Play = True
+    playFreezed = False
+    if area == "TownHouse":
+        print("You were spawned in " + area + ". The town's name is: Johncenangton. Remember: you can get help by typing help() or commands() to view commands!")
+        commonChest(1, 2)
+    while Play == True:
+        bruh = input("> ")
+        if bruh == "help()":
+            Play = False
+            playFreezed = True
+            help()
 
 def viewStats():
     system(clear)
@@ -231,7 +316,7 @@ def viewStats():
 
     print("============ Inventory ============")
     print("     Coins: " + str(coins))
-    print("     Iron: " + str(iron))
+    print("     Iron: " + str(iron)); int(iron)
     print("     Coal: " + str(coal))
     print("     Bronze: " + str(bronze))
     print("     Gold: " + str(gold))
@@ -251,20 +336,28 @@ def start():
     print(" 2. Open the help menu,")
     print(" 3. View your statistics and inventory,")
     print(" 4. Open commands reference manual.")
-    choice = 0
-    startInputActive = False
-    while startInputActive == False:
-        choice = input("> ")
-        if choice == '1':
+    startInputActive = True
+    while startInputActive == True:
+        startChoice = 0
+        startChoice = input("> ")
+        if startChoice == '1':
             play()
-            startInputActive = True
-        elif choice == '2':
+            startInputActive = False
+        elif startChoice == '2':
             help()
-        elif choice == '3':
+            startInputActive = False
+        elif startChoice == '3':
             viewStats()
-        elif choice == '4':
+        elif startChoice == '4':
             commands()
+            startInputActive = False
         else:
             print('Please enter a valid number!')
 
 start()
+
+while playing == True:
+    if Play == False and playFreezed == True and chestOpening == True:
+        play()
+    else:
+        pass

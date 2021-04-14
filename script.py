@@ -1,22 +1,14 @@
 # Computer science 8.1 adventure game.
+# Some variables might seem weird or useless because of their name (e.g. 'G' or 'F'), however they aren't. I just can't come up with a name for a variable that I will not actually use in more than 1 function.
 
 import configparser
+import os
 from os import system
 from sys import platform
 
-###############        Stats        ##################
+### Stats ###########################
 config = configparser.ConfigParser()
 config.read("settings.ini")
-
-#################### Variables #######################
-firstTime = True
-clear = '' # clear function. Later in the code it will be changed to either 'clear' or 'cls' based on the system.
-manual = open("manual.txt")
-
-# Coordinates and location
-X = config["Player"]["X"]
-Y = config["Player"]["Y"]
-area = config["Player"]["area"]
 
 # Basic stats
 hunger = config["Stats"]["hunger"] # The level of hunger. Read the help menu for more info.
@@ -31,6 +23,49 @@ iron = config["Stats"]["iron"] # Iron. Read the help menu for more info.
 emeralds = config["Stats"]["emeralds"] # Emeralds. Read the help menu for more info.
 bronze = config["Stats"]["bronze"] # Carbon crystals. Read the help menu for more info.
 coal = config["Stats"]["coal"] # Coal. Read the help menu for more info.
+
+# Food - meat
+beef = config["Stats"]["beef"]
+pork = config["Stats"]["pork"]
+chicken = config["Stats"]["chicken"]
+# Food - vegetables
+carrot = config["Stats"]["carrot"]
+potato = config["Stats"]["potato"]
+broccoli = config["Stats"]["broccoli"]
+# Food - fruits
+oranges = config["Stats"]["oranges"]
+mango = config["Stats"]["mango"]
+banana = config["Stats"]["banana"]
+
+### Variables #######################
+firstTime = True
+startInputActive = False
+clear = '' # Later in the code it will be changed to either 'clear' or 'cls' based on the system.
+
+# HELP AND COMMANDS 
+with open("./Manual/manual.txt", 'r') as manual:
+    manual = manual.read()
+with open("./Manual/manual1.txt", 'r') as manual1:
+    manual1 = manual1.read()
+with open("./Manual/manual2.txt", 'r') as manual2:
+    manual2 = manual2.read()
+with open("./Manual/manual3.txt", 'r') as manual3:
+    manual3 = manual3.read()
+with open("./Manual/manual4.txt", 'r') as manual4:
+    manual4 = manual4.read()
+with open("./commands.txt", 'r') as commands:
+    commands = commands.read()
+manual1Input = False
+manual2Input = False
+manual3Input = False
+manual4Input = False
+helpInput = False
+
+# Coordinates and location
+X = config["Player"]["x"]
+Y = config["Player"]["y"]
+area = config["Player"]["area"]
+
 
 ## Checks if the player is playing for the 1st time ##
 if int(config["Player"]["firstTime"]) == 1:
@@ -51,21 +86,32 @@ else:
 
 # Save function. If you call it, the changes are written to the .ini file.
 def save():
-    config["SavedData"]["Coins"] = coins
-    config["SavedData"]["Gold"] = gold
-    config["SavedData"]["Iron"] = iron
-    config["SavedData"]["Emeralds"] = emeralds
-    config["SavedData"]["Bronze"] = bronze
-    config["SavedData"]["Coal"] = coal
-
-    config["SavedData"]["Health"] = health
-    config["SavedData"]["Hunger"] = hunger
-    config["SavedData"]["Water"] = water
-    config["SavedData"]["Xp"] = xp
-
-    config["SavedData"]["x"] = X
-    config["SavedData"]["y"] = Y
-    config["SavedData"]["Area"] = area
+    # Saving materials and resources.
+    config["SavedData"]["savedCoins"] = coins
+    config["SavedData"]["savedGold"] = gold
+    config["SavedData"]["savedIron"] = iron
+    config["SavedData"]["savedEmeralds"] = emeralds
+    config["SavedData"]["savedBronze"] = bronze
+    config["SavedData"]["savedCoal"] = coal
+    # Saving basic stats.
+    config["SavedData"]["savedHealth"] = health
+    config["SavedData"]["savedHunger"] = hunger
+    config["SavedData"]["savedWater"] = water
+    config["SavedData"]["savedXp"] = xp
+    # Saving coordinates so that the player spawns where they left.
+    config["SavedData"]["savedX"] = X
+    config["SavedData"]["savedY"] = Y
+    config["SavedData"]["savedArea"] = area
+    # Saving food so that player doesn't get angry at me because I didn't save it.
+    config["Stats"]["savedBeef"] = beef
+    config["Stats"]["savedPork"] = pork
+    config["Stats"]["savedChicken"] = chicken
+    config["Stats"]["savedCarrot"] = carrot
+    config["Stats"]["savedPotato"] = potato
+    config["Stats"]["savedBroccoli"] = broccoli
+    config["Stats"]["savedOranges"] = oranges
+    config["Stats"]["savedMango"] = mango
+    config["Stats"]["savedBanana"] = banana
 
 # A function that lets the player see their stats.
 def getStats():
@@ -73,17 +119,108 @@ def getStats():
     print("Hunger: ", config["Stats"]["hunger"])
     print("Water: ", config["Stats"]["water"])
 
+# A function that shows the player 1st chapter of the manual.
+def manual1():
+    print(manual1)
+    print("Type either 'back' to choose a chapter you want to view or 'menu' to exit the manual.")
+    manual1Input = True
+    while manual1Input == True:
+        choice1 = input("> ").lower
+        if choice1 == 'back':
+            manual1Input = False
+            help()
+        elif choice1 == 'menu':
+            manual1Input = False
+            start()
+        else:
+            print("Please enter a valid choice. ")
+
+def manual2():
+    print(manual2)
+    print("Type either 'back' to choose a chapter you want to view or 'menu' to exit the manual.")
+    manual2Input = True
+    while manual2Input == True:
+        choice2 = input("> ").lower
+        if str(choice2) == 'back':
+            help()
+            manual2Input = False
+        elif str(choice2) == 'menu':
+            start()
+            manual2Input = False
+        else:
+            print("Please enter a valid choice. ")
+
+def manual3():
+    print(manual3)
+    print("Type either 'back' to choose a chapter you want to view or 'menu' to exit the manual.")
+    manual3Input = True
+    while manual3Input == True:
+        choice3 = input("> ").lower
+        if str(choice3) == 'back':
+            help()
+            manual3Input = False
+        elif str(choice3) == 'menu':
+            start()
+            manual3Input = False
+        else:
+            print("Please enter a valid choice. ")
+
+def manual4():
+    print(manual4)
+    print("Type either 'back' to choose a chapter you want to view or 'menu' to exit the manual.")
+    manual4Input = True
+    while manual4Input == True:
+        choice4 = input("> ").lower
+        if str(choice4) == 'back':
+            help()
+            manual4Input = False
+        elif str(choice4) == 'menu':
+            start()
+            manual4Input = False
+        else:
+            print("Please enter a valid choice.")
+
+
+# A menu that asks you to enter the number of a desired chapter.
 def help():
     system(clear)
-    print(manual.read())
+    print("============== Chapters ===============")
+    print(" Chapter 1 - STARTING OUT\n Chapter 2 - RESOURCES AND MATERIALS\n Chapter 3 - FOOD\n Chapter 4 - LOCATIONS")
+    print(" Please choose a chapter")
+    print(" To go back type 'back' and press enter")
+    helpInput = True
+    while helpInput == True:
+        helpChoice = input("> ")
+        if helpChoice == '1':
+            manual1()
+            helpInput = True
+        elif helpChoice == '2':
+            manual2()
+            helpInput = True
+        elif helpChoice == '3':
+            manual3()
+            helpInput = True
+        elif helpChoice == '4':
+            manual4()
+            helpInput = True
+        elif helpChoice == 'back':
+            start()
+            helpInput = False
+        else:
+            print("Please enter a valid choice.")
 
-def surroundings():
+def look():
     print('foo')
 
+def commands():
+    system(clear)
+    print(commands)
+
 def play():
-    print('bar')
+    print('foo')
 
 def viewStats():
+    system(clear)
     print("========== Character info ==========")
     print("     Health: " + str(health))
     print("     Hunger: " + str(hunger))
@@ -100,28 +237,33 @@ def viewStats():
     print("     Gold: " + str(gold))
     print("     Emeralds: " + str(emeralds))
     print("===================================")
+    print("press enter when you have finished reading your stats.")
+    Exit = input("> ")
+    start()
+        
 
 def start():
-    print("Hello! This is an adventure game called john cena bobux.")
-    print("Choose an option:")
-    print("1. Start playing the game,")
-    print("2. Open the help menu,")
-    print("3. View your statistics and inventory,")
-    print("4. Open commands reference manual.")
+    system(clear)
+    print("========================== Menu ==========================")
+    print(" Hello! This is an adventure game called john cena bobux.")
+    print(" Choose an option:")
+    print(" 1. Start playing the game,")
+    print(" 2. Open the help menu,")
+    print(" 3. View your statistics and inventory,")
+    print(" 4. Open commands reference manual.")
     choice = 0
-    f = False
-    while f == False:
-        choice = int(input("> "))
-        if choice == 1:
+    startInputActive = False
+    while startInputActive == False:
+        choice = input("> ")
+        if choice == '1':
             play()
-            f = True
-        elif choice == 2:
+            startInputActive = True
+        elif choice == '2':
             help()
-        elif choice == 3:
+        elif choice == '3':
             viewStats()
-        elif choice == 4:
-            # I'll make the function soon
-            print('foo')
+        elif choice == '4':
+            commands()
         else:
             print('Please enter a valid number!')
 

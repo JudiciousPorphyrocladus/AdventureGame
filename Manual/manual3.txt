@@ -1,0 +1,16 @@
+Chapter 3 of the help menu - FOOD.
+        3 - TYPES OF FOOD
+              There are three types of food: vegetables, fruits and meat. Each of them restore the
+              hunger points, but differently. Meat usually boosts your hunger by 5-7, whereas veg-
+              etables only 3-5.
+        3.1 - WHERE DOES THE FOOD APPEAR
+              Vegetables - usually appear on trees, however you can either find them in the town or
+                           buy them from a merchant. Some vegetables like potatoes or carrots spawn
+                           underground.
+              
+              Fruits - usually appear on trees and bushed, however you can either find them in the
+                       town or buy them from a merchant.
+
+              Meat - can be obtained from animals. Animals can be found outside the town; but you
+                     can kill animals in the town. There is a 1 to 3 chance that you will be caught
+                     and fined.

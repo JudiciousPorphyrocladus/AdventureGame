@@ -1,0 +1,13 @@
+Chapter 4 of the help menu - LOCATIONS.
+        4 - SPAWN
+              You spawn in a small town called Johncenangton. Since it is a small, unremarkable town,
+              you don't have much to do there. The people that live here are poor, but the ones that
+              rule it are filthy rich.
+        4.1 - CAVES
+              Caves are useful places where you can find different ores. Some ores require you to melt
+              them, but some don't. But be careful, the deeper you go, the bigger the chance of you
+              falling and therefore dying.
+        4.2 - BANDIT HIDEOUTS
+              Bandit hideouts are places where you can find gold and emeralds. Usually not a lot, but
+              if you're lucky, you can even get 3 emeralds at a bandit hideout! Also, remember that
+              you must have an appropriate amount of XP or otherwise you WILL BE KILLED.

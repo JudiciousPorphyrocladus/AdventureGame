@@ -1,5 +1,7 @@
 import os
+import json
 
-manual = open("manual.txt")
+with open(os.getcwd() + "/stats.json", 'r') as data:
+    datastore = json.load(data)
 
-print(manual.read())
+print(datastore["data"]["materials"]["coins"])

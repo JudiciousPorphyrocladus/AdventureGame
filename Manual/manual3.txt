@@ -1,8 +1,19 @@
 Chapter 3 of the help menu - FOOD.
         3 - TYPES OF FOOD
               There are three types of food: vegetables, fruits and meat. Each of them restore the
-              hunger points, but differently. Meat usually boosts your hunger by 5-7, whereas veg-
-              etables only 3-5.
+              hunger points.
+              Meat:
+                Beef: 7; pork: 7; chicken: 6
+              Vegetables:
+                Carrot: 4; potato: 3; broccoli: 3
+              Fruits:
+                Oranges: 2; mango: 2; bananas: 1
+
+              There are also beverages in the game. Currently there are 5 types of them: water, sea
+              water, orange juice, apple juice and tea. Water restores 5 points of the water bar,
+              sea water takes away 3 points from the water bar, tea restores 3 points of the water
+              bar, orange and apple juice restores 2 points of the water bar. Food also restores
+              water.
         3.1 - WHERE DOES THE FOOD APPEAR
               Vegetables - usually appear on trees, however you can either find them in the town or
                            buy them from a merchant. Some vegetables like potatoes or carrots spawn
@@ -13,4 +24,4 @@ Chapter 3 of the help menu - FOOD.
 
               Meat - can be obtained from animals. Animals can be found outside the town; but you
                      can kill animals in the town. There is a 1 to 3 chance that you will be caught
-                     and fined.
+                     and fined 15 coins.

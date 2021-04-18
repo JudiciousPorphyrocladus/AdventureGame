@@ -1,27 +1,32 @@
-========================= Game ==========================
-help() - opens a help manual about the game and mechanics,
-commands() - opens this menu again,
-exit() - exits the game,
-save() - saves the game,
-pause() - pauses the game,
-resume() - resumes the game,
-changeSettings() - changes the settings of the game
-===============================================================
+=============================================== Game ===============================================
+gameHelp - opens a help manual about the game and mechanics,
+commands - opens this menu again,
+exit - exits the game,
+save - saves the game progress,
+load - loads the game progress
+========================================================================================================
 
-========================== CHARACTER ==========================
-mine() - mine an ore (caves),
-pickup() - pickup an item,
-eat(food) - eat (arguments: beef, pork, chicken; carrot, potato, broccoli; oranges, mango, banana),
-drink(liters) - drink water. each liter of water refills 5 points of water level,
-viewStats() - get the statistics of your character
-===============================================================
+=============================================== CHARACTER ===============================================
+viewStats - get the statistics of your character,
 
-========================== MOVEMENT ==========================
-moveNorth() - moves you North by a meter,
-moveSouth() - moves you South by a meter,
-moveWest() - moves you West by a meter,
-moveEast() - moves you East by a meter,
-moveDown() - moves you down (caves only),
-moveUp() - moves you up (caves only),
-look() - tells you the surroundings
-===============================================================
+eat - eat (arguments: beef, pork, chicken;
+                            carrot, potato, broccoli;
+                            oranges, mango, banana),
+
+drink - Drink (arguments: waterBottle, seaWatterBottle, tea,
+                            orangeJuiceBottle, appleJuiceBottle.
+
+fastTravel - lets you fast travel to the location if you
+                       have the appropriate level (arguments: banditHideout1,
+                       banditHideout2, banditHideout3, johncenangton, bobuxbury,
+                       monkeville, walterworth, river. The levels for these
+                       locations can be viewed in chapter 4 of the manual.
+========================================================================================================
+
+=============================================== MOVEMENT ===============================================
+moveNorth - moves you North by a meter,
+moveSouth - moves you South by a meter,
+moveWest - moves you West by a meter,
+moveEast - moves you East by a meter,
+look - tells you the surroundings
+========================================================================================================

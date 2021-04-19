@@ -1,30 +1,30 @@
 Chapter 4 of the help menu - LOCATIONS.
-        4 - TOWNS AND SPAWN
-              You spawn in a small town called Johncenangton. Since it is a small, unremarkable town,
-              you don't have much to do there. However, there are 2 chests hidden in the town!
-              The second town is Bobuxbury. It is a town that's north-east from Johncenangton. There
-              is a quest that gives you good loot, so it is quite worth to do it!
-              The third town os Monkeville. You need at least 10th level to go there. There is a mer-
-              chant that sells different kinds of materials, and sometimes you might even get a dis-
-              count if the merchant needs your item!
-              The last town in the game is Walterworth. Its level os 15 and it is the most developed
-              town in the game. You can buy anything there. The King himself lives there!
-        4.1 - BANDIT HIDEOUTS
-              Bandit hideouts are places where you can find gold and emeralds. Usually not a lot, but
-              if you're lucky, you can get even 3 emeralds at the bandit hideout! Also, remember that
-              you must have the appropriate amount of XP or otherwise you will be killed by bandits.
-        4.2 - COORDINATES
-              Coordinates show where your character is located on the map. Coordinates are shown as (X, Y)
-              List of locations and their coordinates:
-                Bandit hideouts:
-                    Bandit hideout #1 (level 10): (30, 30)
-                    Bandit hideout #2 (level 20): (-45, -45)
-                    Bandit hideout #3 (level 30): (180, 180)
-                Towns:
-                    Johncenangton (level 1): (0, 0)
-                    Bobuxbury (level 5): (50, 50)
-                    Monkeville (level 10): (-100, -100)
-                    Walterworth (level 15): (35, -75)
-                Other locations:
-                    River: (150, 150)
-                    Treasure: (Unknown, unknown)
+    4 - TOWNS AND SPAWN
+        You spawn in a small town called Johncenangton. Since it is a small, unremarkable town,
+        you don't have much to do there. However, there are 2 chests hidden in the town!
+        The second town is Bobuxbury. It is a town that's north-east from Johncenangton. There
+        is a quest that gives you good loot, so it is quite worth to do it!
+        The third town os Monkeville. You need at least 10th level to go there. There is a mer-
+        chant that sells different kinds of materials, and sometimes you might even get a dis-
+        count if the merchant needs your item!
+        The last town in the game is Walterworth. Its level os 15 and it is the most developed
+        town in the game. You can buy anything there. The King himself lives there!
+    4.1 - BANDIT HIDEOUTS
+        Bandit hideouts are places where you can find gold and emeralds. Usually not a lot, but
+        if you're lucky, you can get 3 emeralds at a bandit hideout. Also, remember that you must
+        have the appropriate amount of XP or otherwise you will be killed by bandits.
+     4.2 - COORDINATES
+        Coordinates show where your character is located on the map. Coordinates are shown as (X, Y)
+        List of locations and their coordinates:
+            Bandit hideouts:
+                Bandit hideout #1 (level 10): (20, 20)
+                Bandit hideout #2 (level 20): (-65, -65)
+                Bandit hideout #3 (level 30): (180, 180)
+            Towns:
+                Johncenangton (level 1): (0, 0)
+                Bobuxbury (level 10): (50, 50)
+                Monkeville (level 20): (35, -75)
+                Walterworth (level 30): (-100, -100)
+            Other locations:
+                River (level 20): (150, 150)
+                Treasure: (Unknown, unknown)

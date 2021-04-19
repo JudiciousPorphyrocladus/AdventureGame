@@ -1,32 +1,33 @@
-=============================================== Game ===============================================
-gameHelp - opens a help manual about the game and mechanics,
-commands - opens this menu again,
-exit - exits the game,
-save - saves the game progress,
-load - loads the game progress
-========================================================================================================
+=============================================== Game =============================
+          gameHelp - opens a help manual about the game and mechanics,
+          commands - opens this menu again,
+          exit - exits the game,
+          save - saves the game progress,
+          load - loads the game progress,
+          clear - clears everything int the terminal (command line)
+==================================================================================
 
-=============================================== CHARACTER ===============================================
-viewStats - get the statistics of your character,
+=============================================== CHARACTER ========================
+          viewStats - view the statistics of your character,
 
-eat - eat (arguments: beef, pork, chicken;
-                            carrot, potato, broccoli;
-                            oranges, mango, banana),
+          eat - eat (arguments: beef, pork, chicken;
+                                carrot, potato, broccoli;
+                                orange, mango, banana),
 
-drink - Drink (arguments: waterBottle, seaWatterBottle, tea,
-                            orangeJuiceBottle, appleJuiceBottle.
+          drink - Drink (arguments: waterBottle, seaWatterBottle, tea,
+                                    orangeJuiceBottle, appleJuiceBottle.
 
-fastTravel - lets you fast travel to the location if you
+          fastTravel - lets you fast travel to the location if you
                        have the appropriate level (arguments: banditHideout1,
                        banditHideout2, banditHideout3, johncenangton, bobuxbury,
                        monkeville, walterworth, river. The levels for these
                        locations can be viewed in chapter 4 of the manual.
-========================================================================================================
+==================================================================================
 
-=============================================== MOVEMENT ===============================================
-moveNorth - moves you North by a meter,
-moveSouth - moves you South by a meter,
-moveWest - moves you West by a meter,
-moveEast - moves you East by a meter,
-look - tells you the surroundings
-========================================================================================================
+=============================================== MOVEMENT =========================
+          moveNorth - moves you North by a meter,
+          moveSouth - moves you South by a meter,
+          moveWest - moves you West by a meter,
+          moveEast - moves you East by a meter,
+          look - tells you the surroundings
+==================================================================================

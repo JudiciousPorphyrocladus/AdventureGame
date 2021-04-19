@@ -6,8 +6,9 @@ from os import system
 from sys import platform
 
 # Progress file
-with open(os.getcwd() + "/stats.json", 'r') as data:
-    datastore = json.load(data)
+data = open(os.getcwd() + "/stats.json", 'r')
+datastore = json.load(data)
+data.close()
 
 hunger = datastore["data"]["characterInfo"]["hunger"]
 health = datastore["data"]["characterInfo"]["health"]
@@ -45,7 +46,7 @@ appleJuiceBottles = datastore["data"]["food"]["beverages"]["appleJuiceBottles"]
 tea = datastore["data"]["food"]["beverages"]["tea"]
 
 # Variables
-firstTime = True
+firstTime = datastore["data"]["playerInfo"]["firstTime"]
 playing = True
 startInputActive = True
 startChoice = 0
@@ -54,6 +55,8 @@ playfreezed = False
 houseChest = False
 chestOpening = False
 houseChestOpened = False
+level = 0
+
 
 # Input variables (used to loop input() if the correct choice isn't entered)
 manualInput = False
@@ -88,12 +91,51 @@ else:
     print("Your OS isn't supported.")
     Clear = str(input("In order to play the game, please enter the clear function of your console: "))
     clear = Clear
+    del Clear
 
 # Functions
 
 
+def changeLevel():
+    global xp
+    global level
+    level = round(abs(xp / 100))
+
+
 def save():  # Save function
-    print('foo')
+    datastore["data"]["materials"]["coins"] = coins
+    datastore["data"]["materials"]["gold"] = gold
+    datastore["data"]["materials"]["iron"] = iron
+    datastore["data"]["materials"]["emeralds"] = emeralds
+    datastore["data"]["materials"]["bronze"] = bronze
+    datastore["data"]["materials"]["coal"] = coal
+    datastore["data"]["characterInfo"]["health"] = health
+    datastore["data"]["characterInfo"]["hunger"] = hunger
+    datastore["data"]["characterInfo"]["water"] = water
+    datastore["data"]["characterInfo"]["xp"] = xp
+    datastore["data"]["characterInfo"]["x"] = X
+    datastore["data"]["characterInfo"]["y"] = Y
+    datastore["data"]["characterInfo"]["area"] = area
+    datastore["data"]["food"]["meat"]["beef"] = beef
+    datastore["data"]["food"]["meat"]["pork"] = pork
+    datastore["data"]["food"]["meat"]["chicken"] = chicken
+    datastore["data"]["food"]["vegetables"]["carrot"] = carrot
+    datastore["data"]["food"]["vegetables"]["potato"] = potato
+    datastore["data"]["food"]["vegetables"]["broccoli"] = broccoli
+    datastore["data"]["food"]["fruits"]["oranges"] = oranges
+    datastore["data"]["food"]["fruits"]["mango"] = mango
+    datastore["data"]["food"]["fruits"]["banana"] = banana
+    datastore["data"]["food"]["beverages"]["waterBottles"] = waterBottles
+    datastore["data"]["food"]["beverages"]["seaWaterBottles"] = seaWaterBottles
+    datastore["data"]["food"]["beverages"]["orangeJuiceBottles"] = orangeJuiceBottles
+    datastore["data"]["food"]["beverages"]["appleJuiceBottles"] = appleJuiceBottles
+    datastore["data"]["food"]["beverages"]["tea"] = tea
+    datastore["data"]["playerInfo"]["firstTime"] = False
+    datastore["data"]["playerInfo"]["hasProgress"] = True
+    saveddatastore = open("savedstats.json", 'w')
+    json.dump(datastore, saveddatastore)
+    saveddatastore.close()
+    play()
 
 
 def load():
@@ -124,34 +166,43 @@ def load():
     global orangeJuiceBottles
     global appleJuiceBottles
     global tea
-    coins = datastore["data"]["materials"]["coins"]
-    gold = datastore["data"]["materials"]["gold"]
-    iron = datastore["data"]["materials"]["iron"]
-    emeralds = datastore["data"]["materials"]["emeralds"]
-    bronze = datastore["data"]["materials"]["bronze"]
-    coal = datastore["data"]["materials"]["coal"]
-    health = datastore["data"]["characterInfo"]["health"]
-    hunger = datastore["data"]["characterInfo"]["hunger"]
-    water = datastore["data"]["characterInfo"]["water"]
-    xp = datastore["data"]["characterInfo"]["xp"]
-    X = datastore["data"]["characterInfo"]["x"]
-    Y = datastore["data"]["characterInfo"]["y"]
-    area = datastore["data"]["characterInfo"]["area"]
+    global firstTime
+    global hasProgress
+    Saveddatastore = open(os.getcwd() + "/savedstats.json", 'r')
+    saveddatastore = json.load(Saveddatastore)
+    Saveddatastore.close()
+
+    coins = saveddatastore["data"]["materials"]["coins"]
+    gold = saveddatastore["data"]["materials"]["gold"]
+    iron = saveddatastore["data"]["materials"]["iron"]
+    emeralds = saveddatastore["data"]["materials"]["emeralds"]
+    bronze = saveddatastore["data"]["materials"]["bronze"]
+    coal = saveddatastore["data"]["materials"]["coal"]
+    health = saveddatastore["data"]["characterInfo"]["health"]
+    hunger = saveddatastore["data"]["characterInfo"]["hunger"]
+    water = saveddatastore["data"]["characterInfo"]["water"]
+    xp = saveddatastore["data"]["characterInfo"]["xp"]
+    X = saveddatastore["data"]["characterInfo"]["x"]
+    Y = saveddatastore["data"]["characterInfo"]["y"]
+    area = saveddatastore["data"]["characterInfo"]["area"]
+    firstTime = saveddatastore["data"]["playerInfo"]["firstTime"]
+    hasProgress = saveddatastore["data"]["playerInfo"]["hasProgress"]
+
     # i hate coding
-    beef = datastore["data"]["food"]["meat"]["beef"]
-    pork = datastore["data"]["food"]["meat"]["pork"]
-    chicken = datastore["data"]["food"]["meat"]["chicken"]
-    carrot = datastore["data"]["food"]["vegetables"]["carrot"]
-    potato = datastore["data"]["food"]["vegetables"]["potato"]
-    broccoli = datastore["data"]["food"]["vegetables"]["broccoli"]
-    oranges = datastore["data"]["food"]["fruits"]["oranges"]
-    mango = datastore["data"]["food"]["fruits"]["mango"]
-    banana = datastore["data"]["food"]["fruits"]["banana"]
-    waterBottles = datastore["data"]["food"]["beverages"]["waterBottles"]
-    seaWaterBottles = datastore["data"]["food"]["beverages"]["seaWaterBottles"]
-    orangeJuiceBottles = datastore["data"]["food"]["beverages"]["orangeJuiceBottles"]
-    appleJuiceBottles = datastore["data"]["food"]["beverages"]["appleJuiceBottles"]
-    tea = datastore["data"]["food"]["beverages"]["tea"]
+    beef = saveddatastore["data"]["food"]["meat"]["beef"]
+    pork = saveddatastore["data"]["food"]["meat"]["pork"]
+    chicken = saveddatastore["data"]["food"]["meat"]["chicken"]
+    carrot = saveddatastore["data"]["food"]["vegetables"]["carrot"]
+    potato = saveddatastore["data"]["food"]["vegetables"]["potato"]
+    broccoli = saveddatastore["data"]["food"]["vegetables"]["broccoli"]
+    oranges = saveddatastore["data"]["food"]["fruits"]["oranges"]
+    mango = saveddatastore["data"]["food"]["fruits"]["mango"]
+    banana = saveddatastore["data"]["food"]["fruits"]["banana"]
+    waterBottles = saveddatastore["data"]["food"]["beverages"]["waterBottles"]
+    seaWaterBottles = saveddatastore["data"]["food"]["beverages"]["seaWaterBottles"]
+    orangeJuiceBottles = saveddatastore["data"]["food"]["beverages"]["orangeJuiceBottles"]
+    appleJuiceBottles = saveddatastore["data"]["food"]["beverages"]["appleJuiceBottles"]
+    tea = saveddatastore["data"]["food"]["beverages"]["tea"]
 
 
 def readManual(manualnum):
@@ -354,6 +405,7 @@ def viewStats():
     print("     Hunger: " + str(hunger))
     print("     Water: " + str(water))
     print("     XP: " + str(xp))
+    print("     Level: " + str(level))
     print("     Coordinates: (" + str(X) + ", " + str(Y) + ")")
     print("====================================")
 
@@ -364,10 +416,22 @@ def viewStats():
     print("     Bronze: " + str(bronze))
     print("     Gold: " + str(gold))
     print("     Emeralds: " + str(emeralds))
+    print("     Beef: " + str(beef))
+    print("     Pork: " + str(pork))
+    print("     Chicken: " + str(chicken))
+    print("     Carrots: " + str(carrot))
+    print("     Potatoes: " + str(potato))
+    print("     Broccoli: " + str(broccoli))
+    print("     Oranges: " + str(oranges))
+    print("     Mangoes: " + str(mango))
+    print("     Bananas: " + str(banana))
     print("===================================")
     print("press enter when you have finished reading your stats.")
     input("[Viewing stats] > ")
-    start()
+    if not Play and playfreezed:
+        start()
+    else:
+        play()
 
 
 def eat(foodType):
@@ -475,37 +539,120 @@ def eat(foodType):
 
 
 def drink(beverageType):
-    print('bar')
+    global hunger
+    global water
+    global waterBottles
+    global seaWaterBottles
+    global orangeJuiceBottles
+    global appleJuiceBottles
+    global tea
+    if beverageType == 'waterbottle':
+        if waterBottles > 0:
+            print("Before: water - ", water, ".")
+            water = water + 5
+            print("After: water - ", water, ".")
+            play()
+        else:
+            print("You have 0 water bottles.")
+            play()
+    elif beverageType == "seawaterbottle":
+        if seaWaterBottles > 0:
+            print("Before: water - ", water, ".")
+            water = water - 3
+            print("After: water - ", water, ".")
+            play()
+        else:
+            print("You have 0 sea water bottles.")
+            play()
+    elif beverageType == "orangejuicebottle":
+        if orangeJuiceBottles > 0:
+            print("Before: water - ", water, ".")
+            water = water + 3
+            print("After: water - ", water, ".")
+            play()
+        else:
+            print("You have 0 orange juice bottles.")
+            play()
+    elif beverageType == "applejuicebottle":
+        if appleJuiceBottles > 0:
+            print("Before: water - ", water, ".")
+            water = water + 3
+            print("After: water - ", water, ".")
+            play()
+        else:
+            print("You have 0 apple juice bottles.")
+            play()
+    elif beverageType == "tea":
+        if tea > 0:
+            print("Before: water - ", water, ".")
+            water = water + 2
+            print("After: water - ", water, ".")
+            play()
+        else:
+            print("You have 0 tea.")
+            play()
+    else:
+        print("Please enter a valid argument for the drink() function!")
+        play()
 
 
 def fastTravel(location):
-    print('foo')
+    global X
+    global Y
+    if location == 'bandithideout1':
+        if level >= 10:
+            X = 20
+            Y = 20
+        else:
+            print("You don't have the appropriate level to fast travel here!")
+    elif location == 'bandithideout2':
+        if level >= 20:
+            X = -65
+            Y = -65
+        else:
+            print("You don't have the appropriate level to fast travel here!")
+    elif location == 'bandithideout3':
+        if level >= 30:
+            X = 180
+            Y = 180
+        else:
+            print("You don't have the appropriate level to fast travel here!")
+    elif location == 'johncenangton':
+        X = 0
+        Y = 0
+    elif location == 'bobuxbury':
+        if level >= 10:
+            X = 50
+            Y = 50
+        else:
+            print("You don't have the appropriate level to fast travel here!")
+    elif location == 'monkeville':
+        if level >= 20:
+            X = 35
+            Y = -75
+        else:
+            print("You don't have the appropriate level to fast travel here!")
+    elif location == 'walterworth':
+        if level >= 30:
+            X = -100
+            Y = -100
+        else:
+            print("You don't have the appropriate level to fast travel here!")
+    elif location == 'river':
+        if level >= 20:
+            X = 150
+            Y = 150
+        else:
+            print("You don't have the appropriate level to fast travel here!")
 
 
 def start():
     global firstTime
-    global hasProgress
-
-    if hasProgress:
-        print("You have saved progress! Would you like to load it? (Y, n)")
-        userLoadInput = ""
-        while userLoadInput not in ['y', 'yes', 'n', 'no']:
-            userLoadInput = input("[Loading progress] > ").lower()
-            if userLoadInput == 'y':
-                load()
-            elif userLoadInput == 'yes':
-                load()
-            elif userLoadInput == 'n':
-                break
-            elif userLoadInput == 'no':
-                break
-            else:
-                pass
-
     global startInputActive
     global startChoice
     system(clear)
-    print("IT WORKS")
+    load()
+    changeLevel()
     print("========================== Menu ==========================")
     print(" Hello! This is an adventure game called john cena bobux.")
     print(" Choose an option:")
@@ -534,14 +681,16 @@ def start():
 
 
 start()
+h = True
 
 while True:
     if Play and not playfreezed:
-        if firstTime:
+        if h:
             print("You were spawned in " + area + ". The town's name is: Johncenangton.")
             print("Remember: you can get help by typing gameHelp or commands to view commands!")
-            firstTime = False
+            h = False
         while Play:
+            changeLevel()
             if not houseChestOpened:
                 chestChance = chest()
                 if chestChance:
@@ -550,9 +699,10 @@ while True:
                     pass
                 houseChestOpened = True
             playInput = ''
-            while playInput not in ['gamehelp()', 'gamehelp', 'commands()', 'commands', 'gonorth()', 'gonorth', 'gosouth()', 'gosouth', 'goeast()', 'goeast', 'gowest()', 'gowest', 'exit()', 'exit', 'save()', 'save', 'viewstats()', 'viewstats']:
+            while playInput not in ['gamehelp()', 'gamehelp', 'commands()', 'commands', 'gonorth()', 'gonorth', 'gosouth()', 'gosouth', 'goeast()', 'goeast', 'gowest()', 'gowest', 'exit()', 'exit', 'save()', 'save', 'load()', 'load', 'viewstats()', 'viewstats', 'fasttravel']:
+                changeLevel()
                 playInput = input("[Play] > ").lower()
-                if playInput == "gamehelp()" or playInput == "gamehelp":
+                if playInput == "gamehelp()" or playInput == "gamehelp" or playInput == "help()" or playInput == "help":
                     Play = False
                     playfreezed = True
                     gameHelp()
@@ -573,11 +723,32 @@ while True:
                     exit()
                 elif playInput == "save()" or playInput == "save":
                     save()
+                elif playInput == "load()" or playInput == "load":
+                    load()
                 elif playInput == "viewstats()" or playInput == "viewstats":
+                    Play = False
+                    playfreezed = True
                     save()
                     viewStats()
                 elif playInput == "eat":
-                    foodtype = input("Please enter the argument for function eat(): ")
-                    eat(foodtype)
+                    print("  Please enter the argument for the function eat()")
+                    Foodtype = ""
+                    while Foodtype not in['beef', 'pork', 'chicken', 'carrot', 'potato', 'broccoli', 'orange', 'mango', 'banana']:
+                        Foodtype = input("  [Eat argument] > ").lower()
+                        eat(Foodtype)
+                elif playInput == "drink":
+                    print("  Please enter the argument for the function drink()")
+                    BeverageType = ""
+                    while BeverageType not in ['waterbottle', 'seawaterbottle', 'tea', 'orangejuicebottle', 'applejuicebottle']:
+                        BeverageType = input("  [Drink argument] > ").lower()
+                        drink(BeverageType)
+                elif playInput == "clear" or playInput == "clear()":
+                    system(clear)
+                elif playInput == "fastTravel":
+                    print("  Please enter the argument for the function fastTravel()")
+                    Location = ""
+                    while Location not in ["bandithideout1", "bandithideout2", "bandithideout3", "johncenangton", "bobuxbury", "monkeville", "walterworth", "river"]:
+                        Location = input("  [Fast travel] > ").lower()
+                        fastTravel(Location)
                 else:
                     print("I don't know this phrase. Please read the manual.")

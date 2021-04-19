@@ -1,26 +1,17 @@
 Chapter 2 of the help menu: RESOURCES AND MATERIALS.
+       2 - TYPES OF MATERIALS
+           There are three classes of materials: ordinary, rare and extraordinary. Ordinary: iron;
+           Rare: gold, bronze; extraordinary: emeralds.
 
-        2 - TYPES OF MATERIALS
-            There are three classes of materials: ordinary, rare and extraordinary.
-            The ordinary materials are iron and coal.
-            The rare material is gold and bronze.
-            The only extraordinary material is emeralds.
-
-        2.1 - PURPOSES OF DIFFERENT MATERIALS
-              Basic materials:
-                Iron - with iron you can craft armor and tools. Also, you can repair them.
-                       It can be sold to a merchant for 3 coins each.
-                Coal - with coal you can use ovens. Ovens give you the ability to cook
-                       food and therefore boost up your hunger. IMPORTANT NOTICE: the more
-                       hunger you have, the less you are actually hungry. If your hunger is
-                       at 20, this means that you don't need to eat AT ALL.
-                       It can be sold to a merchant for 2 coins each.
+       2.1 - PURPOSES OF DIFFERENT MATERIALS
+             Basic materials:
+              Iron - with iron you can craft armor and tools. Also, you can repair them.
+                     It can be sold to a merchant for 3 coins each.
 
               Rare materials:
-                Gold - with gold you can make jewelry. Jewelry does nothing and serves no 
-                       purpose at all. You can also FORGE COINS with gold but there is a 1 to 3 
-                       chance that you will be caught. Gold can be sold to a merchant for 10 coins 
-                       and bought for 20 each.
+                Gold - with gold you can make jewelry. Jewelry does nothing. You can also forge coins
+                       with gold but there is a chance that you will be caught. Gold can be sold to a
+                       merchant for 10 coins and bought for 20 each.
                 Bronze - bronze can be used in armor and weapons. However, bronze weapons and
                          armor are not as durable as the iron ones because iron is much harder.
                          Bronze can be sold to a merchant for 7 coins and bought for 15 coins each.
@@ -33,18 +24,9 @@ Chapter 2 of the help menu: RESOURCES AND MATERIALS.
 
 
         2.2 - LOCATIONS WHERE THE MATERIALS APPEAR
-              Basic materials:
                 Iron - can be found in caves, however you steel need to melt the iron ore in an
                        oven with coal in order to get iron.
-                Coal - can be found in caves as well. It appears more often than iron does. You
-                       can use it as soon as you mine it.
-
-              Rare materials:
-                Gold - can be found in caves and bandit hideouts. It is thrice as rare as iron.
-                       It can be used as soon as you mine it.
-                Bronze - can be found in caves, more specifically in copper alloy. Also, it can
-                         be found in doors, entrances, fountains, handrails, etc.
-              
-              Extraordinary materials:
-                Emeralds - they can be found in mountain region caves. They can also be found in
-                           jewelry stores.
+                Gold - can be found in bandit hideouts and chests. It is thrice as rare as iron.
+                Bronze - can be found in bandit hideouts or chests just like gold. Bronze can also
+                         be found in armor and tools.
+                Emeralds - they can be found in bandit hideouts, chests and huge towns.

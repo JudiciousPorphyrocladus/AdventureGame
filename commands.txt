@@ -16,18 +16,12 @@
 
           drink - Drink (arguments: waterBottle, seaWatterBottle, tea,
                                     orangeJuiceBottle, appleJuiceBottle.
-
-          fastTravel - lets you fast travel to the location if you
-                       have the appropriate level (arguments: banditHideout1,
-                       banditHideout2, banditHideout3, johncenangton, bobuxbury,
-                       monkeville, walterworth, river. The levels for these
-                       locations can be viewed in chapter 4 of the manual.
 ==================================================================================
 
 =============================================== MOVEMENT =========================
-          moveNorth - moves you North by a meter,
-          moveSouth - moves you South by a meter,
-          moveWest - moves you West by a meter,
-          moveEast - moves you East by a meter,
+          moveNorth - moves you North by half a meter,
+          moveSouth - moves you South by half a meter,
+          moveWest - moves you West by half a meter,
+          moveEast - moves you East by half a meter,
           look - tells you the surroundings
 ==================================================================================

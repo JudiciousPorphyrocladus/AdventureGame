@@ -273,9 +273,8 @@ def gameHelp():  # A menu that asks you to enter the number of a desired chapter
 
 
 def look():
-    if X >= 0 and Y >= 0:
-        if X <= 15 and Y <= 15:
-            print("There are 2 locations in the chunk: ")
+    if X == 0 and Y == 0:
+        print("There are ")
 
 
 def Commands():
@@ -288,11 +287,6 @@ def Commands():
         bruh = input("[Commands] > ")
 
     play()
-
-
-def addIron(quantity):
-    global iron
-    iron = iron + quantity
 
 
 def addCarrot(quantity):
@@ -330,15 +324,6 @@ def openChest(chesttype):
         while chestInput not in ['y', 'yes', '']:
             chestInput = input("[Chest opening] > ").lower()
             if chestInput == 'y' or chestInput == 'yes':
-                IRON = random.randint(1, 3)
-                if IRON == 1:
-                    print("You have found 1 iron! Chance: 33%")
-                    addIron(1)
-                    loot = True
-                else:
-                    continue
-                del IRON
-
                 CARROT = random.randint(1, 2)
                 if CARROT == 1:
                     print("You have found a carrot! Chance: 50%")
@@ -410,12 +395,6 @@ def viewStats():
     print("====================================")
 
     print("============ Inventory ============")
-    print("     Coins: " + str(coins))
-    print("     Iron: " + str(iron))
-    print("     Coal: " + str(coal))
-    print("     Bronze: " + str(bronze))
-    print("     Gold: " + str(gold))
-    print("     Emeralds: " + str(emeralds))
     print("     Beef: " + str(beef))
     print("     Pork: " + str(pork))
     print("     Chicken: " + str(chicken))
@@ -596,56 +575,6 @@ def drink(beverageType):
         play()
 
 
-def fastTravel(location):
-    global X
-    global Y
-    if location == 'bandithideout1':
-        if level >= 10:
-            X = 20
-            Y = 20
-        else:
-            print("You don't have the appropriate level to fast travel here!")
-    elif location == 'bandithideout2':
-        if level >= 20:
-            X = -65
-            Y = -65
-        else:
-            print("You don't have the appropriate level to fast travel here!")
-    elif location == 'bandithideout3':
-        if level >= 30:
-            X = 180
-            Y = 180
-        else:
-            print("You don't have the appropriate level to fast travel here!")
-    elif location == 'johncenangton':
-        X = 0
-        Y = 0
-    elif location == 'bobuxbury':
-        if level >= 10:
-            X = 50
-            Y = 50
-        else:
-            print("You don't have the appropriate level to fast travel here!")
-    elif location == 'monkeville':
-        if level >= 20:
-            X = 35
-            Y = -75
-        else:
-            print("You don't have the appropriate level to fast travel here!")
-    elif location == 'walterworth':
-        if level >= 30:
-            X = -100
-            Y = -100
-        else:
-            print("You don't have the appropriate level to fast travel here!")
-    elif location == 'river':
-        if level >= 20:
-            X = 150
-            Y = 150
-        else:
-            print("You don't have the appropriate level to fast travel here!")
-
-
 def start():
     global firstTime
     global startInputActive
@@ -686,7 +615,7 @@ h = True
 while True:
     if Play and not playfreezed:
         if h:
-            print("You were spawned in " + area + ". The town's name is: Johncenangton.")
+            print("You were spawned in " + area + ".")
             print("Remember: you can get help by typing gameHelp or commands to view commands!")
             h = False
         while Play:
@@ -699,7 +628,7 @@ while True:
                     pass
                 houseChestOpened = True
             playInput = ''
-            while playInput not in ['gamehelp()', 'gamehelp', 'commands()', 'commands', 'gonorth()', 'gonorth', 'gosouth()', 'gosouth', 'goeast()', 'goeast', 'gowest()', 'gowest', 'exit()', 'exit', 'save()', 'save', 'load()', 'load', 'viewstats()', 'viewstats', 'fasttravel']:
+            while playInput not in ['gamehelp()', 'gamehelp', 'commands()', 'commands', 'gonorth()', 'gonorth', 'gosouth()', 'gosouth', 'goeast()', 'goeast', 'gowest()', 'gowest', 'exit()', 'exit', 'save()', 'save', 'load()', 'load', 'viewstats()', 'viewstats']:
                 changeLevel()
                 playInput = input("[Play] > ").lower()
                 if playInput == "gamehelp()" or playInput == "gamehelp" or playInput == "help()" or playInput == "help":
@@ -744,11 +673,5 @@ while True:
                         drink(BeverageType)
                 elif playInput == "clear" or playInput == "clear()":
                     system(clear)
-                elif playInput == "fastTravel":
-                    print("  Please enter the argument for the function fastTravel()")
-                    Location = ""
-                    while Location not in ["bandithideout1", "bandithideout2", "bandithideout3", "johncenangton", "bobuxbury", "monkeville", "walterworth", "river"]:
-                        Location = input("  [Fast travel] > ").lower()
-                        fastTravel(Location)
                 else:
                     print("I don't know this phrase. Please read the manual.")

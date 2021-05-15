@@ -365,22 +365,196 @@ def play():
 
 def goNorth():
     global Y
-    Y = Y + 1
+    global X
+    global level
+    cY = Y + 1
+    cX = X
+
+    # The bathroom
+    if cY == 2 and X == -1 and level < 2:
+        print("Sorry, but your level is too low to enter the bathroom.")
+
+    # Primary rooms
+    elif cY == 4 and X == -1 and level < 2:
+        print("Sorry, but your level is too low to enter the first room.")
+    elif cY == 4 and X == -2 and level < 2:
+        print("Sorry, but your level is too low to enter the first bedroom.")
+
+    # Secondary rooms
+    elif cY == 6 and X == -1 and level < 3:
+        print("Sorry, but your level is too low to enter the second room.")
+    elif cY == 6 and X == -2 and level < 3:
+        print("Sorry, but your level is too low to enter the second bedroom.")
+
+    # Tertiary rooms
+    elif cY == 8 and X == -1 and level < 4:
+        print("Sorry, but your level is too low to enter the third room.")
+    elif cY == 8 and X == -2 and level < 4:
+        print("Sorry, but your level is too low to enter the third bedroom.")
+
+    # The play room
+    elif cY == 4 and cX == 2 and level < 3 or cY == 4 and cX == 3 and level < 3:
+        print("Sorry, but your level is too low to enter the play room")
+
+    # The attic
+    elif cY == 10 and X == 0 and level < 4 or cY == 10 and X == 1 and level < 4:
+        print("Sorry, but your level is too low to enter the attic.")
+
+    else:
+        Y = Y + 1
+    play()
 
 
 def goSouth():
     global Y
-    Y = Y - 1
+    global X
+    global level
+    cY = Y - 1
+    cX = X
+
+    # The bathroom
+    if cY == 2 and X == -1 and level < 2:
+        print("Sorry, but your level is too low to enter the bathroom.")
+
+    # Primary rooms
+    elif cY == 4 and X == -1 and level < 2:
+        print("Sorry, but your level is too low to enter the first room.")
+    elif cY == 4 and X == -2 and level < 2:
+        print("Sorry, but your level is too low to enter the first bedroom.")
+
+    # Secondary rooms
+    elif cY == 6 and X == -1 and level < 3:
+        print("Sorry, but your level is too low to enter the second room.")
+    elif cY == 6 and X == -2 and level < 3:
+        print("Sorry, but your level is too low to enter the second bedroom.")
+
+    # Tertiary rooms
+    elif cY == 8 and X == -1 and level < 4:
+        print("Sorry, but your level is too low to enter the third room.")
+    elif cY == 8 and X == -2 and level < 4:
+        print("Sorry, but your level is too low to enter the third bedroom.")
+
+    # The play room
+    elif cY == 4 and cX == 2 and level < 3 or cY == 4 and cX == 3 and level < 3:
+        print("Sorry, but your level is too low to enter the play room")
+
+    # The attic
+    elif cY == 10 and X == 0 and level < 4 or cY == 10 and X == 1 and level < 4:
+        print("Sorry, but your level is too low to enter the attic.")
+
+    else:
+        Y = Y - 1
+    play()
 
 
 def goEast():
+    global Y
     global X
-    X = X + 1
+    global level
+    cY = Y
+    cX = X + 2
+
+    # The bathroom
+    if cY == 2 and X == -1 and level < 2:
+        print("Sorry, but your level is too low to enter the bathroom.")
+
+    # Primary rooms
+    elif cY == 4 and X == -1 and level < 2:
+        print("Sorry, but your level is too low to enter the first room.")
+    elif cY == 4 and X == -2 and level < 2:
+        print("Sorry, but your level is too low to enter the first bedroom.")
+
+    # Secondary rooms
+    elif cY == 6 and X == -1 and level < 3:
+        print("Sorry, but your level is too low to enter the second room.")
+    elif cY == 6 and X == -2 and level < 3:
+        print("Sorry, but your level is too low to enter the second bedroom.")
+
+    # Tertiary rooms
+    elif cY == 8 and X == -1 and level < 4:
+        print("Sorry, but your level is too low to enter the third room.")
+    elif cY == 8 and X == -2 and level < 4:
+        print("Sorry, but your level is too low to enter the third bedroom.")
+
+    # The play room
+    elif cY == 4 and cX == 2 and level < 3 or cY == 4 and cX == 3 and level < 3:
+        print("Sorry, but your level is too low to enter the play room")
+
+    # The attic
+    elif cY == 10 and X == 0 and level < 4 or cY == 10 and X == 1 and level < 4:
+        print("Sorry, but your level is too low to enter the attic.")
+
+    else:
+        X = X + 1
+    play()
 
 
 def goWest():
+    global Y
     global X
-    X = X - 1
+    global level
+    cY = Y
+    cX = X - 1
+
+    # The bathroom
+    if cY == 2 and X == -1 and level < 2:
+        print("Sorry, but your level is too low to enter the bathroom.")
+
+    # Primary rooms
+    elif cY == 4 and X == -1 and level < 2:
+        print("Sorry, but your level is too low to enter the first room.")
+    elif cY == 4 and X == -2 and level < 2:
+        print("Sorry, but your level is too low to enter the first bedroom.")
+
+    # Secondary rooms
+    elif cY == 6 and X == -1 and level < 3:
+        print("Sorry, but your level is too low to enter the second room.")
+    elif cY == 6 and X == -2 and level < 3:
+        print("Sorry, but your level is too low to enter the second bedroom.")
+
+    # Tertiary rooms
+    elif cY == 8 and X == -1 and level < 4:
+        print("Sorry, but your level is too low to enter the third room.")
+    elif cY == 8 and X == -2 and level < 4:
+        print("Sorry, but your level is too low to enter the third bedroom.")
+
+    # The play room
+    elif cY == 4 and cX == 2 and level < 3 or cY == 4 and cX == 3 and level < 3:
+        print("Sorry, but your level is too low to enter the play room")
+
+    # The attic
+    elif cY == 10 and X == 0 and level < 4 or cY == 10 and X == 1 and level < 4:
+        print("Sorry, but your level is too low to enter the attic.")
+
+    else:
+        X = X - 1
+    play()
+
+
+def changeArea(x, y):
+    global area
+    if x == 2 and y == 1:
+        area = "diningroom"  # the area is set to "diningroom"
+    elif x == 2 and y == 2:
+        area = "kitchen"  # the area is set to "kitchen"
+    elif x == -1 and y == 2:
+        area = "bathroom"  # the area is set to "bathroom"
+    elif x == -1 and y == 4:
+        area = "room1"  # the area is set to "room1"
+    elif x == -2 and y == 4:
+        area = "bedroom1"  # the area is set to "bedroom1"
+    elif x == 2 and y == 4 or x == 3 and y == 4:
+        area = "playroom"  # the area is set to "playroom"
+    elif x == -1 and y == 6:
+        area = "room2"  # the area is set to "room2"
+    elif x == -2 and y == 6:
+        area = "bedroom2"  # the area is set to "bedroom2"
+    elif x == -1 and y == 8:
+        area = "room3"  # the area is set to "room3"
+    elif x == -2 and y == 8:
+        area = "bedroom3"  # the area is set to "bedroom3"
+    elif x == 0 and y == 10 or x == 1 and y == 10:
+        area = "attic"  # the area is set to "attic"
 
 
 def viewStats():
@@ -407,10 +581,10 @@ def viewStats():
     print("===================================")
     print("press enter when you have finished reading your stats.")
     input("[Viewing stats] > ")
-    if not Play and playfreezed:
-        start()
-    else:
+    if Play == False and playfreezed == True:
         play()
+    else:
+        start()
 
 
 def eat(foodType):
@@ -657,7 +831,13 @@ while True:
                 elif playInput == "viewstats()" or playInput == "viewstats":
                     Play = False
                     playfreezed = True
-                    save()
+                    usrinput = "123"
+                    while usrinput not in ['y', 'n', '']:
+                        usrinput = "Would you like to save your progress before viewing your stats? [Y/n] "
+                        if usrinput == 'y' or usrinput == '':
+                            save()
+                        else:
+                            break
                     viewStats()
                 elif playInput == "eat":
                     print("  Please enter the argument for the function eat()")

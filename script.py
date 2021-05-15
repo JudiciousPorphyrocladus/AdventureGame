@@ -57,6 +57,11 @@ chestOpening = False
 houseChestOpened = False
 level = 0
 
+# Quests
+diningroomQuestsLeft = {"Throw away the cake on the table that is 12 days old", "Clean up the table"}
+kitchenQuestsLeft = {"Make a sandwich", "Clean the dishes"}
+bathroomQuestsLeft = {"Fix the faucet", "Clean the ventilation"}
+
 
 # Input variables (used to loop input() if the correct choice isn't entered)
 manualInput = False
@@ -273,8 +278,39 @@ def gameHelp():  # A menu that asks you to enter the number of a desired chapter
 
 
 def look():
-    if X == 0 and Y == 0:
-        print("There are ")
+    global diningroomQuestsLeft
+    global kitchenQuestsLeft
+
+    # Dining room quests
+    if area == "diningroom":
+        usrinput = ' '
+        while usrinput not in ['y', 'n', '']:
+            usrinput = input("Would you like to list all available quests in the current room? [Y/n] > ")
+
+            if usrinput == 'y':
+                print("==-==-==-==-== Dining room quests ==-==-==-==-==")
+                for i in diningroomQuestsLeft:
+                    print(i)
+                print("==-==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
+                break
+            else:
+                break
+    # Kitchen quests
+    elif area == "kitchen":
+        usrinput = ' '
+        while usrinput not in ['y', 'n', '']:
+            usrinput = input("Would you like to list all available quests in the current room? [Y/n] > ")
+
+            if usrinput == 'y':
+                print("==-==-==-==-==-== Kitchen quests ==-==-==-==-==")
+                for i in kitchenQuestsLeft:
+                    print(i)
+                print("==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==")
+                break
+            else:
+                break
+    else:
+        print("what")
 
 
 def Commands():
@@ -367,6 +403,8 @@ def goNorth():
     global Y
     global X
     global level
+    global area
+
     cY = Y + 1
     cX = X
 
@@ -402,6 +440,41 @@ def goNorth():
 
     else:
         Y = Y + 1
+        # The bathroom
+        if Y == 2 and X == -1:
+            area = "bathroom"
+
+        # Primary rooms
+        elif Y == 4 and X == -1:
+            area = "room1"
+        elif Y == 4 and X == -2:
+            area = "bedroom1"
+
+        # Secondary rooms
+        elif Y == 6 and X == -1:
+            area = "room2"
+        elif Y == 6 and X == -2:
+            area = "bedroom2"
+
+        # Tertiary rooms
+        elif Y == 8 and X == -1:
+            area = "room3"
+        elif Y == 8 and X == -2:
+            area = "bedroom3"
+
+        # The kitchen
+        elif Y == 1 and X == 2:
+            area = "diningroom"
+        elif Y == 2 and X == 2:
+            area = "kitchen"
+
+        # The play room
+        elif Y == 4 and X == 2 and level < 3 or Y == 4 and X == 3 and level < 3:
+            area = "playroom"
+
+        # The attic
+        elif Y == 10 and X == 0 and level < 4 or Y == 10 and X == 1 and level < 4:
+            area = "attic"
     play()
 
 
@@ -409,6 +482,8 @@ def goSouth():
     global Y
     global X
     global level
+    global area
+
     cY = Y - 1
     cX = X
 
@@ -444,6 +519,41 @@ def goSouth():
 
     else:
         Y = Y - 1
+        # The bathroom
+        if Y == 2 and X == -1:
+            area = "bathroom"
+
+        # Primary rooms
+        elif Y == 4 and X == -1:
+            area = "room1"
+        elif Y == 4 and X == -2:
+            area = "bedroom1"
+
+        # Secondary rooms
+        elif Y == 6 and X == -1:
+            area = "room2"
+        elif Y == 6 and X == -2:
+            area = "bedroom2"
+
+        # Tertiary rooms
+        elif Y == 8 and X == -1:
+            area = "room3"
+        elif Y == 8 and X == -2:
+            area = "bedroom3"
+
+        # The kitchen
+        elif Y == 1 and X == 2:
+            area = "diningroom"
+        elif Y == 2 and X == 2:
+            area = "kitchen"
+
+        # The play room
+        elif Y == 4 and X == 2 and level < 3 or Y == 4 and X == 3 and level < 3:
+            area = "playroom"
+
+        # The attic
+        elif Y == 10 and X == 0 and level < 4 or Y == 10 and X == 1 and level < 4:
+            area = "attic"
     play()
 
 
@@ -451,6 +561,8 @@ def goEast():
     global Y
     global X
     global level
+    global area
+
     cY = Y
     cX = X + 2
 
@@ -486,6 +598,41 @@ def goEast():
 
     else:
         X = X + 1
+        # The bathroom
+        if Y == 2 and X == -1:
+            area = "bathroom"
+
+        # Primary rooms
+        elif Y == 4 and X == -1:
+            area = "room1"
+        elif Y == 4 and X == -2:
+            area = "bedroom1"
+
+        # Secondary rooms
+        elif Y == 6 and X == -1:
+            area = "room2"
+        elif Y == 6 and X == -2:
+            area = "bedroom2"
+
+        # Tertiary rooms
+        elif Y == 8 and X == -1:
+            area = "room3"
+        elif Y == 8 and X == -2:
+            area = "bedroom3"
+
+        # The kitchen
+        elif Y == 1 and X == 2:
+            area = "diningroom"
+        elif Y == 2 and X == 2:
+            area = "kitchen"
+
+        # The play room
+        elif Y == 4 and X == 2 and level < 3 or Y == 4 and X == 3 and level < 3:
+            area = "playroom"
+
+        # The attic
+        elif Y == 10 and X == 0 and level < 4 or Y == 10 and X == 1 and level < 4:
+            area = "attic"
     play()
 
 
@@ -493,6 +640,8 @@ def goWest():
     global Y
     global X
     global level
+    global area
+
     cY = Y
     cX = X - 1
 
@@ -528,6 +677,42 @@ def goWest():
 
     else:
         X = X - 1
+        # The bathroom
+        if Y == 2 and X == -1:
+            area = "bathroom"
+
+        # Primary rooms
+        elif Y == 4 and X == -1:
+            area = "room1"
+        elif Y == 4 and X == -2:
+            area = "bedroom1"
+
+        # Secondary rooms
+        elif Y == 6 and X == -1:
+            area = "room2"
+        elif Y == 6 and X == -2:
+            area = "bedroom2"
+
+        # Tertiary rooms
+        elif Y == 8 and X == -1:
+            area = "room3"
+        elif Y == 8 and X == -2:
+            area = "bedroom3"
+
+        # The kitchen
+        elif Y == 1 and X == 2:
+            area = "diningroom"
+        elif Y == 2 and X == 2:
+            area = "kitchen"
+
+        # The play room
+        elif Y == 4 and X == 2 and level < 3 or Y == 4 and X == 3 and level < 3:
+            area = "playroom"
+
+        # The attic
+        elif Y == 10 and X == 0 and level < 4 or Y == 10 and X == 1 and level < 4:
+            area = "attic"
+
     play()
 
 
@@ -559,16 +744,17 @@ def changeArea(x, y):
 
 def viewStats():
     system(clear)
-    print("========== Character info ==========")
+    print("========== Character info ===============")
     print("     Health: " + str(health))
     print("     Hunger: " + str(hunger))
     print("     Water: " + str(water))
     print("     XP: " + str(xp))
     print("     Level: " + str(level))
     print("     Coordinates: (" + str(X) + ", " + str(Y) + ")")
-    print("====================================")
+    print("     Area: " + str(area))
+    print("=========================================")
 
-    print("============ Inventory ============")
+    print("============ Inventory: Food ============")
     print("     Beef: " + str(beef))
     print("     Pork: " + str(pork))
     print("     Chicken: " + str(chicken))
@@ -578,7 +764,13 @@ def viewStats():
     print("     Oranges: " + str(oranges))
     print("     Mangoes: " + str(mango))
     print("     Bananas: " + str(banana))
-    print("===================================")
+    print("========= Inventory: Beverages ==========")
+    print("     Water Bottles: " + str(waterBottles))
+    print("     Sea water bottles: " + str(seaWaterBottles))
+    print("     Tea: " + str(tea))
+    print("     Orange juice bottles: " + str(orangeJuiceBottles))
+    print("     Apple juice bottles: " + str(appleJuiceBottles))
+    print("=========================================")
     print("press enter when you have finished reading your stats.")
     input("[Viewing stats] > ")
     if Play == False and playfreezed == True:
@@ -757,7 +949,7 @@ def start():
     load()
     changeLevel()
     print("========================== Menu ==========================")
-    print(" Hello! This is an adventure game called john cena bobux.")
+    print(" Hello! This is an adventure game called boblox.")
     print(" Choose an option:")
     print(" 1. Start playing the game,")
     print(" 2. Open the help menu,")
@@ -802,9 +994,9 @@ while True:
                     pass
                 houseChestOpened = True
             playInput = ''
-            while playInput not in ['gamehelp()', 'gamehelp', 'commands()', 'commands', 'gonorth()', 'gonorth', 'gosouth()', 'gosouth', 'goeast()', 'goeast', 'gowest()', 'gowest', 'exit()', 'exit', 'save()', 'save', 'load()', 'load', 'viewstats()', 'viewstats']:
+            while playInput not in ['gamehelp()', 'gamehelp', 'commands()', 'commands', 'gonorth()', 'gonorth', 'gosouth()', 'gosouth', 'goeast()', 'goeast', 'gowest()', 'gowest', 'exit()', 'exit', 'save()', 'save', 'load()', 'load', 'viewstats()', 'viewstats', "look", "look()", "lookaround", "lookaround()"]:
                 changeLevel()
-                playInput = input("[Play] > ").lower()
+                playInput = input("[Play --> " + area + "] > ").lower()
                 if playInput == "gamehelp()" or playInput == "gamehelp" or playInput == "help()" or playInput == "help":
                     Play = False
                     playfreezed = True
@@ -828,6 +1020,8 @@ while True:
                     save()
                 elif playInput == "load()" or playInput == "load":
                     load()
+                elif playInput == "look" or playInput == "look()" or playInput == "lookaround" or playInput == "lookaround()":
+                    look()
                 elif playInput == "viewstats()" or playInput == "viewstats":
                     Play = False
                     playfreezed = True

@@ -29,15 +29,12 @@ coal = datastore["data"]["materials"]["coal"]
 
 # Food
 beef = datastore["data"]["food"]["meat"]["beef"]
-pork = datastore["data"]["food"]["meat"]["pork"]
 chicken = datastore["data"]["food"]["meat"]["chicken"]
 carrot = datastore["data"]["food"]["vegetables"]["carrot"]
 potato = datastore["data"]["food"]["vegetables"]["potato"]
-broccoli = datastore["data"]["food"]["vegetables"]["broccoli"]
 oranges = datastore["data"]["food"]["fruits"]["oranges"]
-mango = datastore["data"]["food"]["fruits"]["mango"]
 banana = datastore["data"]["food"]["fruits"]["banana"]
-
+sandwiches = datastore["data"]["food"]["other"]["sandwiches"]
 # Beverages
 waterBottles = datastore["data"]["food"]["beverages"]["waterBottles"]
 seaWaterBottles = datastore["data"]["food"]["beverages"]["seaWaterBottles"]
@@ -51,19 +48,20 @@ playing = True
 startInputActive = True
 startChoice = 0
 Play = False
-playfreezed = False
+play_freezed = False
 houseChest = False
 chestOpening = False
 houseChestOpened = False
 level = 0
 
 # Quests
-diningroomQuestsLeft = {"Throw away the cake on the table that is 12 days old", "Clean up the table"}
-kitchenQuestsLeft = {"Make a sandwich", "Clean the dishes"}
-bathroomQuestsLeft = {"Fix the faucet", "Clean the ventilation"}
+dining_room_quests_left = ["Throw away the cake on the table that is 12 days old", "Clean up the table"]
+kitchen_quests_left = ["Make a sandwich", "Clean the dishes"]
+bathroom_quests_left = ["Fix the faucet", "Clean the ventilation"]
+room1_quests_left = ["Fix the TV", "Close the window"]
+attic_quests_left = ["Adjust the radio frequency"]
 
-
-# Input variables (used to loop input() if the correct choice isn't entered)
+# Input variables
 manualInput = False
 helpInput = False
 
@@ -94,9 +92,8 @@ elif platform == "win32":
     clear = 'cls'
 else:
     print("Your OS isn't supported.")
-    Clear = str(input("In order to play the game, please enter the clear function of your console: "))
-    clear = Clear
-    del Clear
+    clear = str(input("In order to play the game, please enter the CLEAR function of your console: "))
+
 
 # Functions
 
@@ -122,13 +119,10 @@ def save():  # Save function
     datastore["data"]["characterInfo"]["y"] = Y
     datastore["data"]["characterInfo"]["area"] = area
     datastore["data"]["food"]["meat"]["beef"] = beef
-    datastore["data"]["food"]["meat"]["pork"] = pork
     datastore["data"]["food"]["meat"]["chicken"] = chicken
     datastore["data"]["food"]["vegetables"]["carrot"] = carrot
     datastore["data"]["food"]["vegetables"]["potato"] = potato
-    datastore["data"]["food"]["vegetables"]["broccoli"] = broccoli
     datastore["data"]["food"]["fruits"]["oranges"] = oranges
-    datastore["data"]["food"]["fruits"]["mango"] = mango
     datastore["data"]["food"]["fruits"]["banana"] = banana
     datastore["data"]["food"]["beverages"]["waterBottles"] = waterBottles
     datastore["data"]["food"]["beverages"]["seaWaterBottles"] = seaWaterBottles
@@ -158,13 +152,10 @@ def load():
     global Y
     global area
     global beef
-    global pork
     global chicken
     global carrot
-    global broccoli
     global potato
     global oranges
-    global mango
     global banana
     global waterBottles
     global seaWaterBottles
@@ -173,41 +164,38 @@ def load():
     global tea
     global firstTime
     global hasProgress
-    Saveddatastore = open(os.getcwd() + "/savedstats.json", 'r')
-    saveddatastore = json.load(Saveddatastore)
-    Saveddatastore.close()
+    saved = open(os.getcwd() + "/savedstats.json", 'r')
+    saved_datastore = json.load(saved)
+    saved.close()
 
-    coins = saveddatastore["data"]["materials"]["coins"]
-    gold = saveddatastore["data"]["materials"]["gold"]
-    iron = saveddatastore["data"]["materials"]["iron"]
-    emeralds = saveddatastore["data"]["materials"]["emeralds"]
-    bronze = saveddatastore["data"]["materials"]["bronze"]
-    coal = saveddatastore["data"]["materials"]["coal"]
-    health = saveddatastore["data"]["characterInfo"]["health"]
-    hunger = saveddatastore["data"]["characterInfo"]["hunger"]
-    water = saveddatastore["data"]["characterInfo"]["water"]
-    xp = saveddatastore["data"]["characterInfo"]["xp"]
-    X = saveddatastore["data"]["characterInfo"]["x"]
-    Y = saveddatastore["data"]["characterInfo"]["y"]
-    area = saveddatastore["data"]["characterInfo"]["area"]
-    firstTime = saveddatastore["data"]["playerInfo"]["firstTime"]
-    hasProgress = saveddatastore["data"]["playerInfo"]["hasProgress"]
+    coins = saved_datastore["data"]["materials"]["coins"]
+    gold = saved_datastore["data"]["materials"]["gold"]
+    iron = saved_datastore["data"]["materials"]["iron"]
+    emeralds = saved_datastore["data"]["materials"]["emeralds"]
+    bronze = saved_datastore["data"]["materials"]["bronze"]
+    coal = saved_datastore["data"]["materials"]["coal"]
+    health = saved_datastore["data"]["characterInfo"]["health"]
+    hunger = saved_datastore["data"]["characterInfo"]["hunger"]
+    water = saved_datastore["data"]["characterInfo"]["water"]
+    xp = saved_datastore["data"]["characterInfo"]["xp"]
+    X = saved_datastore["data"]["characterInfo"]["x"]
+    Y = saved_datastore["data"]["characterInfo"]["y"]
+    area = saved_datastore["data"]["characterInfo"]["area"]
+    firstTime = saved_datastore["data"]["playerInfo"]["firstTime"]
+    hasProgress = saved_datastore["data"]["playerInfo"]["hasProgress"]
 
     # i hate coding
-    beef = saveddatastore["data"]["food"]["meat"]["beef"]
-    pork = saveddatastore["data"]["food"]["meat"]["pork"]
-    chicken = saveddatastore["data"]["food"]["meat"]["chicken"]
-    carrot = saveddatastore["data"]["food"]["vegetables"]["carrot"]
-    potato = saveddatastore["data"]["food"]["vegetables"]["potato"]
-    broccoli = saveddatastore["data"]["food"]["vegetables"]["broccoli"]
-    oranges = saveddatastore["data"]["food"]["fruits"]["oranges"]
-    mango = saveddatastore["data"]["food"]["fruits"]["mango"]
-    banana = saveddatastore["data"]["food"]["fruits"]["banana"]
-    waterBottles = saveddatastore["data"]["food"]["beverages"]["waterBottles"]
-    seaWaterBottles = saveddatastore["data"]["food"]["beverages"]["seaWaterBottles"]
-    orangeJuiceBottles = saveddatastore["data"]["food"]["beverages"]["orangeJuiceBottles"]
-    appleJuiceBottles = saveddatastore["data"]["food"]["beverages"]["appleJuiceBottles"]
-    tea = saveddatastore["data"]["food"]["beverages"]["tea"]
+    beef = saved_datastore["data"]["food"]["meat"]["beef"]
+    chicken = saved_datastore["data"]["food"]["meat"]["chicken"]
+    carrot = saved_datastore["data"]["food"]["vegetables"]["carrot"]
+    potato = saved_datastore["data"]["food"]["vegetables"]["potato"]
+    oranges = saved_datastore["data"]["food"]["fruits"]["oranges"]
+    banana = saved_datastore["data"]["food"]["fruits"]["banana"]
+    waterBottles = saved_datastore["data"]["food"]["beverages"]["waterBottles"]
+    seaWaterBottles = saved_datastore["data"]["food"]["beverages"]["seaWaterBottles"]
+    orangeJuiceBottles = saved_datastore["data"]["food"]["beverages"]["orangeJuiceBottles"]
+    appleJuiceBottles = saved_datastore["data"]["food"]["beverages"]["appleJuiceBottles"]
+    tea = saved_datastore["data"]["food"]["beverages"]["tea"]
 
 
 def readManual(manualnum):
@@ -228,7 +216,7 @@ def readManual(manualnum):
     print("Type either 'back' to choose a chapter you want to view or 'menu' to exit the manual.")
     manualInput = True
     while manualInput:
-        choice1 = input("[Manual] > ").lower()
+        choice1 = input("[root@game/manual]$ ").lower()
         if choice1 == 'back':
             manualInput = False
             gameHelp()
@@ -252,24 +240,24 @@ def gameHelp():  # A menu that asks you to enter the number of a desired chapter
     print(" To go back press enter")
     helpInput = True
     while helpInput:
-        helpChoice = input("[Help menu] > ")
-        if helpChoice == '1':
+        help_choice = input("[root@game/helpMenu]$ ")
+        if help_choice == '1':
             readManual(1)
             helpInput = False
-        elif helpChoice == '2':
+        elif help_choice == '2':
             readManual(2)
             helpInput = False
-        elif helpChoice == '3':
+        elif help_choice == '3':
             readManual(3)
             helpInput = False
-        elif helpChoice == '4':
+        elif help_choice == '4':
             readManual(4)
             helpInput = False
-        elif helpChoice == '' and playfreezed is False:
+        elif help_choice == '' and play_freezed is False:
             start()
             startInputActive = True
             helpInput = False
-        elif helpChoice == '' and playfreezed:
+        elif help_choice == '' and play_freezed:
             Play = True
             helpInput = False
             play()
@@ -278,34 +266,78 @@ def gameHelp():  # A menu that asks you to enter the number of a desired chapter
 
 
 def look():
-    global diningroomQuestsLeft
-    global kitchenQuestsLeft
+    global dining_room_quests_left, kitchen_quests_left, bathroom_quests_left
 
     # Dining room quests
     if area == "diningroom":
-        usrinput = ' '
-        while usrinput not in ['y', 'n', '']:
-            usrinput = input("Would you like to list all available quests in the current room? [Y/n] > ")
+        look_input = ' '
+        while look_input not in ['y', 'n', '']:
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:")
+            l_num = 1
 
-            if usrinput == 'y':
+            if look_input == 'y' or look_input == '':
                 print("==-==-==-==-== Dining room quests ==-==-==-==-==")
-                for i in diningroomQuestsLeft:
-                    print(i)
+                for i in dining_room_quests_left:
+                    print(l_num, ". ", i)
                 print("==-==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
+                del look_input
+                del l_num
                 break
             else:
                 break
+
     # Kitchen quests
     elif area == "kitchen":
-        usrinput = ' '
-        while usrinput not in ['y', 'n', '']:
-            usrinput = input("Would you like to list all available quests in the current room? [Y/n] > ")
+        look_input = ' '
+        while look_input not in ['y', 'n', '']:
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:")
+            l_num = 1
 
-            if usrinput == 'y':
+            if look_input == 'y' or look_input == '':
                 print("==-==-==-==-==-== Kitchen quests ==-==-==-==-==")
-                for i in kitchenQuestsLeft:
-                    print(i)
+                for i in kitchen_quests_left:
+                    print(l_num, ". ", i)
                 print("==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==")
+                del look_input
+                del l_num
+                break
+            else:
+                break
+
+    # Bathroom quests
+    elif area == "bathroom":
+        look_input = ' '
+        while look_input not in ['y', 'n', '']:
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:")
+            l_num = 1
+
+            if look_input == 'y' or look_input == '':
+                print("==-==-==-==-==-== Bathroom quests ==-==-==-==-==")
+                for i in bathroom_quests_left:
+                    print(l_num, ". ", i)
+                    l_num = l_num + 1
+                print("==-==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
+                del look_input
+                del l_num
+                break
+            else:
+                break
+
+    # Room 1 quests
+    elif area == "room1":
+        look_input = ' '
+        while look_input not in ['y', 'n', '']:
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:")
+            l_num = 1
+
+            if look_input == 'y' or look_input == '':
+                print("==-==-==-==-==-==-== Room 1 quests ==-==-==-==-==-==")
+                for i in room1_quests_left:
+                    print(l_num, ".", i)
+                    l_num = l_num + 1
+                print("==-==-==-==-==-==-==-===-==-==-==-==-==-==-==-==")
+                del look_input
+                del l_num
                 break
             else:
                 break
@@ -317,73 +349,66 @@ def Commands():
     system(clear)
     print(commands)
     print("Press enter to go back")
-
-    bruh = ' '
-    while bruh != '':
-        bruh = input("[Commands] > ")
-
+    input("[root@game/commands]$ ")
     play()
 
 
-def addCarrot(quantity):
-    global carrot
-    carrot = carrot + quantity
-
-
-def addChicken(quantity):
-    global chicken
-    chicken = chicken + quantity
-
-
 def chest():
-    Bruh = random.randint(1, 2)
-    if Bruh < 2:
+    chest_available = random.randint(1, 2)
+    if chest_available < 2:
         return False
-    elif Bruh > 1:
+    elif chest_available > 1:
         return True
     return
 
 
 def openChest(chesttype):
-    global Play
-    global playfreezed
-    global chestOpening
+    global Play, play_freezed, chestOpening
+    global carrot, chicken, iron
 
     Play = False
-    playfreezed = True
+    play_freezed = True
     loot = False
 
     if str(chesttype) == 'common':
         print("\nThere is a common chest inside the house. Would you like to open it? (Y/n)")
-        # I can't exit the loop even though chestOpening is set to 0.
-        chestInput = " "
-        while chestInput not in ['y', 'yes', '']:
-            chestInput = input("[Chest opening] > ").lower()
-            if chestInput == 'y' or chestInput == 'yes':
-                CARROT = random.randint(1, 2)
-                if CARROT == 1:
+        chest_input = " "
+        while chest_input not in ['y', 'yes', '']:
+            chest_input = input("[root@game/chestOpening]$ ").lower()
+            if chest_input == 'y' or chest_input == 'yes':
+                chest_carrot = random.randint(1, 2)
+                if chest_carrot == 1:
                     print("You have found a carrot! Chance: 50%")
-                    addCarrot(1)
+                    carrot = carrot + 1
                     loot = True
                 else:
                     continue
-                del CARROT
+                del chest_carrot
 
-                CHICKEN = random.randint(1, 3)
-                if CHICKEN == 1:
+                chest_chicken = random.randint(1, 3)
+                if chest_chicken == 1:
                     print("You have found a chicken! Chance: 33%")
-                    addChicken(1)
+                    chicken = chicken + 1
                     loot = True
                 else:
                     continue
-                del CHICKEN
+                del chest_chicken
+
+                chest_iron = random.randint(1, 4)
+                if chest_iron == 1:
+                    print("You have found an iron ingot! Chance: 25%")
+                    iron = iron + 1
+                    loot = True
+                else:
+                    continue
+                del chest_iron
 
                 Play = False
-                playfreezed = False
+                play_freezed = False
                 play()
             else:
                 Play = False
-                playfreezed = False
+                play_freezed = False
                 play()
         if not loot:
             print("Nothing in the chest. Don't worry, you will be lucky next time!")
@@ -391,12 +416,12 @@ def openChest(chesttype):
 
 def play():
     global startInputActive
-    global playfreezed
+    global play_freezed
     global Play
 
     startInputActive = False
     Play = True
-    playfreezed = False
+    play_freezed = False
 
 
 def goNorth():
@@ -405,41 +430,40 @@ def goNorth():
     global level
     global area
 
-    cY = Y + 1
-    cX = X
+    cy = Y + .5
 
     # The bathroom
-    if cY == 2 and X == -1 and level < 2:
+    if cy == 2 and X == -1 and level < 2:
         print("Sorry, but your level is too low to enter the bathroom.")
 
     # Primary rooms
-    elif cY == 4 and X == -1 and level < 2:
+    elif cy == 4 and X == -1 and level < 2:
         print("Sorry, but your level is too low to enter the first room.")
-    elif cY == 4 and X == -2 and level < 2:
+    elif cy == 4 and X == -2 and level < 2:
         print("Sorry, but your level is too low to enter the first bedroom.")
 
     # Secondary rooms
-    elif cY == 6 and X == -1 and level < 3:
+    elif cy == 6 and X == -1 and level < 3:
         print("Sorry, but your level is too low to enter the second room.")
-    elif cY == 6 and X == -2 and level < 3:
+    elif cy == 6 and X == -2 and level < 3:
         print("Sorry, but your level is too low to enter the second bedroom.")
 
     # Tertiary rooms
-    elif cY == 8 and X == -1 and level < 4:
+    elif cy == 8 and X == -1 and level < 4:
         print("Sorry, but your level is too low to enter the third room.")
-    elif cY == 8 and X == -2 and level < 4:
+    elif cy == 8 and X == -2 and level < 4:
         print("Sorry, but your level is too low to enter the third bedroom.")
 
     # The play room
-    elif cY == 4 and cX == 2 and level < 3 or cY == 4 and cX == 3 and level < 3:
+    elif cy == 4 and X == 2 and level < 3 or cy == 4 and X == 3 and level < 3:
         print("Sorry, but your level is too low to enter the play room")
 
     # The attic
-    elif cY == 10 and X == 0 and level < 4 or cY == 10 and X == 1 and level < 4:
+    elif X == 10 and X == 0 and level < 4 or cy == 10 and X == 1 and level < 4:
         print("Sorry, but your level is too low to enter the attic.")
 
     else:
-        Y = Y + 1
+        Y = Y + .5
         # The bathroom
         if Y == 2 and X == -1:
             area = "bathroom"
@@ -484,41 +508,40 @@ def goSouth():
     global level
     global area
 
-    cY = Y - 1
-    cX = X
+    cy = Y - .5
 
     # The bathroom
-    if cY == 2 and X == -1 and level < 2:
+    if cy == 2 and X == -1 and level < 2:
         print("Sorry, but your level is too low to enter the bathroom.")
 
     # Primary rooms
-    elif cY == 4 and X == -1 and level < 2:
+    elif cy == 4 and X == -1 and level < 2:
         print("Sorry, but your level is too low to enter the first room.")
-    elif cY == 4 and X == -2 and level < 2:
+    elif cy == 4 and X == -2 and level < 2:
         print("Sorry, but your level is too low to enter the first bedroom.")
 
     # Secondary rooms
-    elif cY == 6 and X == -1 and level < 3:
+    elif cy == 6 and X == -1 and level < 3:
         print("Sorry, but your level is too low to enter the second room.")
-    elif cY == 6 and X == -2 and level < 3:
+    elif cy == 6 and X == -2 and level < 3:
         print("Sorry, but your level is too low to enter the second bedroom.")
 
     # Tertiary rooms
-    elif cY == 8 and X == -1 and level < 4:
+    elif cy == 8 and X == -1 and level < 4:
         print("Sorry, but your level is too low to enter the third room.")
-    elif cY == 8 and X == -2 and level < 4:
+    elif cy == 8 and X == -2 and level < 4:
         print("Sorry, but your level is too low to enter the third bedroom.")
 
     # The play room
-    elif cY == 4 and cX == 2 and level < 3 or cY == 4 and cX == 3 and level < 3:
+    elif cy == 4 and cy == 2 and level < 3 or cy == 4 and X == 3 and level < 3:
         print("Sorry, but your level is too low to enter the play room")
 
     # The attic
-    elif cY == 10 and X == 0 and level < 4 or cY == 10 and X == 1 and level < 4:
+    elif cy == 10 and X == 0 and level < 4 or cy == 10 and X == 1 and level < 4:
         print("Sorry, but your level is too low to enter the attic.")
 
     else:
-        Y = Y - 1
+        Y = Y - .5
         # The bathroom
         if Y == 2 and X == -1:
             area = "bathroom"
@@ -563,41 +586,40 @@ def goEast():
     global level
     global area
 
-    cY = Y
-    cX = X + 2
+    cx = X + .5
 
     # The bathroom
-    if cY == 2 and X == -1 and level < 2:
+    if Y == 2 and X == -1 and level < 2:
         print("Sorry, but your level is too low to enter the bathroom.")
 
     # Primary rooms
-    elif cY == 4 and X == -1 and level < 2:
+    elif Y == 4 and cx == -1 and level < 2:
         print("Sorry, but your level is too low to enter the first room.")
-    elif cY == 4 and X == -2 and level < 2:
+    elif Y == 4 and cx == -2 and level < 2:
         print("Sorry, but your level is too low to enter the first bedroom.")
 
     # Secondary rooms
-    elif cY == 6 and X == -1 and level < 3:
+    elif Y == 6 and cx == -1 and level < 3:
         print("Sorry, but your level is too low to enter the second room.")
-    elif cY == 6 and X == -2 and level < 3:
+    elif Y == 6 and cx == -2 and level < 3:
         print("Sorry, but your level is too low to enter the second bedroom.")
 
     # Tertiary rooms
-    elif cY == 8 and X == -1 and level < 4:
+    elif Y == 8 and cx == -1 and level < 4:
         print("Sorry, but your level is too low to enter the third room.")
-    elif cY == 8 and X == -2 and level < 4:
+    elif Y == 8 and cx == -2 and level < 4:
         print("Sorry, but your level is too low to enter the third bedroom.")
 
     # The play room
-    elif cY == 4 and cX == 2 and level < 3 or cY == 4 and cX == 3 and level < 3:
+    elif Y == 4 and cx == 2 and level < 3 or Y == 4 and cx == 3 and level < 3:
         print("Sorry, but your level is too low to enter the play room")
 
     # The attic
-    elif cY == 10 and X == 0 and level < 4 or cY == 10 and X == 1 and level < 4:
+    elif Y == 10 and X == 0 and level < 4 or Y == 10 and X == 1 and level < 4:
         print("Sorry, but your level is too low to enter the attic.")
 
     else:
-        X = X + 1
+        X = X + .5
         # The bathroom
         if Y == 2 and X == -1:
             area = "bathroom"
@@ -642,41 +664,40 @@ def goWest():
     global level
     global area
 
-    cY = Y
-    cX = X - 1
+    cx = X - .5
 
     # The bathroom
-    if cY == 2 and X == -1 and level < 2:
+    if Y == 2 and cx == -1 and level < 2:
         print("Sorry, but your level is too low to enter the bathroom.")
 
     # Primary rooms
-    elif cY == 4 and X == -1 and level < 2:
+    elif Y == 4 and cx == -1 and level < 2:
         print("Sorry, but your level is too low to enter the first room.")
-    elif cY == 4 and X == -2 and level < 2:
+    elif Y == 4 and cx == -2 and level < 2:
         print("Sorry, but your level is too low to enter the first bedroom.")
 
     # Secondary rooms
-    elif cY == 6 and X == -1 and level < 3:
+    elif Y == 6 and cx == -1 and level < 3:
         print("Sorry, but your level is too low to enter the second room.")
-    elif cY == 6 and X == -2 and level < 3:
+    elif Y == 6 and cx == -2 and level < 3:
         print("Sorry, but your level is too low to enter the second bedroom.")
 
     # Tertiary rooms
-    elif cY == 8 and X == -1 and level < 4:
+    elif Y == 8 and cx == -1 and level < 4:
         print("Sorry, but your level is too low to enter the third room.")
-    elif cY == 8 and X == -2 and level < 4:
+    elif Y == 8 and cx == -2 and level < 4:
         print("Sorry, but your level is too low to enter the third bedroom.")
 
     # The play room
-    elif cY == 4 and cX == 2 and level < 3 or cY == 4 and cX == 3 and level < 3:
+    elif Y == 4 and cx == 2 and level < 3 or Y == 4 and cx == 3 and level < 3:
         print("Sorry, but your level is too low to enter the play room")
 
     # The attic
-    elif cY == 10 and X == 0 and level < 4 or cY == 10 and X == 1 and level < 4:
+    elif Y == 10 and X == 0 and level < 4 or Y == 10 and X == 1 and level < 4:
         print("Sorry, but your level is too low to enter the attic.")
 
     else:
-        X = X - 1
+        X = X - .5
         # The bathroom
         if Y == 2 and X == -1:
             area = "bathroom"
@@ -756,14 +777,12 @@ def viewStats():
 
     print("============ Inventory: Food ============")
     print("     Beef: " + str(beef))
-    print("     Pork: " + str(pork))
     print("     Chicken: " + str(chicken))
     print("     Carrots: " + str(carrot))
     print("     Potatoes: " + str(potato))
-    print("     Broccoli: " + str(broccoli))
     print("     Oranges: " + str(oranges))
-    print("     Mangoes: " + str(mango))
     print("     Bananas: " + str(banana))
+    print("     Sandwiches: " + str(sandwiches))
     print("========= Inventory: Beverages ==========")
     print("     Water Bottles: " + str(waterBottles))
     print("     Sea water bottles: " + str(seaWaterBottles))
@@ -772,27 +791,24 @@ def viewStats():
     print("     Apple juice bottles: " + str(appleJuiceBottles))
     print("=========================================")
     print("press enter when you have finished reading your stats.")
-    input("[Viewing stats] > ")
-    if Play == False and playfreezed == True:
+    input("[root@game/viewingStats]$ ")
+    if not Play and play_freezed is True:
         play()
     else:
         start()
 
 
-def eat(foodType):
+def eat(foodtype):
     global hunger
     global beef
-    global pork
     global chicken
     global carrot
     global potato
-    global broccoli
     global oranges
-    global mango
     global banana
     global water
 
-    if foodType == 'beef':
+    if foodtype == 'beef':
         if beef > 0:
             print("Before: hunger - ", hunger, "; water - ", water, ".")
             hunger = hunger + 7
@@ -802,17 +818,7 @@ def eat(foodType):
         else:
             print("You have 0 beef chops.")
             play()
-    elif foodType == "pork":
-        if pork > 0:
-            print("Before: hunger - ", hunger, "; water - ", water, ".")
-            hunger = hunger + 7
-            water = water - 2
-            print("After: hunger - ", hunger, "; water - ", water, ".")
-            play()
-        else:
-            print("You have 0 pork chops.")
-            play()
-    elif foodType == "chicken":
+    elif foodtype == "chicken":
         if chicken > 0:
             print("Before: hunger - ", hunger, "; water - ", water, ".")
             hunger = hunger + 6
@@ -822,7 +828,7 @@ def eat(foodType):
         else:
             print("You have 0 chicken chops.")
             play()
-    elif foodType == "carrot":
+    elif foodtype == "carrot":
         if carrot > 0:
             print("Before: hunger - ", hunger, "; water - ", water, ".")
             hunger = hunger + 4
@@ -831,7 +837,7 @@ def eat(foodType):
         else:
             print("You have 0 carrots.")
             play()
-    elif foodType == "potato":
+    elif foodtype == "potato":
         if potato > 0:
             print("Before: hunger - ", hunger, "; water - ", water, ".")
             hunger = hunger + 3
@@ -840,16 +846,7 @@ def eat(foodType):
         else:
             print("You have 0 potatoes.")
             play()
-    elif foodType == "broccoli":
-        if broccoli > 0:
-            print("Before: hunger - ", hunger, "; water - ", water, ".")
-            hunger = hunger + 3
-            print("After: hunger - ", hunger, "; water - ", water, ".")
-            play()
-        else:
-            print("You have 0 broccoli.")
-            play()
-    elif foodType == "orange":
+    elif foodtype == "orange":
         if oranges > 0:
             print("Before: hunger - ", hunger, "; water - ", water, ".")
             hunger = hunger + 2
@@ -859,17 +856,7 @@ def eat(foodType):
         else:
             print("You have 0 oranges.")
             play()
-    elif foodType == "mango":
-        if mango > 0:
-            print("Before: hunger - ", hunger, "; water - ", water, ".")
-            hunger = hunger + 2
-            water = water + 3
-            print("After: hunger - ", hunger, "; water - ", water, ".")
-            play()
-        else:
-            print("You have 0 mangoes.")
-            play()
-    elif foodType == "banana":
+    elif foodtype == "banana":
         if banana > 0:
             print("Before: hunger - ", hunger, "; water - ", water, ".")
             hunger = hunger + 1
@@ -883,7 +870,7 @@ def eat(foodType):
         play()
 
 
-def drink(beverageType):
+def drink(beveragetype):
     global hunger
     global water
     global waterBottles
@@ -891,7 +878,7 @@ def drink(beverageType):
     global orangeJuiceBottles
     global appleJuiceBottles
     global tea
-    if beverageType == 'waterbottle':
+    if beveragetype == 'waterbottle':
         if waterBottles > 0:
             print("Before: water - ", water, ".")
             water = water + 5
@@ -900,7 +887,7 @@ def drink(beverageType):
         else:
             print("You have 0 water bottles.")
             play()
-    elif beverageType == "seawaterbottle":
+    elif beveragetype == "seawaterbottle":
         if seaWaterBottles > 0:
             print("Before: water - ", water, ".")
             water = water - 3
@@ -909,7 +896,7 @@ def drink(beverageType):
         else:
             print("You have 0 sea water bottles.")
             play()
-    elif beverageType == "orangejuicebottle":
+    elif beveragetype == "orangejuicebottle":
         if orangeJuiceBottles > 0:
             print("Before: water - ", water, ".")
             water = water + 3
@@ -918,7 +905,7 @@ def drink(beverageType):
         else:
             print("You have 0 orange juice bottles.")
             play()
-    elif beverageType == "applejuicebottle":
+    elif beveragetype == "applejuicebottle":
         if appleJuiceBottles > 0:
             print("Before: water - ", water, ".")
             water = water + 3
@@ -927,7 +914,7 @@ def drink(beverageType):
         else:
             print("You have 0 apple juice bottles.")
             play()
-    elif beverageType == "tea":
+    elif beveragetype == "tea":
         if tea > 0:
             print("Before: water - ", water, ".")
             water = water + 2
@@ -958,7 +945,7 @@ def start():
     startInputActive = True
     while startInputActive:
         startChoice = 0
-        startChoice = input("> ")
+        startChoice = input("[root@game/start]$ ")
         if startChoice == '1':
             system(clear)
             play()
@@ -979,7 +966,7 @@ start()
 h = True
 
 while True:
-    if Play and not playfreezed:
+    if Play and not play_freezed:
         if h:
             print("You were spawned in " + area + ".")
             print("Remember: you can get help by typing gameHelp or commands to view commands!")
@@ -994,16 +981,20 @@ while True:
                     pass
                 houseChestOpened = True
             playInput = ''
-            while playInput not in ['gamehelp()', 'gamehelp', 'commands()', 'commands', 'gonorth()', 'gonorth', 'gosouth()', 'gosouth', 'goeast()', 'goeast', 'gowest()', 'gowest', 'exit()', 'exit', 'save()', 'save', 'load()', 'load', 'viewstats()', 'viewstats', "look", "look()", "lookaround", "lookaround()"]:
+            while playInput not in ['gamehelp()', 'gamehelp', 'help', 'help()', 'commands()',
+                                    'commands', 'gonorth()', 'gonorth', 'gosouth()', 'gosouth',
+                                    'goeast()', 'goeast', 'gowest()', 'gowest', 'exit()', 'exit',
+                                    'save()', 'save', 'load()', 'load', 'viewstats()', 'viewstats',
+                                    "look", "look()", "lookaround", "lookaround()"]:
                 changeLevel()
-                playInput = input("[Play --> " + area + "] > ").lower()
+                playInput = input("[root@game/" + area + "]$ ").lower()
                 if playInput == "gamehelp()" or playInput == "gamehelp" or playInput == "help()" or playInput == "help":
                     Play = False
-                    playfreezed = True
+                    play_freezed = True
                     gameHelp()
                 elif playInput == "commands()" or playInput == "commands":
                     Play = False
-                    playfreezed = True
+                    play_freezed = True
                     Commands()
                 elif playInput == "gonorth()" or playInput == "gonorth":
                     goNorth()
@@ -1020,11 +1011,11 @@ while True:
                     save()
                 elif playInput == "load()" or playInput == "load":
                     load()
-                elif playInput == "look" or playInput == "look()" or playInput == "lookaround" or playInput == "lookaround()":
+                elif playInput in ["look", "look()", "lookaround", "lookaround()"]:
                     look()
                 elif playInput == "viewstats()" or playInput == "viewstats":
                     Play = False
-                    playfreezed = True
+                    play_freezed = True
                     usrinput = "123"
                     while usrinput not in ['y', 'n', '']:
                         usrinput = "Would you like to save your progress before viewing your stats? [Y/n] "
@@ -1036,14 +1027,17 @@ while True:
                 elif playInput == "eat":
                     print("  Please enter the argument for the function eat()")
                     Foodtype = ""
-                    while Foodtype not in['beef', 'pork', 'chicken', 'carrot', 'potato', 'broccoli', 'orange', 'mango', 'banana']:
-                        Foodtype = input("  [Eat argument] > ").lower()
+                    while Foodtype not in ['beef', 'chicken', 'carrot',
+                                           'potato', 'orange', 'banana',
+                                           "sandwiches"]:
+                        Foodtype = input("  >>> [Eat argument]$ ").lower()
                         eat(Foodtype)
                 elif playInput == "drink":
                     print("  Please enter the argument for the function drink()")
                     BeverageType = ""
-                    while BeverageType not in ['waterbottle', 'seawaterbottle', 'tea', 'orangejuicebottle', 'applejuicebottle']:
-                        BeverageType = input("  [Drink argument] > ").lower()
+                    while BeverageType not in ['waterbottle', 'seawaterbottle', 'tea', 'orangejuicebottle',
+                                               'applejuicebottle']:
+                        BeverageType = input("  >>> [Drink argument]$ ").lower()
                         drink(BeverageType)
                 elif playInput == "clear" or playInput == "clear()":
                     system(clear)

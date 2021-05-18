@@ -52,14 +52,24 @@ play_freezed = False
 houseChest = False
 chestOpening = False
 houseChestOpened = False
-level = 0
+level = 1
 
 # Quests
 dining_room_quests_left = ["Throw away the cake on the table that is 12 days old", "Clean up the table"]
 kitchen_quests_left = ["Make a sandwich", "Clean the dishes"]
 bathroom_quests_left = ["Fix the faucet", "Clean the ventilation"]
+######
 room1_quests_left = ["Fix the TV", "Close the window"]
-attic_quests_left = ["Adjust the radio frequency"]
+bedroom1_quests_left = ["Kill the monster hiding under the bed", "Tidy up the cupboard"]
+######
+room2_quests_left = ["Change the light bulb in the lamp", "Adjust the frequency on the radio"]
+bedroom2_quests_left = ["Sleep", "Clean the dust on the table"]
+######
+room3_quests_left = ["Remove cobweb on the ceiling", "Put the clothes inside the cupboard"]
+bedroom3_quests_left = ["Wipe the mirror from dust", "Fix the bedside table"]
+######
+playroom_quests_left = ["Take all the toys to the storage"]
+attic_quests_left = ["Unlock the safe", "Open the safe"]
 
 # Input variables
 manualInput = False
@@ -101,7 +111,8 @@ else:
 def changeLevel():
     global xp
     global level
-    level = round(abs(xp / 100))
+    if round(abs(xp / 50)) > level:
+        level = round(abs(xp / 50))
 
 
 def save():  # Save function
@@ -286,11 +297,17 @@ def look():
             else:
                 break
 
+    # Hallway
+    elif area == "hall":
+        print("Your are in a hallway. There are 11 doors.")
+        play()
+
+
     # Kitchen quests
     elif area == "kitchen":
         look_input = ' '
         while look_input not in ['y', 'n', '']:
-            look_input = input("Would you like to list all available quests in the current room? [Y/n]:")
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
@@ -308,13 +325,13 @@ def look():
     elif area == "bathroom":
         look_input = ' '
         while look_input not in ['y', 'n', '']:
-            look_input = input("Would you like to list all available quests in the current room? [Y/n]:")
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-==-== Bathroom quests ==-==-==-==-==")
                 for i in bathroom_quests_left:
-                    print(l_num, ". ", i)
+                    print(str(l_num) + ". ", i)
                     l_num = l_num + 1
                 print("==-==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
                 del look_input
@@ -327,7 +344,7 @@ def look():
     elif area == "room1":
         look_input = ' '
         while look_input not in ['y', 'n', '']:
-            look_input = input("Would you like to list all available quests in the current room? [Y/n]:")
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
@@ -341,6 +358,140 @@ def look():
                 break
             else:
                 break
+
+    # Bedroom 1
+    elif area == "bedroom1":
+        look_input = ' '
+        while look_input not in ['y', 'n', '']:
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
+            l_num = 1
+
+            if look_input == 'y' or look_input == '':
+                print("==-==-==-==-==-== Bedroom 1 quests ==-==-==-==-==")
+                for i in bedroom1_quests_left:
+                    print(l_num, ".", i)
+                    l_num = l_num + 1
+                print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
+                del look_input
+                del l_num
+                break
+            else:
+                break
+
+    # Room 2
+    elif area == "room2":
+        look_input = ' '
+        while look_input not in ['y', 'n', '']:
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
+            l_num = 1
+
+            if look_input == 'y' or look_input == '':
+                print("==-==-==-==-==-== Room 2 quests ==-==-==-==-==-==")
+                for i in room2_quests_left:
+                    print(l_num, ".", i)
+                    l_num = l_num + 1
+                print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
+                del look_input
+                del l_num
+                break
+            else:
+                break
+
+    # Bedroom 2
+    elif area == "bedroom2":
+        look_input = ' '
+        while look_input not in ['y', 'n', '']:
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
+            l_num = 1
+
+            if look_input == 'y' or look_input == '':
+                print("==-==-==-==-==-== Bedroom 2 quests ==-==-==-==-==")
+                for i in bedroom2_quests_left:
+                    print(l_num, ".", i)
+                    l_num = l_num + 1
+                print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
+                del look_input
+                del l_num
+                break
+            else:
+                break
+
+    # Room 3
+    elif area == "room3":
+        look_input = ' '
+        while look_input not in ['y', 'n', '']:
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
+            l_num = 1
+
+            if look_input == 'y' or look_input == '':
+                print("==-==-==-==-==-== Room 3 quests ==-==-==-==-==")
+                for i in room3_quests_left:
+                    print(l_num, ".", i)
+                    l_num = l_num + 1
+                print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==")
+                del look_input
+                del l_num
+                break
+            else:
+                break
+
+    # Bedroom 3
+    elif area == "bedroom3":
+        look_input = ' '
+        while look_input not in ['y', 'n', '']:
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
+            l_num = 1
+
+            if look_input == 'y' or look_input == '':
+                print("==-==-==-==-==-== Bedroom 3 quests ==-==-==-==-==")
+                for i in bedroom3_quests_left:
+                    print(l_num, ".", i)
+                    l_num = l_num + 1
+                print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
+                del look_input
+                del l_num
+                break
+            else:
+                break
+
+    # Playroom
+    elif area == "playroom":
+        look_input = ' '
+        while look_input not in ['y', 'n', '']:
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
+            l_num = 1
+
+            if look_input == 'y' or look_input == '':
+                print("==-==-==-==-==-== Playroom 1 quests ==-==-==-==-==")
+                for i in playroom_quests_left:
+                    print(l_num, ".", i)
+                    l_num = l_num + 1
+                print("==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==")
+                del look_input
+                del l_num
+                break
+            else:
+                break
+
+    # Attic
+    elif area == "attic":
+        look_input = ' '
+        while look_input not in ['y', 'n', '']:
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
+            l_num = 1
+
+            if look_input == 'y' or look_input == '':
+                print("==-==-==-==-==-== Attic 1 quests ==-==-==-==-==")
+                for i in attic_quests_left:
+                    print(l_num, ".", i)
+                    l_num = l_num + 1
+                print("==-==-==-==-==-==-==-==--=-==-==-==-==-==-==-==")
+                del look_input
+                del l_num
+                break
+            else:
+                break
+
     else:
         print("what")
 
@@ -737,32 +888,6 @@ def goWest():
     play()
 
 
-def changeArea(x, y):
-    global area
-    if x == 2 and y == 1:
-        area = "diningroom"  # the area is set to "diningroom"
-    elif x == 2 and y == 2:
-        area = "kitchen"  # the area is set to "kitchen"
-    elif x == -1 and y == 2:
-        area = "bathroom"  # the area is set to "bathroom"
-    elif x == -1 and y == 4:
-        area = "room1"  # the area is set to "room1"
-    elif x == -2 and y == 4:
-        area = "bedroom1"  # the area is set to "bedroom1"
-    elif x == 2 and y == 4 or x == 3 and y == 4:
-        area = "playroom"  # the area is set to "playroom"
-    elif x == -1 and y == 6:
-        area = "room2"  # the area is set to "room2"
-    elif x == -2 and y == 6:
-        area = "bedroom2"  # the area is set to "bedroom2"
-    elif x == -1 and y == 8:
-        area = "room3"  # the area is set to "room3"
-    elif x == -2 and y == 8:
-        area = "bedroom3"  # the area is set to "bedroom3"
-    elif x == 0 and y == 10 or x == 1 and y == 10:
-        area = "attic"  # the area is set to "attic"
-
-
 def viewStats():
     system(clear)
     print("========== Character info ===============")
@@ -987,7 +1112,7 @@ while True:
                                     'save()', 'save', 'load()', 'load', 'viewstats()', 'viewstats',
                                     "look", "look()", "lookaround", "lookaround()"]:
                 changeLevel()
-                playInput = input("[root@game/" + area + "]$ ").lower()
+                playInput = input("[root@game/" + area + " lvl" + str(level) + "]$ ").lower()
                 if playInput == "gamehelp()" or playInput == "gamehelp" or playInput == "help()" or playInput == "help":
                     Play = False
                     play_freezed = True

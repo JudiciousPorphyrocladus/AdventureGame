@@ -44,6 +44,7 @@ tea = datastore["data"]["food"]["beverages"]["tea"]
 
 # Variables
 firstTime = datastore["data"]["playerInfo"]["firstTime"]
+hasUnsavedProgress = False
 playing = True
 startInputActive = True
 startChoice = 0
@@ -55,7 +56,7 @@ houseChestOpened = False
 level = 1
 
 # Quests
-dining_room_quests_left = ["Throw away the cake on the table that is 12 days old", "Clean up the table"]
+dining_room_quests_left = ["Throw away the cake on the table", "Clean up the table"]
 kitchen_quests_left = ["Make a sandwich", "Clean the dishes"]
 bathroom_quests_left = ["Fix the faucet", "Clean the ventilation"]
 ######
@@ -285,45 +286,47 @@ def look():
 
     # Dining room quests
     if area == "diningroom":
-        look_input = ' '
-        while look_input not in ['y', 'n', '']:
+        lookinput = ' '
+        while lookinput not in ['y', 'n', '']:
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:")
             l_num = 1
 
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-== Dining room quests ==-==-==-==-==")
                 for i in dining_room_quests_left:
-                    print(l_num, ". ", i)
+                    print(str(l_num) + ".", i)
                 print("==-==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
                 quest_input = input("Would you like to take any of these quests? [Y/n] ")
                 if quest_input in ['y', '', 'yes']:
-                    quest_number = input("What quest would you like to take? [1, 2] ")
+                    quest_number = ''
+
                     while quest_number not in ['1', '2']:
-                        if int(quest_number) == 1:
-                            quests_in_progress.append(dining_room_quests_left[0])
+                        quest_number = input("What quest would you like to take? [1, 2] ")
+                        if quest_number == '1':
+                            for quest in quests_in_progress:
+                                if quest == dining_room_quests_left[1]:
+                                    break
+                                else:
+                                    quests_in_progress.append(dining_room_quests_left[1])
+                                    break
+
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
-                        elif int(quest_number) == 2:
+                        elif quest_number == '2':
                             quests_in_progress.append(dining_room_quests_left[1])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         else:
                             print("Please enter a valid quest number!")
                 else:
-                    del look_input
-                    del quest_number
-                    del quest_input
-                    del l_num
+                    del look_input, quest_number, quest_input, l_num
+                    play()
                     break
             else:
                 break
@@ -344,7 +347,7 @@ def look():
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-==-== Kitchen quests ==-==-==-==-==")
                 for i in kitchen_quests_left:
-                    print(l_num, ". ", i)
+                    print(str(l_num) + ".", i)
                 print("==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==")
                 quest_input = input("Would you like to take any of these quests? [Y/n] ")
                 if quest_input in ['y', '', 'yes']:
@@ -354,27 +357,21 @@ def look():
                             quests_in_progress.append(kitchen_quests_left[0])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         elif int(quest_number) == 2:
                             quests_in_progress.append(kitchen_quests_left[1])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         else:
                             print("Please enter a valid quest number!")
                 else:
-                    del look_input
-                    del quest_number
-                    del quest_input
-                    del l_num
+                    del look_input, quest_number, quest_input, l_num
+                    play()
                     break
             else:
                 break
@@ -389,7 +386,7 @@ def look():
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-==-== Bathroom quests ==-==-==-==-==")
                 for i in bathroom_quests_left:
-                    print(str(l_num) + ". ", i)
+                    print(str(l_num) + ".", i)
                     l_num = l_num + 1
                 print("==-==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
                 quest_input = input("Would you like to take any of these quests? [Y/n] ")
@@ -400,27 +397,21 @@ def look():
                             quests_in_progress.append(bathroom_quests_left[0])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         elif int(quest_number) == 2:
                             quests_in_progress.append(bathroom_quests_left[1])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         else:
                             print("Please enter a valid quest number!")
                 else:
-                    del look_input
-                    del quest_number
-                    del quest_input
-                    del l_num
+                    del look_input, quest_number, quest_input, l_num
+                    play()
                     break
             else:
                 break
@@ -435,7 +426,7 @@ def look():
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-==-==-== Room 1 quests ==-==-==-==-==-==")
                 for i in room1_quests_left:
-                    print(l_num, ".", i)
+                    print(str(l_num) + ".", i)
                     l_num = l_num + 1
                 print("==-==-==-==-==-==-==-===-==-==-==-==-==-==-==-==")
                 quest_input = input("Would you like to take any of these quests? [Y/n] ")
@@ -446,27 +437,21 @@ def look():
                             quests_in_progress.append(room1_quests_left[0])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         elif int(quest_number) == 2:
                             quests_in_progress.append(room1_quests_left[1])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         else:
                             print("Please enter a valid quest number!")
                 else:
-                    del look_input
-                    del quest_number
-                    del quest_input
-                    del l_num
+                    del look_input, quest_number, quest_input, l_num
+                    play()
                     break
             else:
                 break
@@ -481,7 +466,7 @@ def look():
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-==-== Bedroom 1 quests ==-==-==-==-==")
                 for i in bedroom1_quests_left:
-                    print(l_num, ".", i)
+                    print(str(l_num) + ".", i)
                     l_num = l_num + 1
                 print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
                 quest_input = input("Would you like to take any of these quests? [Y/n] ")
@@ -492,27 +477,21 @@ def look():
                             quests_in_progress.append(bedroom1_quests_left[0])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         elif int(quest_number) == 2:
                             quests_in_progress.append(bedroom1_quests_left[1])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         else:
                             print("Please enter a valid quest number!")
                 else:
-                    del look_input
-                    del quest_number
-                    del quest_input
-                    del l_num
+                    del look_input, quest_number, quest_input, l_num
+                    play()
                     break
             else:
                 break
@@ -527,7 +506,7 @@ def look():
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-==-== Room 2 quests ==-==-==-==-==-==")
                 for i in room2_quests_left:
-                    print(l_num, ".", i)
+                    print(str(l_num) + ".", i)
                     l_num = l_num + 1
                 print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
                 quest_input = input("Would you like to take any of these quests? [Y/n] ")
@@ -538,27 +517,21 @@ def look():
                             quests_in_progress.append(room2_quests_left[0])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         elif int(quest_number) == 2:
                             quests_in_progress.append(room2_quests_left[1])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         else:
                             print("Please enter a valid quest number!")
                 else:
-                    del look_input
-                    del quest_number
-                    del quest_input
-                    del l_num
+                    del look_input, quest_number, quest_input, l_num
+                    play()
                     break
             else:
                 break
@@ -573,7 +546,7 @@ def look():
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-==-== Bedroom 2 quests ==-==-==-==-==")
                 for i in bedroom2_quests_left:
-                    print(l_num, ".", i)
+                    print(str(l_num) + ".", i)
                     l_num = l_num + 1
                 print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
                 quest_input = input("Would you like to take any of these quests? [Y/n] ")
@@ -584,27 +557,21 @@ def look():
                             quests_in_progress.append(bedroom2_quests_left[0])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         elif int(quest_number) == 2:
                             quests_in_progress.append(bedroom2_quests_left[1])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         else:
                             print("Please enter a valid quest number!")
                 else:
-                    del look_input
-                    del quest_number
-                    del quest_input
-                    del l_num
+                    del look_input, quest_number, quest_input, l_num
+                    play()
                     break
             else:
                 break
@@ -619,7 +586,7 @@ def look():
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-==-== Room 3 quests ==-==-==-==-==")
                 for i in room3_quests_left:
-                    print(l_num, ".", i)
+                    print(str(l_num) + ".", i)
                     l_num = l_num + 1
                 print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==")
                 quest_input = input("Would you like to take any of these quests? [Y/n] ")
@@ -630,27 +597,21 @@ def look():
                             quests_in_progress.append(room3_quests_left[0])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         elif int(quest_number) == 2:
                             quests_in_progress.append(room3_quests_left[1])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         else:
                             print("Please enter a valid quest number!")
                 else:
-                    del look_input
-                    del quest_number
-                    del quest_input
-                    del l_num
+                    del look_input, quest_number, quest_input, l_num
+                    play()
                     break
             else:
                 break
@@ -665,7 +626,7 @@ def look():
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-==-== Bedroom 3 quests ==-==-==-==-==")
                 for i in bedroom3_quests_left:
-                    print(l_num, ".", i)
+                    print(str(l_num) + ".", i)
                     l_num = l_num + 1
                 print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
                 quest_input = input("Would you like to take any of these quests? [Y/n] ")
@@ -676,27 +637,21 @@ def look():
                             quests_in_progress.append(bedroom3_quests_left[0])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         elif int(quest_number) == 2:
                             quests_in_progress.append(bedroom3_quests_left[1])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         else:
                             print("Please enter a valid quest number!")
                 else:
-                    del look_input
-                    del quest_number
-                    del quest_input
-                    del l_num
+                    del look_input, quest_number, quest_input, l_num
+                    play()
                     break
             else:
                 break
@@ -711,7 +666,7 @@ def look():
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-==-== Playroom 1 quests ==-==-==-==-==")
                 for i in playroom_quests_left:
-                    print(l_num, ".", i)
+                    print(str(l_num) + ".", i)
                     l_num = l_num + 1
                 print("==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==")
                 quest_input = input("Would you like to take any of these quests? [Y/n] ")
@@ -722,27 +677,21 @@ def look():
                             quests_in_progress.append(playroom_quests_left[0])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         elif int(quest_number) == 2:
                             quests_in_progress.append(playroom_quests_left[1])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         else:
                             print("Please enter a valid quest number!")
                 else:
-                    del look_input
-                    del quest_number
-                    del quest_input
-                    del l_num
+                    del look_input, quest_number, quest_input, l_num
+                    play()
                     break
             else:
                 break
@@ -757,7 +706,7 @@ def look():
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-==-== Attic 1 quests ==-==-==-==-==")
                 for i in attic_quests_left:
-                    print(l_num, ".", i)
+                    print(str(l_num) + ".", i)
                     l_num = l_num + 1
                 print("==-==-==-==-==-==-==-==--=-==-==-==-==-==-==-==")
                 quest_input = input("Would you like to take any of these quests? [Y/n] ")
@@ -768,27 +717,21 @@ def look():
                             quests_in_progress.append(attic_quests_left[0])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         elif int(quest_number) == 2:
                             quests_in_progress.append(attic_quests_left[1])
                             print("Quest taken!")
                             input("Press any key to continue...")
-                            del look_input
-                            del quest_number
-                            del quest_input
-                            del l_num
+                            del look_input, quest_number, quest_input, l_num
+                            play()
                             break
                         else:
                             print("Please enter a valid quest number!")
                 else:
-                    del look_input
-                    del quest_number
-                    del quest_input
-                    del l_num
+                    del look_input, quest_number, quest_input, l_num
+                    play()
                     break
             else:
                 break
@@ -863,7 +806,7 @@ def openChest(chesttype):
                 play_freezed = False
                 play()
         if not loot:
-            print("Nothing in the chest. Don't worry, you will be lucky next time!")
+            print("Nothing in the chest.\n")
 
 
 def play():
@@ -1226,11 +1169,135 @@ def viewStats():
 # This function lists all available quests
 def listQuests():
     print("You have " + len(quests_in_progress) + " quests. ")
-    lq_input = input("Would you like to list all available quests? [Y/n] ").lower()
+    lq_input = input("Would you like to list all quests in progress? [Y/n] ").lower()
     if lq_input in ['y', '', 'yes']:
         for i in quests_in_progress:
             print(i)
         input("Press any key to continue... ")
+
+
+def takeQuest():
+    print("What quest would you like to start?")
+    f = 1
+    for i in quests_in_progress:
+        print(f, i)
+        f = f + 1
+    usrinput = input("")
+    if int(usrinput) == 1:
+        if quests_in_progress[0] == dining_room_quests_left[0]:
+            os.system("clear")
+
+            finished = False
+            while not finished:
+                text = "Enter E 5 times to pick up the cake...\n"
+                for char in text:
+                    sys.stdout.write(char)
+                    sys.stdout.flush()
+                    time.sleep(.07)
+
+                finished_e = False
+                Es = 0
+                while not finished_e:
+                    for _ in range(0, 5):
+                        usrinput = input("Press > ").lower()
+                        if usrinput != "e":
+                            print("You must press E!")
+                            time.sleep(1.5)
+                            os.system("clear")
+                            break
+                        elif usrinput == "e":
+                            Es = Es + 1
+
+                    if Es == 5:
+                        break
+
+                text = "Use the WASD keys in order to move..."
+                got = False
+                for char in text:
+                    sys.stdout.write(char)
+                    sys.stdout.flush()
+                    time.sleep(.07)
+
+                time.sleep(2)
+
+                leftY = 5
+                leftX = -2
+                coordinates = [0, 0]
+                while not got:
+                    os.system("clear")
+                    print("Y left: " + str(leftY) + "\nX left: " + str(leftX) + ".")
+                    key = input("> ").lower()
+                    if key == "w" and coordinates[1] < 5:
+                        leftY = leftY - 1
+                        coordinates[1] = coordinates[1] - 1
+                        if leftY == 0 and leftX == 0:
+                            break
+                    elif key == "w" and coordinates[1] > 5:
+                        leftY = leftY + 1
+                        coordinates[1] = coordinates[1] + 1
+                        if leftY == 0 and leftX == 0:
+                            break
+                    elif key == "s" and coordinates[1] < 5:
+                        leftY = leftY - 1
+                        coordinates[1] = coordinates[1] - 1
+                        if leftY == 0 and leftX == 0:
+                            break
+                    elif key == "s" and coordinates[1] > 5:
+                        leftY = leftY + 1
+                        coordinates[1] = coordinates[1] + 1
+                        if leftY == 0 and leftX == 0:
+                            break
+                    elif key == "a" and coordinates[0] < -2:
+                        leftX = leftX - 1
+                        coordinates[0] = coordinates[0] - 1
+                        if leftY == 0 and leftX == 0:
+                            break
+                    elif key == "a" and coordinates[0] > -2:
+                        leftX = leftX + 1
+                        coordinates[0] = coordinates[0] + 1
+                        if leftY == 0 and leftX == 0:
+                            break
+                    elif key == "d" and coordinates[0] > -2:
+                        leftX = leftX - 1
+                        coordinates[0] = coordinates[0] - 1
+                        if leftY == 0 and leftX == 0:
+                            break
+                    elif key == "d" and coordinates[0] < -2:
+                        leftX = leftX + 1
+                        coordinates[0] = coordinates[0] + 1
+                        if leftY == 0 and leftX == 0:
+                            break
+                    else:
+                        pass
+
+                text = "Enter E 5 times to throw away the cake...\n"
+                for char in text:
+                    sys.stdout.write(char)
+                    sys.stdout.flush()
+                    time.sleep(.07)
+
+                finished_e = False
+                Es = 0
+                while not finished_e:
+                    for _ in range(0, 5):
+                        usrinput = input("Press > ").lower()
+                        if usrinput != "e":
+                            print("You must press E!")
+                            time.sleep(1.5)
+                            os.system("clear")
+                            break
+                        elif usrinput == "e":
+                            Es = Es + 1
+
+                    if Es == 5:
+                        break
+
+                os.system("clear")
+
+                print("Successfully finished the quest! +25XP")
+                input("Press any key to continue... ")
+                finished = True
+                break
 
 
 def eat(foodtype):
@@ -1303,6 +1370,22 @@ def eat(foodtype):
     else:
         print("Please enter a valid argument for the eat() function!")
         play()
+
+
+# Exits the game
+def exitGame():
+    if hasUnsavedProgress:
+        usrinput = " "
+        while usrinput not in ["s", "q"]:
+            usrinput = input("You have unsaved progress!\nAre you sure you want to quit the game? [S-Save and quit/Q-Quit] ").lower()
+            if usrinput == "s":
+                save()
+                exit()
+            elif usrinput == "q":
+                exit()
+            else:
+                print("Enter a valid choice!\nS to save the game or Q to quit")
+
 
 
 def drink(beveragetype):
@@ -1403,8 +1486,8 @@ h = True
 while True:
     if Play and not play_freezed:
         if h:
-            print("You were spawned in " + area + ".")
-            print("Remember: you can get help by typing gameHelp or commands to view commands!")
+            print("You were spawned in the " + area + ".")
+            print("Remember: you can get help by typing gameHelp or commands to view commands!\nEnjoy!\n")
             h = False
         while Play:
             changeLevel()
@@ -1420,34 +1503,64 @@ while True:
                                     'commands', 'gonorth()', 'gonorth', 'gosouth()', 'gosouth',
                                     'goeast()', 'goeast', 'gowest()', 'gowest', 'exit()', 'exit',
                                     'save()', 'save', 'load()', 'load', 'viewstats()', 'viewstats',
-                                    "look", "look()", "lookaround", "lookaround()"]:
+                                    "look", "look()", "lookaround", "lookaround()", "takequest()",
+                                    "takequest", 'listquests', 'listquests()']:
                 changeLevel()
                 playInput = input("[root@game/" + area + " lvl" + str(level) + "]$ ").lower()
-                if playInput == "gamehelp()" or playInput == "gamehelp" or playInput == "help()" or playInput == "help":
+
+                if playInput in ["help", "gamehelp", "help()", "gamehelp()"]:
                     Play = False
                     play_freezed = True
                     gameHelp()
-                elif playInput == "commands()" or playInput == "commands":
+
+                elif playInput in ["commands", "commands()"]:
                     Play = False
                     play_freezed = True
                     Commands()
-                elif playInput == "gonorth()" or playInput == "gonorth":
+
+                elif playInput in ["gonorth", "gonorth()"]:
                     goNorth()
-                elif playInput == "gosouth()" or playInput == "gosouth":
+
+                elif playInput in ["gosouth", "gosouth()"]:
                     goSouth()
-                elif playInput == "goeast()" or playInput == "goeast":
+
+                elif playInput in ["goeast", "goeast()"]:
                     goEast()
-                elif playInput == "gowest()" or playInput == "gowest":
+
+                elif playInput in ["gowest", "gowest()"]:
                     goWest()
-                elif playInput == "exit()" or playInput == "exit":
+
+                elif playInput in ["exit", "exit()"]:
                     save()
-                    exit()
-                elif playInput == "save()" or playInput == "save":
+                    exitGame()
+
+                elif playInput in ["save", "save()"]:
                     save()
-                elif playInput == "load()" or playInput == "load":
+
+                elif playInput in ["load", "load()"]:
                     load()
+
                 elif playInput in ["look", "look()", "lookaround", "lookaround()"]:
                     look()
+
+                # Prints out all the quests that were taken and not completed
+                elif playInput in ["listquests", "listquests()"]:
+                    blabla = False
+                    # Checks whether the player has a quest active
+                    try:
+                        quests_in_progress[0]
+                    # If yes,
+                    except:
+                        print("You don't have any quests.")
+                        blabla = True
+                        break
+
+                    if not blabla:
+                        for i in quests_in_progress:
+                            print(i)
+                    else:
+                        pass
+
                 elif playInput == "viewstats()" or playInput == "viewstats":
                     Play = False
                     play_freezed = True
@@ -1459,6 +1572,7 @@ while True:
                         else:
                             break
                     viewStats()
+
                 elif playInput == "eat":
                     print("  Please enter the argument for the function eat()")
                     Foodtype = ""
@@ -1467,6 +1581,7 @@ while True:
                                            "sandwiches"]:
                         Foodtype = input("  >>> [Eat argument]$ ").lower()
                         eat(Foodtype)
+
                 elif playInput == "drink":
                     print("  Please enter the argument for the function drink()")
                     BeverageType = ""
@@ -1474,7 +1589,12 @@ while True:
                                                'applejuicebottle']:
                         BeverageType = input("  >>> [Drink argument]$ ").lower()
                         drink(BeverageType)
-                elif playInput == "clear" or playInput == "clear()":
+
+                elif playInput in ["clear", "clear()"]:
                     system(clear)
+
+                elif playInput in ["takequest", "takequest()"]:
+                    takeQuest()
+
                 else:
-                    print("I don't know this phrase. Please read the manual.")
+                    print("I don't know the phrase '" + playInput + "'. Please read the manual.")

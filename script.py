@@ -1,7 +1,5 @@
 # Computer science 8.1 adventure game
-import json
-import os
-import random
+import json, os, random
 from os import system
 from sys import platform
 
@@ -10,6 +8,7 @@ data = open(os.getcwd() + "/stats.json", 'r')
 datastore = json.load(data)
 data.close()
 
+# Character statistics
 hunger = datastore["data"]["characterInfo"]["hunger"]
 health = datastore["data"]["characterInfo"]["health"]
 water = datastore["data"]["characterInfo"]["water"]
@@ -282,49 +281,58 @@ def gameHelp():  # A menu that asks you to enter the number of a desired chapter
 
 
 def look():
-    global dining_room_quests_left, kitchen_quests_left, bathroom_quests_left
+    global dining_room_quests_left, kitchen_quests_left, bathroom_quests_left, startInputActive, Play, play_freezed
+    hasChosenAQuest = False
 
     # Dining room quests
     if area == "diningroom":
         lookinput = ' '
-        while lookinput not in ['y', 'n', '']:
-            look_input = input("Would you like to list all available quests in the current room? [Y/n]:")
+        while lookinput not in ['y', 'n', ''] and not hasChosenAQuest:
+            look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
-                print("==-==-==-==-== Dining room quests ==-==-==-==-==")
-                for i in dining_room_quests_left:
-                    print(str(l_num) + ".", i)
-                print("==-==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
-                quest_input = input("Would you like to take any of these quests? [Y/n] ")
-                if quest_input in ['y', '', 'yes']:
-                    quest_number = ''
+                if dining_room_quests_left[0] and dining_room_quests_left[1]:
+                    print("==-==-==-==-== Dining room quests ==-==-==-==-==")
+                    for i in dining_room_quests_left:
+                        print(str(l_num) + ".", i)
+                    print("==-==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
+                    quest_input = input("Would you like to take any of these quests? [Y/n] ")
+                    if quest_input in ['y', '', 'yes']:
+                        quest_number = ' '
 
-                    while quest_number not in ['1', '2']:
-                        quest_number = input("What quest would you like to take? [1, 2] ")
-                        if quest_number == '1':
-                            for quest in quests_in_progress:
-                                if quest == dining_room_quests_left[1]:
-                                    break
-                                else:
+                        while quest_number not in ['1', '2']:
+                            quest_number = input("What quest would you like to take? [1, 2] ").lower()
+                            if quest_number == '1':
+                                if dining_room_quests_left[0]:
+                                    quests_in_progress.append(dining_room_quests_left[0])
+                                    del dining_room_quests_left[0]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    pass
+                            elif quest_number == '2':
+                                if dining_room_quests_left[1]:
                                     quests_in_progress.append(dining_room_quests_left[1])
-                                    break
+                                    del dining_room_quests_left[1]
 
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
+                                    print("Quest taken!")
+                                    input("Enter any key to continue...")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                            else:
+                                print("Please enter a valid quest number!")
                             break
-                        elif quest_number == '2':
-                            quests_in_progress.append(dining_room_quests_left[1])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
-                            break
-                        else:
-                            print("Please enter a valid quest number!")
+                    else:
+                        del look_input, quest_number, quest_input, l_num
+                        play()
+                        break
                 else:
+                    print("There are no quests in this room.")
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -339,37 +347,53 @@ def look():
 
     # Kitchen quests
     elif area == "kitchen":
-        look_input = ' '
-        while look_input not in ['y', 'n', '']:
+        lookinput = ' '
+        while lookinput not in ['y', 'n', ''] and not hasChosenAQuest:
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
-                print("==-==-==-==-==-== Kitchen quests ==-==-==-==-==")
-                for i in kitchen_quests_left:
-                    print(str(l_num) + ".", i)
-                print("==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==")
-                quest_input = input("Would you like to take any of these quests? [Y/n] ")
-                if quest_input in ['y', '', 'yes']:
-                    quest_number = input("What quest would you like to take? [1, 2] ")
-                    while quest_number not in ['1', '2']:
-                        if int(quest_number) == 1:
-                            quests_in_progress.append(kitchen_quests_left[0])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
+                if kitchen_quests_left[0] and kitchen_quests_left[1]:
+                    print("==-==-==-==-== Kitchen quests ==-==-==-==-==")
+                    for i in kitchen_quests_left:
+                        print(str(l_num) + ".", i)
+                    print("==-==-==-==-==-==-==-==-==-==-==-==-==-==-==")
+                    quest_input = input("Would you like to take any of these quests? [Y/n] ")
+                    if quest_input in ['y', '', 'yes']:
+                        quest_number = ' '
+
+                        while quest_number not in ['1', '2']:
+                            quest_number = input("What quest would you like to take? [1, 2] ").lower()
+                            if quest_number == '1':
+                                if dining_room_quests_left[0]:
+                                    quests_in_progress.append(kitchen_quests_left[0])
+                                    del kitchen_quests_left[0]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    pass
+                            elif quest_number == '2':
+                                if kitchen_quests_left[1]:
+                                    quests_in_progress.append(kitchen_quests_left[1])
+                                    del kitchen_quests_left[1]
+
+                                    print("Quest taken!")
+                                    input("Enter any key to continue...")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                            else:
+                                print("Please enter a valid quest number!")
                             break
-                        elif int(quest_number) == 2:
-                            quests_in_progress.append(kitchen_quests_left[1])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
-                            break
-                        else:
-                            print("Please enter a valid quest number!")
+                    else:
+                        del look_input, quest_number, quest_input, l_num
+                        play()
+                        break
                 else:
+                    print("There are no quests in this room.")
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -378,38 +402,53 @@ def look():
 
     # Bathroom quests
     elif area == "bathroom":
-        look_input = ' '
-        while look_input not in ['y', 'n', '']:
+        lookinput = ' '
+        while lookinput not in ['y', 'n', ''] and not hasChosenAQuest:
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
-                print("==-==-==-==-==-== Bathroom quests ==-==-==-==-==")
-                for i in bathroom_quests_left:
-                    print(str(l_num) + ".", i)
-                    l_num = l_num + 1
-                print("==-==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
-                quest_input = input("Would you like to take any of these quests? [Y/n] ")
-                if quest_input in ['y', '', 'yes']:
-                    quest_number = input("What quest would you like to take? [1, 2] ")
-                    while quest_number not in ['1', '2']:
-                        if int(quest_number) == 1:
-                            quests_in_progress.append(bathroom_quests_left[0])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
+                if bathroom_quests_left[0] and bathroom_quests_left[1]:
+                    print("==-==-==-==-== Bathroom quests ==-==-==-==-==")
+                    for i in bathroom_quests_left:
+                        print(str(l_num) + ".", i)
+                    print("==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
+                    quest_input = input("Would you like to take any of these quests? [Y/n] ")
+                    if quest_input in ['y', '', 'yes']:
+                        quest_number = ' '
+
+                        while quest_number not in ['1', '2']:
+                            quest_number = input("What quest would you like to take? [1, 2] ").lower()
+                            if quest_number == '1':
+                                if bathroom_quests_left[0]:
+                                    quests_in_progress.append(bathroom_quests_left[0])
+                                    del bathroom_quests_left[0]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    pass
+                            elif quest_number == '2':
+                                if bathroom_quests_left[1]:
+                                    quests_in_progress.append(bathroom_quests_left[1])
+                                    del bathroom_quests_left[1]
+
+                                    print("Quest taken!")
+                                    input("Enter any key to continue...")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                            else:
+                                print("Please enter a valid quest number!")
                             break
-                        elif int(quest_number) == 2:
-                            quests_in_progress.append(bathroom_quests_left[1])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
-                            break
-                        else:
-                            print("Please enter a valid quest number!")
+                    else:
+                        del look_input, quest_number, quest_input, l_num
+                        play()
+                        break
                 else:
+                    print("There are no quests in this room.")
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -418,38 +457,53 @@ def look():
 
     # Room 1 quests
     elif area == "room1":
-        look_input = ' '
-        while look_input not in ['y', 'n', '']:
+        lookinput = ' '
+        while lookinput not in ['y', 'n', ''] and not hasChosenAQuest:
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
-                print("==-==-==-==-==-==-== Room 1 quests ==-==-==-==-==-==")
-                for i in room1_quests_left:
-                    print(str(l_num) + ".", i)
-                    l_num = l_num + 1
-                print("==-==-==-==-==-==-==-===-==-==-==-==-==-==-==-==")
-                quest_input = input("Would you like to take any of these quests? [Y/n] ")
-                if quest_input in ['y', '', 'yes']:
-                    quest_number = input("What quest would you like to take? [1, 2] ")
-                    while quest_number not in ['1', '2']:
-                        if int(quest_number) == 1:
-                            quests_in_progress.append(room1_quests_left[0])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
+                if room1_quests_left[0] and room1_quests_left[1]:
+                    print("==-==-==-==-== Room 1 quests ==-==-==-==-==")
+                    for i in room1_quests_left:
+                        print(str(l_num) + ".", i)
+                    print("==-==-==-==-==-==-==-=-==-==-==-==-==-==-==")
+                    quest_input = input("Would you like to take any of these quests? [Y/n] ")
+                    if quest_input in ['y', '', 'yes']:
+                        quest_number = ' '
+
+                        while quest_number not in ['1', '2']:
+                            quest_number = input("What quest would you like to take? [1, 2] ").lower()
+                            if quest_number == '1':
+                                if room1_quests_left[0]:
+                                    quests_in_progress.append(room1_quests_left[0])
+                                    del room1_quests_left[0]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    pass
+                            elif quest_number == '2':
+                                if room1_quests_left[1]:
+                                    quests_in_progress.append(room1_quests_left[1])
+                                    del room1_quests_left[1]
+
+                                    print("Quest taken!")
+                                    input("Enter any key to continue...")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                            else:
+                                print("Please enter a valid quest number!")
                             break
-                        elif int(quest_number) == 2:
-                            quests_in_progress.append(room1_quests_left[1])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
-                            break
-                        else:
-                            print("Please enter a valid quest number!")
+                    else:
+                        del look_input, quest_number, quest_input, l_num
+                        play()
+                        break
                 else:
+                    print("There are no quests in this room.")
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -458,38 +512,53 @@ def look():
 
     # Bedroom 1
     elif area == "bedroom1":
-        look_input = ' '
-        while look_input not in ['y', 'n', '']:
+        lookinput = ' '
+        while lookinput not in ['y', 'n', ''] and not hasChosenAQuest:
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
-                print("==-==-==-==-==-== Bedroom 1 quests ==-==-==-==-==")
-                for i in bedroom1_quests_left:
-                    print(str(l_num) + ".", i)
-                    l_num = l_num + 1
-                print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
-                quest_input = input("Would you like to take any of these quests? [Y/n] ")
-                if quest_input in ['y', '', 'yes']:
-                    quest_number = input("What quest would you like to take? [1, 2] ")
-                    while quest_number not in ['1', '2']:
-                        if int(quest_number) == 1:
-                            quests_in_progress.append(bedroom1_quests_left[0])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
+                if bedroom1_quests_left[0] and bedroom1_quests_left[1]:
+                    print("==-==-==-==-== Bedroom 1 quests ==-==-==-==-==")
+                    for i in bedroom1_quests_left:
+                        print(str(l_num) + ".", i)
+                    print("==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
+                    quest_input = input("Would you like to take any of these quests? [Y/n] ")
+                    if quest_input in ['y', '', 'yes']:
+                        quest_number = ' '
+
+                        while quest_number not in ['1', '2']:
+                            quest_number = input("What quest would you like to take? [1, 2] ").lower()
+                            if quest_number == '1':
+                                if bedroom1_quests_left[0]:
+                                    quests_in_progress.append(bedroom1_quests_left[0])
+                                    del bedroom1_quests_left[0]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    pass
+                            elif quest_number == '2':
+                                if bedroom1_quests_left[1]:
+                                    quests_in_progress.append(bedroom1_quests_left[1])
+                                    del bedroom1_quests_left[1]
+
+                                    print("Quest taken!")
+                                    input("Enter any key to continue...")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                            else:
+                                print("Please enter a valid quest number!")
                             break
-                        elif int(quest_number) == 2:
-                            quests_in_progress.append(bedroom1_quests_left[1])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
-                            break
-                        else:
-                            print("Please enter a valid quest number!")
+                    else:
+                        del look_input, quest_number, quest_input, l_num
+                        play()
+                        break
                 else:
+                    print("There are no quests in this room.")
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -498,38 +567,53 @@ def look():
 
     # Room 2
     elif area == "room2":
-        look_input = ' '
-        while look_input not in ['y', 'n', '']:
+        lookinput = ' '
+        while lookinput not in ['y', 'n', ''] and not hasChosenAQuest:
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
-                print("==-==-==-==-==-== Room 2 quests ==-==-==-==-==-==")
-                for i in room2_quests_left:
-                    print(str(l_num) + ".", i)
-                    l_num = l_num + 1
-                print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
-                quest_input = input("Would you like to take any of these quests? [Y/n] ")
-                if quest_input in ['y', '', 'yes']:
-                    quest_number = input("What quest would you like to take? [1, 2] ")
-                    while quest_number not in ['1', '2']:
-                        if int(quest_number) == 1:
-                            quests_in_progress.append(room2_quests_left[0])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
+                if room2_quests_left[0] and room2_quests_left[1]:
+                    print("==-==-==-==-== Room 2 quests ==-==-==-==-==")
+                    for i in room2_quests_left:
+                        print(str(l_num) + ".", i)
+                    print("==-==-==-==-==-==-==-=-==-==-==-==-==-==-==")
+                    quest_input = input("Would you like to take any of these quests? [Y/n] ")
+                    if quest_input in ['y', '', 'yes']:
+                        quest_number = ' '
+
+                        while quest_number not in ['1', '2']:
+                            quest_number = input("What quest would you like to take? [1, 2] ").lower()
+                            if quest_number == '1':
+                                if room2_quests_left[0]:
+                                    quests_in_progress.append(room2_quests_left[0])
+                                    del room2_quests_left[0]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    pass
+                            elif quest_number == '2':
+                                if room2_quests_left[1]:
+                                    quests_in_progress.append(room2_quests_left[1])
+                                    del room2_quests_left[1]
+
+                                    print("Quest taken!")
+                                    input("Enter any key to continue...")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                            else:
+                                print("Please enter a valid quest number!")
                             break
-                        elif int(quest_number) == 2:
-                            quests_in_progress.append(room2_quests_left[1])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
-                            break
-                        else:
-                            print("Please enter a valid quest number!")
+                    else:
+                        del look_input, quest_number, quest_input, l_num
+                        play()
+                        break
                 else:
+                    print("There are no quests in this room.")
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -538,38 +622,53 @@ def look():
 
     # Bedroom 2
     elif area == "bedroom2":
-        look_input = ' '
-        while look_input not in ['y', 'n', '']:
+        lookinput = ' '
+        while lookinput not in ['y', 'n', ''] and not hasChosenAQuest:
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
-                print("==-==-==-==-==-== Bedroom 2 quests ==-==-==-==-==")
-                for i in bedroom2_quests_left:
-                    print(str(l_num) + ".", i)
-                    l_num = l_num + 1
-                print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
-                quest_input = input("Would you like to take any of these quests? [Y/n] ")
-                if quest_input in ['y', '', 'yes']:
-                    quest_number = input("What quest would you like to take? [1, 2] ")
-                    while quest_number not in ['1', '2']:
-                        if int(quest_number) == 1:
-                            quests_in_progress.append(bedroom2_quests_left[0])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
+                if bedroom2_quests_left[0] and bedroom2_quests_left[1]:
+                    print("==-==-==-==-== Bedroom 2 quests ==-==-==-==-==")
+                    for i in bedroom2_quests_left:
+                        print(str(l_num) + ".", i)
+                    print("==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
+                    quest_input = input("Would you like to take any of these quests? [Y/n] ")
+                    if quest_input in ['y', '', 'yes']:
+                        quest_number = ' '
+
+                        while quest_number not in ['1', '2']:
+                            quest_number = input("What quest would you like to take? [1, 2] ").lower()
+                            if quest_number == '1':
+                                if bedroom2_quests_left[0]:
+                                    quests_in_progress.append(bedroom2_quests_left[0])
+                                    del bedroom2_quests_left[0]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    pass
+                            elif quest_number == '2':
+                                if bedroom2_quests_left[1]:
+                                    quests_in_progress.append(bedroom2_quests_left[1])
+                                    del bedroom2_quests_left[1]
+
+                                    print("Quest taken!")
+                                    input("Enter any key to continue...")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                            else:
+                                print("Please enter a valid quest number!")
                             break
-                        elif int(quest_number) == 2:
-                            quests_in_progress.append(bedroom2_quests_left[1])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
-                            break
-                        else:
-                            print("Please enter a valid quest number!")
+                    else:
+                        del look_input, quest_number, quest_input, l_num
+                        play()
+                        break
                 else:
+                    print("There are no quests in this room.")
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -578,38 +677,53 @@ def look():
 
     # Room 3
     elif area == "room3":
-        look_input = ' '
-        while look_input not in ['y', 'n', '']:
+        lookinput = ' '
+        while lookinput not in ['y', 'n', ''] and not hasChosenAQuest:
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
-                print("==-==-==-==-==-== Room 3 quests ==-==-==-==-==")
-                for i in room3_quests_left:
-                    print(str(l_num) + ".", i)
-                    l_num = l_num + 1
-                print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==")
-                quest_input = input("Would you like to take any of these quests? [Y/n] ")
-                if quest_input in ['y', '', 'yes']:
-                    quest_number = input("What quest would you like to take? [1, 2] ")
-                    while quest_number not in ['1', '2']:
-                        if int(quest_number) == 1:
-                            quests_in_progress.append(room3_quests_left[0])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
+                if room3_quests_left[0] and room3_quests_left[1]:
+                    print("==-==-==-==-== Room 3 quests ==-==-==-==-==")
+                    for i in room3_quests_left:
+                        print(str(l_num) + ".", i)
+                    print("==-==-==-==-==-==-==-=-==-==-==-==-==-==-==")
+                    quest_input = input("Would you like to take any of these quests? [Y/n] ")
+                    if quest_input in ['y', '', 'yes']:
+                        quest_number = ' '
+
+                        while quest_number not in ['1', '2']:
+                            quest_number = input("What quest would you like to take? [1, 2] ").lower()
+                            if quest_number == '1':
+                                if room3_quests_left[0]:
+                                    quests_in_progress.append(room3_quests_left[0])
+                                    del room3_quests_left[0]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    pass
+                            elif quest_number == '2':
+                                if room3_quests_left[1]:
+                                    quests_in_progress.append(room3_quests_left[1])
+                                    del room3_quests_left[1]
+
+                                    print("Quest taken!")
+                                    input("Enter any key to continue...")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                            else:
+                                print("Please enter a valid quest number!")
                             break
-                        elif int(quest_number) == 2:
-                            quests_in_progress.append(room3_quests_left[1])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
-                            break
-                        else:
-                            print("Please enter a valid quest number!")
+                    else:
+                        del look_input, quest_number, quest_input, l_num
+                        play()
+                        break
                 else:
+                    print("There are no quests in this room.")
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -618,38 +732,53 @@ def look():
 
     # Bedroom 3
     elif area == "bedroom3":
-        look_input = ' '
-        while look_input not in ['y', 'n', '']:
+        lookinput = ' '
+        while lookinput not in ['y', 'n', ''] and not hasChosenAQuest:
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
-                print("==-==-==-==-==-== Bedroom 3 quests ==-==-==-==-==")
-                for i in bedroom3_quests_left:
-                    print(str(l_num) + ".", i)
-                    l_num = l_num + 1
-                print("==-==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
-                quest_input = input("Would you like to take any of these quests? [Y/n] ")
-                if quest_input in ['y', '', 'yes']:
-                    quest_number = input("What quest would you like to take? [1, 2] ")
-                    while quest_number not in ['1', '2']:
-                        if int(quest_number) == 1:
-                            quests_in_progress.append(bedroom3_quests_left[0])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
+                if bedroom3_quests_left[0] and bedroom3_quests_left[1]:
+                    print("==-==-==-==-== Bedroom 3 quests ==-==-==-==-==")
+                    for i in bedroom3_quests_left:
+                        print(str(l_num) + ".", i)
+                    print("==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
+                    quest_input = input("Would you like to take any of these quests? [Y/n] ")
+                    if quest_input in ['y', '', 'yes']:
+                        quest_number = ' '
+
+                        while quest_number not in ['1', '2']:
+                            quest_number = input("What quest would you like to take? [1, 2] ").lower()
+                            if quest_number == '1':
+                                if bedroom3_quests_left[0]:
+                                    quests_in_progress.append(bedroom3_quests_left[0])
+                                    del bedroom3_quests_left[0]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    pass
+                            elif quest_number == '2':
+                                if bedroom3_quests_left[1]:
+                                    quests_in_progress.append(bedroom3_quests_left[1])
+                                    del bedroom3_quests_left[1]
+
+                                    print("Quest taken!")
+                                    input("Enter any key to continue...")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                            else:
+                                print("Please enter a valid quest number!")
                             break
-                        elif int(quest_number) == 2:
-                            quests_in_progress.append(bedroom3_quests_left[1])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
-                            break
-                        else:
-                            print("Please enter a valid quest number!")
+                    else:
+                        del look_input, quest_number, quest_input, l_num
+                        play()
+                        break
                 else:
+                    print("There are no quests in this room.")
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -658,38 +787,53 @@ def look():
 
     # Playroom
     elif area == "playroom":
-        look_input = ' '
-        while look_input not in ['y', 'n', '']:
+        lookinput = ' '
+        while lookinput not in ['y', 'n', ''] and not hasChosenAQuest:
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
-                print("==-==-==-==-==-== Playroom 1 quests ==-==-==-==-==")
-                for i in playroom_quests_left:
-                    print(str(l_num) + ".", i)
-                    l_num = l_num + 1
-                print("==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==")
-                quest_input = input("Would you like to take any of these quests? [Y/n] ")
-                if quest_input in ['y', '', 'yes']:
-                    quest_number = input("What quest would you like to take? [1, 2] ")
-                    while quest_number not in ['1', '2']:
-                        if int(quest_number) == 1:
-                            quests_in_progress.append(playroom_quests_left[0])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
+                if playroom_quests_left[0] and playroom_quests_left[1]:
+                    print("==-==-==-==-== Playroom 3 quests ==-==-==-==-==")
+                    for i in playroom_quests_left:
+                        print(str(l_num) + ".", i)
+                    print("==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==")
+                    quest_input = input("Would you like to take any of these quests? [Y/n] ")
+                    if quest_input in ['y', '', 'yes']:
+                        quest_number = ' '
+
+                        while quest_number not in ['1', '2']:
+                            quest_number = input("What quest would you like to take? [1, 2] ").lower()
+                            if quest_number == '1':
+                                if playroom_quests_left[0]:
+                                    quests_in_progress.append(playroom_quests_left[0])
+                                    del playroom_quests_left[0]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    pass
+                            elif quest_number == '2':
+                                if playroom_quests_left[1]:
+                                    quests_in_progress.append(playroom_quests_left[1])
+                                    del playroom_quests_left[1]
+
+                                    print("Quest taken!")
+                                    input("Enter any key to continue...")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                            else:
+                                print("Please enter a valid quest number!")
                             break
-                        elif int(quest_number) == 2:
-                            quests_in_progress.append(playroom_quests_left[1])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
-                            break
-                        else:
-                            print("Please enter a valid quest number!")
+                    else:
+                        del look_input, quest_number, quest_input, l_num
+                        play()
+                        break
                 else:
+                    print("There are no quests in this room.")
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -698,38 +842,53 @@ def look():
 
     # Attic
     elif area == "attic":
-        look_input = ' '
-        while look_input not in ['y', 'n', '']:
+        lookinput = ' '
+        while lookinput not in ['y', 'n', ''] and not hasChosenAQuest:
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
             if look_input == 'y' or look_input == '':
-                print("==-==-==-==-==-== Attic 1 quests ==-==-==-==-==")
-                for i in attic_quests_left:
-                    print(str(l_num) + ".", i)
-                    l_num = l_num + 1
-                print("==-==-==-==-==-==-==-==--=-==-==-==-==-==-==-==")
-                quest_input = input("Would you like to take any of these quests? [Y/n] ")
-                if quest_input in ['y', '', 'yes']:
-                    quest_number = input("What quest would you like to take? [1, 2] ")
-                    while quest_number not in ['1', '2']:
-                        if int(quest_number) == 1:
-                            quests_in_progress.append(attic_quests_left[0])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
+                if attic_quests_left[0] and attic_quests_left[1]:
+                    print("==-==-==-==-== Attic quests ==-==-==-==-==")
+                    for i in attic_quests_left:
+                        print(str(l_num) + ".", i)
+                    print("==-==-==-==-==-==-==--==-==-==-==-==-==-==")
+                    quest_input = input("Would you like to take any of these quests? [Y/n] ")
+                    if quest_input in ['y', '', 'yes']:
+                        quest_number = ' '
+
+                        while quest_number not in ['1', '2']:
+                            quest_number = input("What quest would you like to take? [1, 2] ").lower()
+                            if quest_number == '1':
+                                if attic_quests_left[0]:
+                                    quests_in_progress.append(attic_quests_left[0])
+                                    del attic_quests_left[0]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    pass
+                            elif quest_number == '2':
+                                if attic_quests_left[1]:
+                                    quests_in_progress.append(attic_quests_left[1])
+                                    del attic_quests_left[1]
+
+                                    print("Quest taken!")
+                                    input("Enter any key to continue...")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                            else:
+                                print("Please enter a valid quest number!")
                             break
-                        elif int(quest_number) == 2:
-                            quests_in_progress.append(attic_quests_left[1])
-                            print("Quest taken!")
-                            input("Press any key to continue...")
-                            del look_input, quest_number, quest_input, l_num
-                            play()
-                            break
-                        else:
-                            print("Please enter a valid quest number!")
+                    else:
+                        del look_input, quest_number, quest_input, l_num
+                        play()
+                        break
                 else:
+                    print("There are no quests in this room.")
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -1454,7 +1613,7 @@ def start():
     load()
     changeLevel()
     print("========================== Menu ==========================")
-    print(" Hello! This is an adventure game called boblox.")
+    print(" Hello!")
     print(" Choose an option:")
     print(" 1. Start playing the game,")
     print(" 2. Open the help menu,")

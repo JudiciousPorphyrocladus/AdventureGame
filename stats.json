@@ -4,20 +4,17 @@
             "coins": 10,
             "gold": 0,
             "iron": 3,
-            "emeralds": 0,
             "coal": 0,
             "bronze": 0
         },
         "food": {
             "meat": {
                 "beef": 0,
-                "pork": 0,
                 "chicken": 0
             },
             "vegetables": {
                 "carrot": 0,
-                "potato": 0,
-                "broccoli": 0
+                "potato": 0
             },
             "fruits": {
                 "oranges": 0,

@@ -1,5 +1,5 @@
 # Computer science 8.1 adventure game
-import json, os, random
+import json, os, random, sys, time
 from os import system
 from sys import platform
 
@@ -22,7 +22,6 @@ hasProgress = datastore["data"]["playerInfo"]["hasProgress"]
 coins = datastore["data"]["materials"]["coins"]
 gold = datastore["data"]["materials"]["gold"]
 iron = datastore["data"]["materials"]["iron"]
-emeralds = datastore["data"]["materials"]["emeralds"]
 bronze = datastore["data"]["materials"]["bronze"]
 coal = datastore["data"]["materials"]["coal"]
 
@@ -123,7 +122,6 @@ def save():  # Save function
     datastore["data"]["materials"]["coins"] = coins
     datastore["data"]["materials"]["gold"] = gold
     datastore["data"]["materials"]["iron"] = iron
-    datastore["data"]["materials"]["emeralds"] = emeralds
     datastore["data"]["materials"]["bronze"] = bronze
     datastore["data"]["materials"]["coal"] = coal
     datastore["data"]["characterInfo"]["health"] = health
@@ -153,32 +151,8 @@ def save():  # Save function
 
 
 def load():
-    global coins
-    global gold
-    global iron
-    global emeralds
-    global bronze
-    global coal
-    global health
-    global hunger
-    global water
-    global xp
-    global X
-    global Y
-    global area
-    global beef
-    global chicken
-    global carrot
-    global potato
-    global oranges
-    global banana
-    global waterBottles
-    global seaWaterBottles
-    global orangeJuiceBottles
-    global appleJuiceBottles
-    global tea
-    global firstTime
-    global hasProgress
+    global coins, gold, iron, bronze, coal, health, hunger, water, xp, X, Y, area, beef, chicken, carrot, potato, oranges, banana
+    global waterBottles, seaWaterBottles, orangeJuiceBottles, appleJuiceBottles, tea, firstTime, hasProgress
     saved = open(os.getcwd() + "/savedstats.json", 'r')
     saved_datastore = json.load(saved)
     saved.close()
@@ -186,7 +160,6 @@ def load():
     coins = saved_datastore["data"]["materials"]["coins"]
     gold = saved_datastore["data"]["materials"]["gold"]
     iron = saved_datastore["data"]["materials"]["iron"]
-    emeralds = saved_datastore["data"]["materials"]["emeralds"]
     bronze = saved_datastore["data"]["materials"]["bronze"]
     coal = saved_datastore["data"]["materials"]["coal"]
     health = saved_datastore["data"]["characterInfo"]["health"]
@@ -198,8 +171,6 @@ def load():
     area = saved_datastore["data"]["characterInfo"]["area"]
     firstTime = saved_datastore["data"]["playerInfo"]["firstTime"]
     hasProgress = saved_datastore["data"]["playerInfo"]["hasProgress"]
-
-    # i hate coding
     beef = saved_datastore["data"]["food"]["meat"]["beef"]
     chicken = saved_datastore["data"]["food"]["meat"]["chicken"]
     carrot = saved_datastore["data"]["food"]["vegetables"]["carrot"]
@@ -292,19 +263,20 @@ def look():
             l_num = 1
 
             if look_input == 'y' or look_input == '':
-                if dining_room_quests_left[0] and dining_room_quests_left[1]:
-                    print("==-==-==-==-== Dining room quests ==-==-==-==-==")
-                    for i in dining_room_quests_left:
-                        print(str(l_num) + ".", i)
-                    print("==-==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
-                    quest_input = input("Would you like to take any of these quests? [Y/n] ")
-                    if quest_input in ['y', '', 'yes']:
-                        quest_number = ' '
+                print("==-==-==-==-== Dining room quests ==-==-==-==-==")
+                for i in dining_room_quests_left:
+                    print(str(l_num) + ".", i)
+                    l_num = l_num + 1
+                print("==-==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
+                quest_input = input("Would you like to take any of these quests? [Y/n] ")
+                if quest_input in ['y', '', 'yes']:
+                    quest_number = ' '
 
-                        while quest_number not in ['1', '2']:
-                            quest_number = input("What quest would you like to take? [1, 2] ").lower()
-                            if quest_number == '1':
-                                if dining_room_quests_left[0]:
+                    while quest_number not in ['1', '2']:
+                        quest_number = input("What quest would you like to take? [1, 2] ").lower()
+                        if quest_number == '1':
+                            if "Throw away the cake on the table" in dining_room_quests_left:
+                                if dining_room_quests_left[0] == "Throw away the cake on the table":
                                     quests_in_progress.append(dining_room_quests_left[0])
                                     del dining_room_quests_left[0]
 
@@ -312,21 +284,44 @@ def look():
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
-                                    pass
-                            elif quest_number == '2':
-                                if dining_room_quests_left[1]:
-                                    quests_in_progress.append(dining_room_quests_left[1])
-                                    del dining_room_quests_left[1]
+                                    break
+                                else:
+                                    quests_in_progress.append(dining_room_quests_left[0])
+                                    del dining_room_quests_left[0]
 
                                     print("Quest taken!")
-                                    input("Enter any key to continue...")
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("Please enter a valid quest number!")
-                            break
+                                print("")
+                        elif quest_number == '2':
+                            if "Clean up the table" in dining_room_quests_left:
+                                if dining_room_quests_left[0] == "Clean up the table":
+                                    quests_in_progress.append(dining_room_quests_left[0])
+                                    del dining_room_quests_left[0]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                                else:
+                                    uests_in_progress.append(dining_room_quests_left[1])
+                                    del dining_room_quests_left[1]
+
+                                    print("Quest taken!")
+                                    del look_input, quest_number, quest_input, l_num
+                                    hasChosenAQuest = True
+                                    play()
+                                    break
+                            else:
+                                print("")
+                        else:
+                            print("Please enter a valid quest number!")
+                        break
+
                     else:
                         del look_input, quest_number, quest_input, l_num
                         play()
@@ -1336,127 +1331,234 @@ def listQuests():
 
 
 def takeQuest():
+    global xp
     print("What quest would you like to start?")
     f = 1
+    questType = ""
+
     for i in quests_in_progress:
         print(f, i)
         f = f + 1
-    usrinput = input("")
-    if int(usrinput) == 1:
-        if quests_in_progress[0] == dining_room_quests_left[0]:
+
+    usrinput = int(input(""))
+
+    try:
+        if quests_in_progress[usrinput - 1] == "Throw away the cake on the table":
+            questType = "Throw away the cake on the table"
+        elif quests_in_progress[usrinput - 1] == "Clean up the table":
+            questType = "Clean up the table"
+        elif quests_in_progress[usrinput - 1] == "Make a sandwich":
+            questType = "Make a sandwich"
+        elif quests_in_progress[usrinput - 1] == "Clean the dishes":
+            questType = "Clean the dishes"
+        elif quests_in_progress[usrinput - 1] == "Fix the faucet":
+            questType = "Fix the faucet"
+        elif quests_in_progress[usrinput - 1] == "Clean the ventilation":
+            questType = "Clean the ventilation"
+        elif quests_in_progress[usrinput - 1] == "Fix the TV":
+            questType = "Fix the TV"
+        elif quests_in_progress[usrinput - 1] == "Close the window":
+            questType = "Close the window"
+        elif quests_in_progress[usrinput - 1] == "Kill the monster hiding under the bed":
+            questType = "Tidy up the cupboard"
+        elif quests_in_progress[usrinput - 1] == "Tidy up the cupboard":
+            questType = "Tidy up the cupboard"
+        elif quests_in_progress[usrinput - 1] == "Change the light bulb in the lamp":
+            questType = "Change the light bulb in the lamp"
+        elif quests_in_progress[usrinput - 1] == "Adjust the frequency on the radio":
+            questType = "Adjust the frequency on the radio"
+        elif quests_in_progress[usrinput - 1] == "Sleep":
+            questType = "Sleep"
+        elif quests_in_progress[usrinput - 1] == "Clean the dust on the table":
+            questType = "Clean the dust on the table"
+        elif quests_in_progress[usrinput - 1] == "Remove cobweb on the ceiling":
+            questType = "Remove cobweb on the ceiling"
+        elif quests_in_progress[usrinput - 1] == "Put the clothes inside the cupboard":
+            questType = "Put the clothes inside the cupboard"
+        elif quests_in_progress[usrinput - 1] == "Wipe the mirror from dust":
+            questType = "Wipe the mirror from dust"
+        elif quests_in_progress[usrinput - 1] == "Fix the bedside table":
+            questType = "Fix the bedside table"
+        elif quests_in_progress[usrinput - 1] == "Take all the toys to the storage":
+            questType = "Take all the toys to the storage"
+        elif quests_in_progress[usrinput - 1] == "Unlock the safe":
+            questType = "Unlock the safe"
+        elif quests_in_progress[usrinput - 1] == "Open the safe":
+            questType = "Open the safe"
+    except:
+        print("ok")
+
+    if questType == "Throw away the cake on the table":
+        os.system("clear")
+
+        finished = False
+        while not finished:
+            text = "Enter E 5 times to pick up the cake...\n"
+            for char in text:
+                sys.stdout.write(char)
+                sys.stdout.flush()
+                time.sleep(.07)
+
+            finished_e = False
+            Es = 0
+            while not finished_e:
+                for _ in range(0, 5):
+                    usrinput = input("Press > ").lower()
+                    if usrinput != "e":
+                        print("You must press E!")
+                        time.sleep(1.5)
+                        os.system("clear")
+                        break
+                    elif usrinput == "e":
+                        Es = Es + 1
+                        continue
+
+                if Es == 5:
+                    break
+
+            text = "Use the WASD keys in order to move..."
+            got = False
+            for char in text:
+                sys.stdout.write(char)
+                sys.stdout.flush()
+                time.sleep(.07)
+
+            time.sleep(2)
+
+            leftY = 5
+            leftX = -2
+            coordinates = [0, 0]
+            while not got:
+                os.system("clear")
+                print("Y left: " + str(leftY) + "\nX left: " + str(leftX) + ".")
+                key = input("> ").lower()
+                if key == "w" and coordinates[1] < 5:
+                    leftY = leftY - 1
+                    coordinates[1] = coordinates[1] - 1
+                    if leftY == 0 and leftX == 0:
+                        break
+                elif key == "w" and coordinates[1] > 5:
+                    leftY = leftY + 1
+                    coordinates[1] = coordinates[1] + 1
+                    if leftY == 0 and leftX == 0:
+                        break
+                elif key == "s" and coordinates[1] < 5:
+                    leftY = leftY - 1
+                    coordinates[1] = coordinates[1] - 1
+                    if leftY == 0 and leftX == 0:
+                        break
+                elif key == "s" and coordinates[1] > 5:
+                    leftY = leftY + 1
+                    coordinates[1] = coordinates[1] + 1
+                    if leftY == 0 and leftX == 0:
+                        break
+                elif key == "a" and coordinates[0] < -2:
+                    leftX = leftX - 1
+                    coordinates[0] = coordinates[0] - 1
+                    if leftY == 0 and leftX == 0:
+                        break
+                elif key == "a" and coordinates[0] > -2:
+                    leftX = leftX + 1
+                    coordinates[0] = coordinates[0] + 1
+                    if leftY == 0 and leftX == 0:
+                        break
+                elif key == "d" and coordinates[0] > -2:
+                    leftX = leftX - 1
+                    coordinates[0] = coordinates[0] - 1
+                    if leftY == 0 and leftX == 0:
+                        break
+                elif key == "d" and coordinates[0] < -2:
+                    leftX = leftX + 1
+                    coordinates[0] = coordinates[0] + 1
+                    if leftY == 0 and leftX == 0:
+                        break
+                else:
+                    pass
+
+            text = "Enter E 5 times to throw away the cake...\n"
+            for char in text:
+                sys.stdout.write(char)
+                sys.stdout.flush()
+                time.sleep(.07)
+
+            finished_e = False
+            Es = 0
+            while not finished_e:
+                for _ in range(0, 5):
+                    usrinput = input("Press > ").lower()
+                    if usrinput != "e":
+                        print("You must press E!")
+                        time.sleep(1.5)
+                        os.system("clear")
+                        break
+                    elif usrinput == "e":
+                        Es = Es + 1
+
+                if Es == 5:
+                    break
+
             os.system("clear")
 
-            finished = False
-            while not finished:
-                text = "Enter E 5 times to pick up the cake...\n"
-                for char in text:
-                    sys.stdout.write(char)
-                    sys.stdout.flush()
-                    time.sleep(.07)
+            xp = xp + 50
 
-                finished_e = False
-                Es = 0
-                while not finished_e:
-                    for _ in range(0, 5):
-                        usrinput = input("Press > ").lower()
-                        if usrinput != "e":
-                            print("You must press E!")
-                            time.sleep(1.5)
-                            os.system("clear")
-                            break
-                        elif usrinput == "e":
-                            Es = Es + 1
+            for element in quests_in_progress:
+                if element == "Throw away the cake on the table":
+                    quests_in_progress.pop(element)
 
-                    if Es == 5:
-                        break
+            print("Successfully finished the quest! +50XP")
+            input("Press any key to continue... ")
+            finished = True
+            break
 
-                text = "Use the WASD keys in order to move..."
-                got = False
-                for char in text:
-                    sys.stdout.write(char)
-                    sys.stdout.flush()
-                    time.sleep(.07)
+    elif questType == "Clean up the table":
+        done = False
+        os.system("clear")
 
-                time.sleep(2)
+        text = "Use the Q and E keys to wipe the table\n"
+        for char in text:
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.07)
 
-                leftY = 5
-                leftX = -2
-                coordinates = [0, 0]
-                while not got:
+        wipesLeft = random.randint(5, 10)
+        while not done:
+            os.system("clear")
+            print("Wipes left: " + str(wipesLeft) + ".")
+            usrinput = input("> ").lower()
+            if usrinput == "q":
+                wipesLeft = wipesLeft - 1
+                if wipesLeft == 0:
                     os.system("clear")
-                    print("Y left: " + str(leftY) + "\nX left: " + str(leftX) + ".")
-                    key = input("> ").lower()
-                    if key == "w" and coordinates[1] < 5:
-                        leftY = leftY - 1
-                        coordinates[1] = coordinates[1] - 1
-                        if leftY == 0 and leftX == 0:
-                            break
-                    elif key == "w" and coordinates[1] > 5:
-                        leftY = leftY + 1
-                        coordinates[1] = coordinates[1] + 1
-                        if leftY == 0 and leftX == 0:
-                            break
-                    elif key == "s" and coordinates[1] < 5:
-                        leftY = leftY - 1
-                        coordinates[1] = coordinates[1] - 1
-                        if leftY == 0 and leftX == 0:
-                            break
-                    elif key == "s" and coordinates[1] > 5:
-                        leftY = leftY + 1
-                        coordinates[1] = coordinates[1] + 1
-                        if leftY == 0 and leftX == 0:
-                            break
-                    elif key == "a" and coordinates[0] < -2:
-                        leftX = leftX - 1
-                        coordinates[0] = coordinates[0] - 1
-                        if leftY == 0 and leftX == 0:
-                            break
-                    elif key == "a" and coordinates[0] > -2:
-                        leftX = leftX + 1
-                        coordinates[0] = coordinates[0] + 1
-                        if leftY == 0 and leftX == 0:
-                            break
-                    elif key == "d" and coordinates[0] > -2:
-                        leftX = leftX - 1
-                        coordinates[0] = coordinates[0] - 1
-                        if leftY == 0 and leftX == 0:
-                            break
-                    elif key == "d" and coordinates[0] < -2:
-                        leftX = leftX + 1
-                        coordinates[0] = coordinates[0] + 1
-                        if leftY == 0 and leftX == 0:
-                            break
-                    else:
-                        pass
-
-                text = "Enter E 5 times to throw away the cake...\n"
+                    print("Wipes left: 0")
+                    xp = xp + 50
+                    text = "Successfully finished the quest! +50XP\n"
+                    for char in text:
+                        sys.stdout.write(char)
+                        sys.stdout.flush()
+                        time.sleep(0.07)
+                    time.sleep(2)
+                    break
+            elif usrinput == "e":
+                wipesLeft = wipesLeft - 1
+                if wipesLeft == 0:
+                    os.system("clear")
+                    print("Wipes left: 0")
+                    xp = xp + 50
+                    text = "Successfully finished the quest! +50XP\n"
+                    for char in text:
+                        sys.stdout.write(char)
+                        sys.stdout.flush()
+                        time.sleep(0.07)
+                    time.sleep(2)
+                    break
+            else:
+                text = "You have to enter either Q or E\n"
                 for char in text:
                     sys.stdout.write(char)
                     sys.stdout.flush()
-                    time.sleep(.07)
+                    time.sleep(0.07)
+                time.sleep(1)
 
-                finished_e = False
-                Es = 0
-                while not finished_e:
-                    for _ in range(0, 5):
-                        usrinput = input("Press > ").lower()
-                        if usrinput != "e":
-                            print("You must press E!")
-                            time.sleep(1.5)
-                            os.system("clear")
-                            break
-                        elif usrinput == "e":
-                            Es = Es + 1
-
-                    if Es == 5:
-                        break
-
-                os.system("clear")
-
-                print("Successfully finished the quest! +25XP")
-                input("Press any key to continue... ")
-                finished = True
-                break
 
 
 def eat(foodtype):

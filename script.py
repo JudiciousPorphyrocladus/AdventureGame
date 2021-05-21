@@ -54,6 +54,23 @@ houseChestOpened = False
 level = 1
 
 # Quests
+dining_room_quests = ["Throw away the cake on the table", "Clean up the table"]
+kitchen_quests = ["Make a sandwich", "Clean the dishes"]
+bathroom_quests = ["Fix the faucet", "Clean the ventilation"]
+######
+room1_quests = ["Fix the TV", "Close the window"]
+bedroom1_quests = ["Kill the monster hiding under the bed", "Tidy up the cupboard"]
+######
+room2_quests = ["Change the light bulb in the lamp", "Adjust the frequency on the radio"]
+bedroom2_quests = ["Sleep", "Clean the dust on the table"]
+######
+room3_quests = ["Remove cobweb on the ceiling", "Put the clothes inside the cupboard"]
+bedroom3_quests = ["Wipe the mirror from dust", "Fix the bedside table"]
+######
+playroom_quests = ["Take all the toys to the storage"]
+attic_quests = ["Unlock the safe", "Open the safe"]
+############
+# Quests
 dining_room_quests_left = ["Throw away the cake on the table", "Clean up the table"]
 kitchen_quests_left = ["Make a sandwich", "Clean the dishes"]
 bathroom_quests_left = ["Fix the faucet", "Clean the ventilation"]
@@ -347,6 +364,16 @@ def look():
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
             l_num = 1
 
+            for i in kitchen_quests_left:
+                if i == kitchen_quests[0]:
+                    kitchen1 = True
+                    if i == kitchen_quests[1]:
+                        kitchen2 = True
+                    else:
+                        kitchen2 = False
+                else:
+                    kitchen1 = False
+
             if look_input == 'y' or look_input == '':
                 if kitchen_quests_left[0] and kitchen_quests_left[1]:
                     print("==-==-==-==-== Kitchen quests ==-==-==-==-==")
@@ -360,7 +387,7 @@ def look():
                         while quest_number not in ['1', '2']:
                             quest_number = input("What quest would you like to take? [1, 2] ").lower()
                             if quest_number == '1':
-                                if dining_room_quests_left[0]:
+                                if kitchen_quests_left[0] and kitchen1:
                                     quests_in_progress.append(kitchen_quests_left[0])
                                     del kitchen_quests_left[0]
 
@@ -1330,7 +1357,7 @@ def listQuests():
         input("Press any key to continue... ")
 
 
-def takeQuest():
+def startQuest():
     global xp
     print("What quest would you like to start?")
     f = 1
@@ -1661,7 +1688,7 @@ def takeQuest():
             sys.stdout.flush()
             time.sleep(0.07)
 
-        objectives = ["take soap", "take a sponge", "clean dishes"]
+        objectives = ["take soap", "take a sponge"]
         while not done:
             os.system(clear)
             text = "Objectives left: \n"
@@ -1673,8 +1700,54 @@ def takeQuest():
                 print(str(obj_num) + objective)
                 obj_num = obj_num + 1
             usrinput = input ("> ")
-            if usrinput = "1":
-                
+            if usrinput == "take soap":
+                objectives.remove("take soap")
+                if not objectives:
+                    continue
+            elif usrinput == "take a sponge":
+                objectives.remove("take soap")
+                if not objectives:
+                    continue
+
+            text = "Use the A and D keys to clean the dishes...\n"
+            dishesLeft = 5
+            wipesLeft = round(abs(dishesLeft * 5))
+            cleanDone = False
+            for char in text:
+                sys.stdout.write(char)
+                sys.stdout.flush()
+                time.sleep(0.07)
+            time.sleep(1)
+
+            while not cleanDone:
+                os.system(clear)
+                print("Dishes left: " + str(dishesLeft) + "\nWipes left: " + str(wipesLeft))
+                usrinput = input("> ").lower()
+                if usrinput == "a":
+                    wipesLeft = wipesLeft - 1
+                    if wipesLeft == 0:
+                        os.system(clear)
+                        text = "Successfully finished the quest! +50XP\n"
+                        for char in text:
+                            sys.stdout.write(char)
+                            sys.stdout.flush()
+                            time.sleep(0.07)
+                elif usrinput == "d":
+                    wipesLeft = wipesLeft - 1
+                    if wipesLeft == 0:
+                        os.system(clear)
+                        text = "Successfully finished the quest! +50XP\n"
+                        for char in text:
+                            sys.stdout.write(char)
+                            sys.stdout.flush()
+                            time.sleep(0.07)
+                else:
+                    text = "Please enter either A or D\n"
+                    for char in text:
+                        sys.stdout.write(char)
+                        sys.stdout.flush()
+                        time.sleep(0.07)
+                    time.sleep(1)
 
 
 def eat(foodtype):
@@ -1880,8 +1953,8 @@ while True:
                                     'commands', 'gonorth()', 'gonorth', 'gosouth()', 'gosouth',
                                     'goeast()', 'goeast', 'gowest()', 'gowest', 'exit()', 'exit',
                                     'save()', 'save', 'load()', 'load', 'viewstats()', 'viewstats',
-                                    "look", "look()", "lookaround", "lookaround()", "takequest()",
-                                    "takequest", 'listquests', 'listquests()']:
+                                    "look", "look()", "lookaround", "lookaround()", "startquest()",
+                                    "startquest", 'listquests', 'listquests()']:
                 changeLevel()
                 playInput = input("[root@game/" + area + " lvl" + str(level) + "]$ ").lower()
 
@@ -1943,7 +2016,7 @@ while True:
                     play_freezed = True
                     usrinput = "123"
                     while usrinput not in ['y', 'n', '']:
-                        usrinput = "Would you like to save your progress before viewing your stats? [Y/n] "
+                        usrinput = input("Would you like to save your progress before viewing your stats? [Y/n] ")
                         if usrinput == 'y' or usrinput == '':
                             save()
                         else:
@@ -1970,8 +2043,8 @@ while True:
                 elif playInput in ["clear", "clear()"]:
                     system(clear)
 
-                elif playInput in ["takequest", "takequest()"]:
-                    takeQuest()
+                elif playInput in ["startquest", "startquest()"]:
+                    startQuest()
 
                 else:
                     print("I don't know the phrase '" + playInput + "'. Please read the manual.")

@@ -308,7 +308,7 @@ def look():
                                     play()
                                     break
                                 else:
-                                    uests_in_progress.append(dining_room_quests_left[1])
+                                    quests_in_progress.append(dining_room_quests_left[1])
                                     del dining_room_quests_left[1]
 
                                     print("Quest taken!")
@@ -1503,7 +1503,8 @@ def takeQuest():
 
             for element in quests_in_progress:
                 if element == "Throw away the cake on the table":
-                    quests_in_progress.pop(element)
+
+                    quests_in_progress.remove(element)
 
             print("Successfully finished the quest! +50XP")
             input("Press any key to continue... ")
@@ -1512,7 +1513,7 @@ def takeQuest():
 
     elif questType == "Clean up the table":
         done = False
-        os.system("clear")
+        os.system(clear)
 
         text = "Use the Q and E keys to wipe the table\n"
         for char in text:
@@ -1522,7 +1523,7 @@ def takeQuest():
 
         wipesLeft = random.randint(5, 10)
         while not done:
-            os.system("clear")
+            os.system(clear)
             print("Wipes left: " + str(wipesLeft) + ".")
             usrinput = input("> ").lower()
             if usrinput == "q":
@@ -1559,6 +1560,121 @@ def takeQuest():
                     time.sleep(0.07)
                 time.sleep(1)
 
+    elif questType == "Make a sandwich":
+        done = False
+        os.system(clear)
+        ingredients_left = ["bread", "cucumbers", "cheese", "butter", "meat"]
+
+        text = "Take the ingredients from the fridge by typing their name..."
+        for char in text:
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.07)
+
+        while not done:
+            os.system(clear)
+            print("Ingredients left:")
+            for ingredient in ingredients_left:
+                print(ingredient)
+            usrinput = input("> ").lower()
+            if usrinput == "bread" and any("bread" in s for s in ingredients_left):
+                ingredients_left.remove("bread")
+                if not ingredients_left:
+                    os.system(clear)
+                    xp = xp + 50
+                    text = "Successfully finished the quest! +50XP\n"
+                    for char in text:
+                        sys.stdout.write(char)
+                        sys.stdout.flush()
+                        time.sleep(0.07)
+                    input("Enter any key to continue... ")
+                    play()
+                    break
+            elif usrinput == "cucumbers" and any("cucumbers" in s for s in ingredients_left):
+                ingredients_left.remove("cucumbers")
+                if not ingredients_left:
+                    os.system(clear)
+                    xp = xp + 50
+                    text = "Successfully finished the quest! +50XP\n"
+                    for char in text:
+                        sys.stdout.write(char)
+                        sys.stdout.flush()
+                        time.sleep(0.07)
+                    input("Enter any key to continue... ")
+                    play()
+                    break
+            elif usrinput == "cheese" and any("cheese" in s for s in ingredients_left):
+                ingredients_left.remove("cheese")
+                if not ingredients_left:
+                    os.system(clear)
+                    xp = xp + 50
+                    text = "Successfully finished the quest! +50XP\n"
+                    for char in text:
+                        sys.stdout.write(char)
+                        sys.stdout.flush()
+                        time.sleep(0.07)
+                    input("Enter any key to continue... ")
+                    play()
+                    break
+            elif usrinput == "butter" and any("butter" in s for s in ingredients_left):
+                ingredients_left.remove("butter")
+                if not ingredients_left:
+                    os.system(clear)
+                    xp = xp + 50
+                    text = "Successfully finished the quest! +50XP\n"
+                    for char in text:
+                        sys.stdout.write(char)
+                        sys.stdout.flush()
+                        time.sleep(0.07)
+                    input("Enter any key to continue... ")
+                    play()
+                    break
+            elif usrinput == "meat" and any("meat" in s for s in ingredients_left):
+                ingredients_left.remove("meat")
+                if not ingredients_left:
+                    os.system(clear)
+                    xp = xp + 50
+                    text = "Successfully finished the quest! +50XP\n"
+                    for char in text:
+                        sys.stdout.write(char)
+                        sys.stdout.flush()
+                        time.sleep(0.07)
+                    input("Enter any key to continue... ")
+                    play()
+                    break
+            else:
+                text = "Please enter a valid ingredient"
+                for char in text:
+                    sys.stdout.write(char)
+                    sys.stdout.flush()
+                    time.sleep(0.07)
+                time.sleep(1)
+
+    elif questType == "Clean the dishes":
+        done = False
+        os.system(clear)
+
+        obj_num = 1
+        text = "Complete the objectives by typing their number... "
+        for char in text:
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.07)
+
+        objectives = ["take soap", "take a sponge", "clean dishes"]
+        while not done:
+            os.system(clear)
+            text = "Objectives left: \n"
+            for char in text:
+                sys.stdout.write(char)
+                sys.stdout.flush()
+                time.sleep(0.07)
+            for objective in objectives:
+                print(str(obj_num) + objective)
+                obj_num = obj_num + 1
+            usrinput = input ("> ")
+            if usrinput = "1":
+                
 
 
 def eat(foodtype):

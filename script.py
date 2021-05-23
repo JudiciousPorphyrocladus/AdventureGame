@@ -17,6 +17,8 @@ X = datastore["data"]["characterInfo"]["x"]
 Y = datastore["data"]["characterInfo"]["y"]
 area = datastore["data"]["characterInfo"]["area"]
 hasProgress = datastore["data"]["playerInfo"]["hasProgress"]
+prompt = datastore["data"]["playerInfo"]["promptType"]
+interval = 0.038
 
 # Materials, resources
 coins = datastore["data"]["materials"]["coins"]
@@ -115,16 +117,6 @@ if datastore["data"]["playerInfo"]["firstTime"]:
 else:
     firstTime = False
 
-# Operating system check
-if platform == "linux" or platform == "linux2" or platform == "darwin":
-    clear = 'clear'
-elif platform == "win32":
-    clear = 'cls'
-else:
-    print("Your OS isn't supported.")
-    clear = str(input("In order to play the game, please enter the CLEAR function of your console: "))
-
-
 # Functions
 
 
@@ -133,6 +125,23 @@ def changeLevel():
     global level
     if round(abs(xp / 50)) > level:
         level = round(abs(xp / 50))
+
+
+def aprint(TEXT, SECONDS):
+    for char in TEXT:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(SECONDS)
+
+
+# Operating system check
+if platform == "linux" or platform == "linux2" or platform == "darwin":
+    clear = 'clear'
+elif platform == "win32":
+    clear = 'cls'
+else:
+    print("Your OS isn't supported.", 0.04)
+    clear = str(input("In order to play the game, please enter the clear function of your terminal: "))
 
 
 def save():  # Save function
@@ -161,6 +170,7 @@ def save():  # Save function
     datastore["data"]["food"]["beverages"]["tea"] = tea
     datastore["data"]["playerInfo"]["firstTime"] = False
     datastore["data"]["playerInfo"]["hasProgress"] = True
+    datastore["data"]["playerInfo"]["promptType"] = prompt
     saveddatastore = open("savedstats.json", 'w')
     json.dump(datastore, saveddatastore)
     saveddatastore.close()
@@ -169,7 +179,7 @@ def save():  # Save function
 
 def load():
     global coins, gold, iron, bronze, coal, health, hunger, water, xp, X, Y, area, beef, chicken, carrot, potato, oranges, banana
-    global waterBottles, seaWaterBottles, orangeJuiceBottles, appleJuiceBottles, tea, firstTime, hasProgress
+    global waterBottles, seaWaterBottles, orangeJuiceBottles, appleJuiceBottles, tea, firstTime, hasProgress, level
     saved = open(os.getcwd() + "/savedstats.json", 'r')
     saved_datastore = json.load(saved)
     saved.close()
@@ -182,6 +192,7 @@ def load():
     health = saved_datastore["data"]["characterInfo"]["health"]
     hunger = saved_datastore["data"]["characterInfo"]["hunger"]
     water = saved_datastore["data"]["characterInfo"]["water"]
+    level = saved_datastore["data"]["characterInfo"]["level"]
     xp = saved_datastore["data"]["characterInfo"]["xp"]
     X = saved_datastore["data"]["characterInfo"]["x"]
     Y = saved_datastore["data"]["characterInfo"]["y"]
@@ -201,9 +212,9 @@ def load():
     tea = saved_datastore["data"]["food"]["beverages"]["tea"]
 
 
+
 def readManual(manualnum):
-    global manualInput
-    global helpInput
+    global manualInput, helpInput, interval
     system(clear)
 
     if manualnum == 1:
@@ -216,7 +227,7 @@ def readManual(manualnum):
         print(manual4)
     else:
         return
-    print("Type either 'back' to choose a chapter you want to view or 'menu' to exit the manual.")
+    aprint("Type either 'back' to choose a chapter you want to view or 'menu' to exit the manual.\n", interval)
     manualInput = True
     while manualInput:
         choice1 = input("[root@game/manual]$ ").lower()
@@ -228,19 +239,17 @@ def readManual(manualnum):
             manualInput = False
             start()
         else:
-            print("Please enter a valid choice. ")
+            aprint("Please enter a valid choice.\n", interval)
 
 
 def gameHelp():  # A menu that asks you to enter the number of a desired chapter.
-    global startInputActive
-    global Play
-    global helpInput
+    global startInputActive, Play, helpInput, interval
 
     system(clear)
     print("============== Chapters ===============")
     print(" Chapter 1 - STARTING OUT\n Chapter 2 - RESOURCES AND MATERIALS\n Chapter 3 - FOOD\n Chapter 4 - LOCATIONS")
-    print(" Please choose a chapter")
-    print(" To go back press enter")
+    aprint(" Please choose a chapter\n", interval)
+    aprint(" To go back press enter\n", interval)
     helpInput = True
     while helpInput:
         help_choice = input("[root@game/helpMenu]$ ")
@@ -265,11 +274,11 @@ def gameHelp():  # A menu that asks you to enter the number of a desired chapter
             helpInput = False
             play()
         else:
-            print("Please enter a valid choice.")
+            aprint("Please enter a valid choice.\n", interval)
 
 
 def look():
-    global dining_room_quests_left, kitchen_quests_left, bathroom_quests_left, startInputActive, Play, play_freezed
+    global dining_room_quests_left, kitchen_quests_left, bathroom_quests_left, startInputActive, Play, play_freezed, interval
     hasChosenAQuest = False
 
     # Dining room quests
@@ -281,8 +290,9 @@ def look():
 
             if look_input == 'y' or look_input == '':
                 print("==-==-==-==-== Dining room quests ==-==-==-==-==")
+                l_num = 1
                 for i in dining_room_quests_left:
-                    print(str(l_num) + ".", i)
+                    aprint(str(l_num) + ". " + i + "\n", interval)
                     l_num = l_num + 1
                 print("==-==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
                 quest_input = input("Would you like to take any of these quests? [Y/n] ")
@@ -297,7 +307,7 @@ def look():
                                     quests_in_progress.append(dining_room_quests_left[0])
                                     del dining_room_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
@@ -306,20 +316,20 @@ def look():
                                     quests_in_progress.append(dining_room_quests_left[0])
                                     del dining_room_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("")
+                                aprint("\n", interval)
                         elif quest_number == '2':
                             if "Clean up the table" in dining_room_quests_left:
                                 if dining_room_quests_left[0] == "Clean up the table":
                                     quests_in_progress.append(dining_room_quests_left[0])
                                     del dining_room_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
@@ -328,15 +338,15 @@ def look():
                                     quests_in_progress.append(dining_room_quests_left[1])
                                     del dining_room_quests_left[1]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("")
+                                aprint("\n", interval)
                         else:
-                            print("Please enter a valid quest number!")
+                            aprint("Please enter a valid quest number!\n", interval)
                         break
 
                     else:
@@ -344,7 +354,7 @@ def look():
                         play()
                         break
                 else:
-                    print("There are no quests in this room.")
+                    aprint("There are no quests in this room.\n", interval)
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -353,7 +363,7 @@ def look():
 
     # Hallway
     elif area == "hall":
-        print("Your are in the hallway. There are 11 doors.")
+        aprint("You are in the hallway. There are 11 doors.\n", interval)
         play()
 
 
@@ -362,7 +372,6 @@ def look():
         lookinput = ' '
         while lookinput not in ['y', 'n', ''] and not hasChosenAQuest:
             look_input = input("Would you like to list all available quests in the current room? [Y/n]:").lower()
-            l_num = 1
 
             for i in kitchen_quests_left:
                 if i == kitchen_quests[0]:
@@ -377,8 +386,9 @@ def look():
             if look_input == 'y' or look_input == '':
                 if kitchen_quests_left[0] and kitchen_quests_left[1]:
                     print("==-==-==-==-== Kitchen quests ==-==-==-==-==")
+                    l_num = 1
                     for i in kitchen_quests_left:
-                        print(str(l_num) + ".", i)
+                        aprint(str(l_num) + ". " + i + "\n", interval)
                     print("==-==-==-==-==-==-==-==-==-==-==-==-==-==-==")
                     quest_input = input("Would you like to take any of these quests? [Y/n] ")
                     if quest_input in ['y', '', 'yes']:
@@ -391,7 +401,7 @@ def look():
                                     quests_in_progress.append(kitchen_quests_left[0])
                                     del kitchen_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
@@ -401,21 +411,20 @@ def look():
                                     quests_in_progress.append(kitchen_quests_left[1])
                                     del kitchen_quests_left[1]
 
-                                    print("Quest taken!")
-                                    input("Enter any key to continue...")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("Please enter a valid quest number!")
+                                aprint("Please enter a valid quest number!\n", interval)
                             break
                     else:
                         del look_input, quest_number, quest_input, l_num
                         play()
                         break
                 else:
-                    print("There are no quests in this room.")
+                    aprint("There are no quests in this room.\n", interval)
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -432,8 +441,10 @@ def look():
             if look_input == 'y' or look_input == '':
                 if bathroom_quests_left[0] and bathroom_quests_left[1]:
                     print("==-==-==-==-== Bathroom quests ==-==-==-==-==")
+                    l_num = 1
                     for i in bathroom_quests_left:
-                        print(str(l_num) + ".", i)
+                        aprint(str(l_num) + ". " + i + ",\n", interval)
+                        l_num = l_num + 1
                     print("==-==-==-==-==-==-==--==-==-==-==-==-==-==-==")
                     quest_input = input("Would you like to take any of these quests? [Y/n] ")
                     if quest_input in ['y', '', 'yes']:
@@ -446,7 +457,7 @@ def look():
                                     quests_in_progress.append(bathroom_quests_left[0])
                                     del bathroom_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
@@ -456,21 +467,20 @@ def look():
                                     quests_in_progress.append(bathroom_quests_left[1])
                                     del bathroom_quests_left[1]
 
-                                    print("Quest taken!")
-                                    input("Enter any key to continue...")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("Please enter a valid quest number!")
+                                aprint("Please enter a valid quest number!\n", interval)
                             break
                     else:
                         del look_input, quest_number, quest_input, l_num
                         play()
                         break
                 else:
-                    print("There are no quests in this room.")
+                    aprint("There are no quests in this room.\n", interval)
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -487,8 +497,9 @@ def look():
             if look_input == 'y' or look_input == '':
                 if room1_quests_left[0] and room1_quests_left[1]:
                     print("==-==-==-==-== Room 1 quests ==-==-==-==-==")
+                    l_num = 1
                     for i in room1_quests_left:
-                        print(str(l_num) + ".", i)
+                        aprint(str(l_num) + ". " + i, interval)
                     print("==-==-==-==-==-==-==-=-==-==-==-==-==-==-==")
                     quest_input = input("Would you like to take any of these quests? [Y/n] ")
                     if quest_input in ['y', '', 'yes']:
@@ -501,7 +512,7 @@ def look():
                                     quests_in_progress.append(room1_quests_left[0])
                                     del room1_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
@@ -511,21 +522,20 @@ def look():
                                     quests_in_progress.append(room1_quests_left[1])
                                     del room1_quests_left[1]
 
-                                    print("Quest taken!")
-                                    input("Enter any key to continue...")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("Please enter a valid quest number!")
+                                aprint("Please enter a valid quest number!\n", interval)
                             break
                     else:
                         del look_input, quest_number, quest_input, l_num
                         play()
                         break
                 else:
-                    print("There are no quests in this room.")
+                    aprint("There are no quests in this room.\n", interval)
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -542,8 +552,9 @@ def look():
             if look_input == 'y' or look_input == '':
                 if bedroom1_quests_left[0] and bedroom1_quests_left[1]:
                     print("==-==-==-==-== Bedroom 1 quests ==-==-==-==-==")
+                    l_num = 1
                     for i in bedroom1_quests_left:
-                        print(str(l_num) + ".", i)
+                        aprint(str(l_num) + ". " + i, interval)
                     print("==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
                     quest_input = input("Would you like to take any of these quests? [Y/n] ")
                     if quest_input in ['y', '', 'yes']:
@@ -556,7 +567,7 @@ def look():
                                     quests_in_progress.append(bedroom1_quests_left[0])
                                     del bedroom1_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
@@ -566,21 +577,20 @@ def look():
                                     quests_in_progress.append(bedroom1_quests_left[1])
                                     del bedroom1_quests_left[1]
 
-                                    print("Quest taken!")
-                                    input("Enter any key to continue...")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("Please enter a valid quest number!")
+                                aprint("Please enter a valid quest number!\n", interval)
                             break
                     else:
                         del look_input, quest_number, quest_input, l_num
                         play()
                         break
                 else:
-                    print("There are no quests in this room.")
+                    aprint("There are no quests in this room.\n", interval)
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -597,8 +607,9 @@ def look():
             if look_input == 'y' or look_input == '':
                 if room2_quests_left[0] and room2_quests_left[1]:
                     print("==-==-==-==-== Room 2 quests ==-==-==-==-==")
+                    l_num = 1
                     for i in room2_quests_left:
-                        print(str(l_num) + ".", i)
+                        aprint(str(l_num) + "." + i, interval)
                     print("==-==-==-==-==-==-==-=-==-==-==-==-==-==-==")
                     quest_input = input("Would you like to take any of these quests? [Y/n] ")
                     if quest_input in ['y', '', 'yes']:
@@ -611,7 +622,7 @@ def look():
                                     quests_in_progress.append(room2_quests_left[0])
                                     del room2_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
@@ -621,21 +632,20 @@ def look():
                                     quests_in_progress.append(room2_quests_left[1])
                                     del room2_quests_left[1]
 
-                                    print("Quest taken!")
-                                    input("Enter any key to continue...")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("Please enter a valid quest number!")
+                                aprint("Please enter a valid quest number!\n", interval)
                             break
                     else:
                         del look_input, quest_number, quest_input, l_num
                         play()
                         break
                 else:
-                    print("There are no quests in this room.")
+                    aprint("There are no quests in this room.\n", interval)
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -652,8 +662,9 @@ def look():
             if look_input == 'y' or look_input == '':
                 if bedroom2_quests_left[0] and bedroom2_quests_left[1]:
                     print("==-==-==-==-== Bedroom 2 quests ==-==-==-==-==")
+                    l_num = 1
                     for i in bedroom2_quests_left:
-                        print(str(l_num) + ".", i)
+                        aprint(str(l_num) + "." + i + "\n", interval)
                     print("==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
                     quest_input = input("Would you like to take any of these quests? [Y/n] ")
                     if quest_input in ['y', '', 'yes']:
@@ -666,7 +677,7 @@ def look():
                                     quests_in_progress.append(bedroom2_quests_left[0])
                                     del bedroom2_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
@@ -676,21 +687,20 @@ def look():
                                     quests_in_progress.append(bedroom2_quests_left[1])
                                     del bedroom2_quests_left[1]
 
-                                    print("Quest taken!")
-                                    input("Enter any key to continue...")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("Please enter a valid quest number!")
+                                aprint("Please enter a valid quest number!\n", interval)
                             break
                     else:
                         del look_input, quest_number, quest_input, l_num
                         play()
                         break
                 else:
-                    print("There are no quests in this room.")
+                    aprint("There are no quests in this room.\n", interval)
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -707,8 +717,9 @@ def look():
             if look_input == 'y' or look_input == '':
                 if room3_quests_left[0] and room3_quests_left[1]:
                     print("==-==-==-==-== Room 3 quests ==-==-==-==-==")
+                    l_num = 1
                     for i in room3_quests_left:
-                        print(str(l_num) + ".", i)
+                        aprint(str(l_num) + "." + i + "\n", interval)
                     print("==-==-==-==-==-==-==-=-==-==-==-==-==-==-==")
                     quest_input = input("Would you like to take any of these quests? [Y/n] ")
                     if quest_input in ['y', '', 'yes']:
@@ -721,7 +732,7 @@ def look():
                                     quests_in_progress.append(room3_quests_left[0])
                                     del room3_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
@@ -731,21 +742,20 @@ def look():
                                     quests_in_progress.append(room3_quests_left[1])
                                     del room3_quests_left[1]
 
-                                    print("Quest taken!")
-                                    input("Enter any key to continue...")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("Please enter a valid quest number!")
+                                aprint("Please enter a valid quest number!\n", interval)
                             break
                     else:
                         del look_input, quest_number, quest_input, l_num
                         play()
                         break
                 else:
-                    print("There are no quests in this room.")
+                    aprint("There are no quests in this room.\n", interval)
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -762,8 +772,9 @@ def look():
             if look_input == 'y' or look_input == '':
                 if bedroom3_quests_left[0] and bedroom3_quests_left[1]:
                     print("==-==-==-==-== Bedroom 3 quests ==-==-==-==-==")
+                    l_num = 1
                     for i in bedroom3_quests_left:
-                        print(str(l_num) + ".", i)
+                        aprint(str(l_num) + "." + i + "\n", interval)
                     print("==-==-==-==-==-==-==-=-==-==-==-==-==-==-==-==")
                     quest_input = input("Would you like to take any of these quests? [Y/n] ")
                     if quest_input in ['y', '', 'yes']:
@@ -776,7 +787,7 @@ def look():
                                     quests_in_progress.append(bedroom3_quests_left[0])
                                     del bedroom3_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
@@ -786,21 +797,20 @@ def look():
                                     quests_in_progress.append(bedroom3_quests_left[1])
                                     del bedroom3_quests_left[1]
 
-                                    print("Quest taken!")
-                                    input("Enter any key to continue...")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("Please enter a valid quest number!")
+                                aprint("Please enter a valid quest number!\n", interval)
                             break
                     else:
                         del look_input, quest_number, quest_input, l_num
                         play()
                         break
                 else:
-                    print("There are no quests in this room.")
+                    aprint("There are no quests in this room.\n", interval)
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -817,8 +827,9 @@ def look():
             if look_input == 'y' or look_input == '':
                 if playroom_quests_left[0] and playroom_quests_left[1]:
                     print("==-==-==-==-== Playroom 3 quests ==-==-==-==-==")
+                    l_num = 1
                     for i in playroom_quests_left:
-                        print(str(l_num) + ".", i)
+                        aprint(str(l_num) + "." + i + "\n", interval)
                     print("==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==")
                     quest_input = input("Would you like to take any of these quests? [Y/n] ")
                     if quest_input in ['y', '', 'yes']:
@@ -831,7 +842,7 @@ def look():
                                     quests_in_progress.append(playroom_quests_left[0])
                                     del playroom_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
@@ -841,21 +852,20 @@ def look():
                                     quests_in_progress.append(playroom_quests_left[1])
                                     del playroom_quests_left[1]
 
-                                    print("Quest taken!")
-                                    input("Enter any key to continue...")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("Please enter a valid quest number!")
+                                aprint("Please enter a valid quest number!\n", interval)
                             break
                     else:
                         del look_input, quest_number, quest_input, l_num
                         play()
                         break
                 else:
-                    print("There are no quests in this room.")
+                    aprint("There are no quests in this room.\n", interval)
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -872,8 +882,9 @@ def look():
             if look_input == 'y' or look_input == '':
                 if attic_quests_left[0] and attic_quests_left[1]:
                     print("==-==-==-==-== Attic quests ==-==-==-==-==")
+                    l_num = 1
                     for i in attic_quests_left:
-                        print(str(l_num) + ".", i)
+                        aprint(str(l_num) + "." + i + "\n", interval)
                     print("==-==-==-==-==-==-==--==-==-==-==-==-==-==")
                     quest_input = input("Would you like to take any of these quests? [Y/n] ")
                     if quest_input in ['y', '', 'yes']:
@@ -886,7 +897,7 @@ def look():
                                     quests_in_progress.append(attic_quests_left[0])
                                     del attic_quests_left[0]
 
-                                    print("Quest taken!")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
@@ -896,21 +907,20 @@ def look():
                                     quests_in_progress.append(attic_quests_left[1])
                                     del attic_quests_left[1]
 
-                                    print("Quest taken!")
-                                    input("Enter any key to continue...")
+                                    aprint("Quest taken!\n", interval)
                                     del look_input, quest_number, quest_input, l_num
                                     hasChosenAQuest = True
                                     play()
                                     break
                             else:
-                                print("Please enter a valid quest number!")
+                                aprint("Please enter a valid quest number!\n", interval)
                             break
                     else:
                         del look_input, quest_number, quest_input, l_num
                         play()
                         break
                 else:
-                    print("There are no quests in this room.")
+                    aprint("There are no quests in this room.\n", interval)
                     del look_input, quest_number, quest_input, l_num
                     play()
                     break
@@ -918,14 +928,15 @@ def look():
                 break
 
     else:
-        print("what")
+        aprint("what\n", interval)
 
 
 def Commands():
+    global interval
     system(clear)
     print(commands)
-    print("Press enter to go back")
-    input("[root@game/commands]$ ")
+    aprint("Press enter to go back... ", interval)
+    input("")
     play()
 
 
@@ -939,22 +950,21 @@ def chest():
 
 
 def openChest(chesttype):
-    global Play, play_freezed, chestOpening
-    global carrot, chicken, iron
+    global Play, play_freezed, chestOpening, interval, carrot, chicken, iron
 
     Play = False
     play_freezed = True
     loot = False
 
     if str(chesttype) == 'common':
-        print("\nThere is a common chest inside the house. Would you like to open it? (Y/n)")
+        aprint("There is a common chest inside the house. Would you like to open it? (Y/n) ", interval)
         chest_input = " "
         while chest_input not in ['y', 'yes', '']:
-            chest_input = input("[root@game/chestOpening]$ ").lower()
+            chest_input = input().lower()
             if chest_input == 'y' or chest_input == 'yes':
                 chest_carrot = random.randint(1, 2)
                 if chest_carrot == 1:
-                    print("You have found a carrot! Chance: 50%")
+                    aprint("You have found a carrot! Chance: 50%\n", interval)
                     carrot = carrot + 1
                     loot = True
                 else:
@@ -963,7 +973,7 @@ def openChest(chesttype):
 
                 chest_chicken = random.randint(1, 3)
                 if chest_chicken == 1:
-                    print("You have found a chicken! Chance: 33%")
+                    aprint("You have found a chicken! Chance: 33%\n", interval)
                     chicken = chicken + 1
                     loot = True
                 else:
@@ -972,7 +982,7 @@ def openChest(chesttype):
 
                 chest_iron = random.randint(1, 4)
                 if chest_iron == 1:
-                    print("You have found an iron ingot! Chance: 25%")
+                    aprint("You have found an iron ingot! Chance: 25%\n", interval)
                     iron = iron + 1
                     loot = True
                 else:
@@ -987,13 +997,11 @@ def openChest(chesttype):
                 play_freezed = False
                 play()
         if not loot:
-            print("Nothing in the chest.\n")
+            aprint("Nothing in the chest.\n", interval)
 
 
 def play():
-    global startInputActive
-    global play_freezed
-    global Play
+    global startInputActive, play_freezed, Play
 
     startInputActive = False
     Play = True
@@ -1001,42 +1009,39 @@ def play():
 
 
 def goNorth():
-    global Y
-    global X
-    global level
-    global area
+    global Y, X, level, area, interval
 
     cy = Y + .5
 
     # The bathroom
     if cy == 2 and X == -1 and level < 2:
-        print("Sorry, but your level is too low to enter the bathroom.")
+        aprint("Your level is too low to enter the bathroom.\n", interval)
 
     # Primary rooms
     elif cy == 4 and X == -1 and level < 2:
-        print("Sorry, but your level is too low to enter the first room.")
+        aprint("Your level is too low to enter the first room.\n", interval)
     elif cy == 4 and X == -2 and level < 2:
-        print("Sorry, but your level is too low to enter the first bedroom.")
+        aprint("Your level is too low to enter the first bedroom.\n", interval)
 
     # Secondary rooms
     elif cy == 6 and X == -1 and level < 3:
-        print("Sorry, but your level is too low to enter the second room.")
+        aprint("Your level is too low to enter the second room.\n", interval)
     elif cy == 6 and X == -2 and level < 3:
-        print("Sorry, but your level is too low to enter the second bedroom.")
+        aprint("Your level is too low to enter the second bedroom.\n", interval)
 
     # Tertiary rooms
     elif cy == 8 and X == -1 and level < 4:
-        print("Sorry, but your level is too low to enter the third room.")
+        aprint("Your level is too low to enter the third room.\n", interval)
     elif cy == 8 and X == -2 and level < 4:
-        print("Sorry, but your level is too low to enter the third bedroom.")
+        aprint("Your level is too low to enter the third bedroom.\n", interval)
 
     # The play room
     elif cy == 4 and X == 2 and level < 3 or cy == 4 and X == 3 and level < 3:
-        print("Sorry, but your level is too low to enter the play room")
+        aprint("Your level is too low to enter the play room\n", interval)
 
     # The attic
     elif X == 10 and X == 0 and level < 4 or cy == 10 and X == 1 and level < 4:
-        print("Sorry, but your level is too low to enter the attic.")
+        aprint("Your level is too low to enter the attic.\n", interval)
 
     else:
         Y = Y + .5
@@ -1075,46 +1080,45 @@ def goNorth():
         # The attic
         elif Y == 10 and X == 0 and level < 4 or Y == 10 and X == 1 and level < 4:
             area = "attic"
+        else:
+            area = "hall"
     play()
 
 
 def goSouth():
-    global Y
-    global X
-    global level
-    global area
+    global Y, X, level, area, interval
 
     cy = Y - .5
 
     # The bathroom
     if cy == 2 and X == -1 and level < 2:
-        print("Sorry, but your level is too low to enter the bathroom.")
+        aprint("Your level is too low to enter the bathroom.\n", interval)
 
     # Primary rooms
     elif cy == 4 and X == -1 and level < 2:
-        print("Sorry, but your level is too low to enter the first room.")
+        aprint("Your level is too low to enter the first room.\n", interval)
     elif cy == 4 and X == -2 and level < 2:
-        print("Sorry, but your level is too low to enter the first bedroom.")
+        aprint("Your level is too low to enter the first bedroom.\n", interval)
 
     # Secondary rooms
     elif cy == 6 and X == -1 and level < 3:
-        print("Sorry, but your level is too low to enter the second room.")
+        aprint("Your level is too low to enter the second room.\n", interval)
     elif cy == 6 and X == -2 and level < 3:
-        print("Sorry, but your level is too low to enter the second bedroom.")
+        aprint("Your level is too low to enter the second bedroom.\n", interval)
 
     # Tertiary rooms
     elif cy == 8 and X == -1 and level < 4:
-        print("Sorry, but your level is too low to enter the third room.")
+        aprint("Your level is too low to enter the third room.\n", interval)
     elif cy == 8 and X == -2 and level < 4:
-        print("Sorry, but your level is too low to enter the third bedroom.")
+        aprint("Your level is too low to enter the third bedroom.\n", interval)
 
     # The play room
-    elif cy == 4 and cy == 2 and level < 3 or cy == 4 and X == 3 and level < 3:
-        print("Sorry, but your level is too low to enter the play room")
+    elif cy == 4 and X == 2 and level < 3 or cy == 4 and X == 3 and level < 3:
+        aprint("Your level is too low to enter the play room\n", interval)
 
     # The attic
-    elif cy == 10 and X == 0 and level < 4 or cy == 10 and X == 1 and level < 4:
-        print("Sorry, but your level is too low to enter the attic.")
+    elif X == 10 and X == 0 and level < 4 or cy == 10 and X == 1 and level < 4:
+        aprint("Your level is too low to enter the attic.\n", interval)
 
     else:
         Y = Y - .5
@@ -1153,46 +1157,45 @@ def goSouth():
         # The attic
         elif Y == 10 and X == 0 and level < 4 or Y == 10 and X == 1 and level < 4:
             area = "attic"
+        else:
+            area = "hall"
     play()
 
 
 def goEast():
-    global Y
-    global X
-    global level
-    global area
+    global Y, X, level, area, interval
 
     cx = X + .5
 
     # The bathroom
     if Y == 2 and X == -1 and level < 2:
-        print("Sorry, but your level is too low to enter the bathroom.")
+        aprint("Your level is too low to enter the bathroom.\n", interval)
 
     # Primary rooms
     elif Y == 4 and cx == -1 and level < 2:
-        print("Sorry, but your level is too low to enter the first room.")
+        aprint("Your level is too low to enter the first room.\n", interval)
     elif Y == 4 and cx == -2 and level < 2:
-        print("Sorry, but your level is too low to enter the first bedroom.")
+        aprint("Your level is too low to enter the first bedroom.\n", interval)
 
     # Secondary rooms
     elif Y == 6 and cx == -1 and level < 3:
-        print("Sorry, but your level is too low to enter the second room.")
+        aprint("Your level is too low to enter the second room.\n", interval)
     elif Y == 6 and cx == -2 and level < 3:
-        print("Sorry, but your level is too low to enter the second bedroom.")
+        aprint("Your level is too low to enter the second bedroom.\n", interval)
 
     # Tertiary rooms
     elif Y == 8 and cx == -1 and level < 4:
-        print("Sorry, but your level is too low to enter the third room.")
+        aprint("Your level is too low to enter the third room.\n", interval)
     elif Y == 8 and cx == -2 and level < 4:
-        print("Sorry, but your level is too low to enter the third bedroom.")
+        aprint("Your level is too low to enter the third bedroom.\n", interval)
 
     # The play room
     elif Y == 4 and cx == 2 and level < 3 or Y == 4 and cx == 3 and level < 3:
-        print("Sorry, but your level is too low to enter the play room")
+        aprint("Your level is too low to enter the play room\n", interval)
 
     # The attic
     elif Y == 10 and X == 0 and level < 4 or Y == 10 and X == 1 and level < 4:
-        print("Sorry, but your level is too low to enter the attic.")
+        aprint("Your level is too low to enter the attic.\n", interval)
 
     else:
         X = X + .5
@@ -1231,46 +1234,45 @@ def goEast():
         # The attic
         elif Y == 10 and X == 0 and level < 4 or Y == 10 and X == 1 and level < 4:
             area = "attic"
+        else:
+            area = "hall"
     play()
 
 
 def goWest():
-    global Y
-    global X
-    global level
-    global area
+    global Y, X, level, area, interval
 
     cx = X - .5
 
     # The bathroom
-    if Y == 2 and cx == -1 and level < 2:
-        print("Sorry, but your level is too low to enter the bathroom.")
+    if Y == 2 and X == -1 and level < 2:
+        aprint("Your level is too low to enter the bathroom.\n", interval)
 
     # Primary rooms
     elif Y == 4 and cx == -1 and level < 2:
-        print("Sorry, but your level is too low to enter the first room.")
+        aprint("Your level is too low to enter the first room.\n", interval)
     elif Y == 4 and cx == -2 and level < 2:
-        print("Sorry, but your level is too low to enter the first bedroom.")
+        aprint("Your level is too low to enter the first bedroom.\n", interval)
 
     # Secondary rooms
     elif Y == 6 and cx == -1 and level < 3:
-        print("Sorry, but your level is too low to enter the second room.")
+        aprint("Your level is too low to enter the second room.\n", interval)
     elif Y == 6 and cx == -2 and level < 3:
-        print("Sorry, but your level is too low to enter the second bedroom.")
+        aprint("Your level is too low to enter the second bedroom.\n", interval)
 
     # Tertiary rooms
     elif Y == 8 and cx == -1 and level < 4:
-        print("Sorry, but your level is too low to enter the third room.")
+        aprint("Your level is too low to enter the third room.\n", interval)
     elif Y == 8 and cx == -2 and level < 4:
-        print("Sorry, but your level is too low to enter the third bedroom.")
+        aprint("Your level is too low to enter the third bedroom.\n", interval)
 
     # The play room
     elif Y == 4 and cx == 2 and level < 3 or Y == 4 and cx == 3 and level < 3:
-        print("Sorry, but your level is too low to enter the play room")
+        aprint("Your level is too low to enter the play room\n", interval)
 
     # The attic
     elif Y == 10 and X == 0 and level < 4 or Y == 10 and X == 1 and level < 4:
-        print("Sorry, but your level is too low to enter the attic.")
+        aprint("Your level is too low to enter the attic.\n", interval)
 
     else:
         X = X - .5
@@ -1309,38 +1311,40 @@ def goWest():
         # The attic
         elif Y == 10 and X == 0 and level < 4 or Y == 10 and X == 1 and level < 4:
             area = "attic"
+        else:
+            area = "hall"
 
     play()
 
 
 def viewStats():
     system(clear)
-    print("========== Character info ===============")
-    print("     Health: " + str(health))
-    print("     Hunger: " + str(hunger))
-    print("     Water: " + str(water))
-    print("     XP: " + str(xp))
-    print("     Level: " + str(level))
-    print("     Coordinates: (" + str(X) + ", " + str(Y) + ")")
-    print("     Area: " + str(area))
-    print("=========================================")
+    aprint("========== Character info ===============\n", 0.03)
+    aprint("     Health: " + str(health) + "\n", 0.03)
+    aprint("     Hunger: " + str(hunger) + "\n", 0.03)
+    aprint("     Water: " + str(water) + "\n", 0.03)
+    aprint("     XP: " + str(xp) + "\n", 0.03)
+    aprint("     Level: " + str(level) + "\n", 0.03)
+    aprint("     Coordinates: (" + str(X) + ", " + str(Y) + ")\n", 0.03)
+    aprint("     Area: " + str(area) + "\n", 0.03)
 
-    print("============ Inventory: Food ============")
-    print("     Beef: " + str(beef))
-    print("     Chicken: " + str(chicken))
-    print("     Carrots: " + str(carrot))
-    print("     Potatoes: " + str(potato))
-    print("     Oranges: " + str(oranges))
-    print("     Bananas: " + str(banana))
-    print("     Sandwiches: " + str(sandwiches))
-    print("========= Inventory: Beverages ==========")
-    print("     Water Bottles: " + str(waterBottles))
-    print("     Sea water bottles: " + str(seaWaterBottles))
-    print("     Tea: " + str(tea))
-    print("     Orange juice bottles: " + str(orangeJuiceBottles))
-    print("     Apple juice bottles: " + str(appleJuiceBottles))
-    print("=========================================")
-    input("Press any key to continue... ")
+    aprint("============ Inventory: Food ============\n", 0.03)
+    aprint("     Beef: " + str(beef) + "\n", 0.03)
+    aprint("     Chicken: " + str(chicken) + "\n", 0.03)
+    aprint("     Carrots: " + str(carrot) + "\n", 0.03)
+    aprint("     Potatoes: " + str(potato) + "\n", 0.03)
+    aprint("     Oranges: " + str(oranges) + "\n", 0.03)
+    aprint("     Bananas: " + str(banana) + "\n", 0.03)
+    aprint("     Sandwiches: " + str(sandwiches) + "\n", 0.03)
+
+    aprint("========= Inventory: Beverages ==========\n", 0.03)
+    aprint("     Water Bottles: " + str(waterBottles) + "\n", 0.03)
+    aprint("     Sea water bottles: " + str(seaWaterBottles) + "\n", 0.03)
+    aprint("     Tea: " + str(tea) + "\n", 0.03)
+    aprint("     Orange juice bottles: " + str(orangeJuiceBottles) + "\n", 0.03)
+    aprint("     Apple juice bottles: " + str(appleJuiceBottles) + "\n", 0.03)
+    aprint("Press any key to continue... ", interval)
+    input("")
     if not Play and play_freezed is True:
         play()
     else:
@@ -1349,22 +1353,25 @@ def viewStats():
 
 # This function lists all available quests
 def listQuests():
-    print("You have " + len(quests_in_progress) + " quests. ")
-    lq_input = input("Would you like to list all quests in progress? [Y/n] ").lower()
+    global interval
+    aprint("You have " + len(quests_in_progress) + " quests. \n", interval)
+    aprint("Would you like to list all quests in progress? [Y/n]\n", interval)
+    lq_input = input("$ ").lower()
     if lq_input in ['y', '', 'yes']:
         for i in quests_in_progress:
-            print(i)
-        input("Press any key to continue... ")
+            aprint(i, interval)
+        aprint("Press any key to continue... ", interval)
+        input()
 
 
 def startQuest():
-    global xp
-    print("What quest would you like to start?")
+    global xp, interval
+    aprint("What quest would you like to start?\n", interval)
     f = 1
     questType = ""
 
     for i in quests_in_progress:
-        print(f, i)
+        aprint(str(f) + ". " + i + "\n", interval)
         f = f + 1
 
     usrinput = int(input(""))
@@ -1413,28 +1420,28 @@ def startQuest():
         elif quests_in_progress[usrinput - 1] == "Open the safe":
             questType = "Open the safe"
     except:
-        print("ok")
+        aprint("ok\n", interval)
 
     if questType == "Throw away the cake on the table":
-        os.system("clear")
+        os.system(clear)
 
         finished = False
         while not finished:
-            text = "Enter E 5 times to pick up the cake...\n"
-            for char in text:
-                sys.stdout.write(char)
-                sys.stdout.flush()
-                time.sleep(.07)
-
             finished_e = False
+            got = False
             Es = 0
+            leftY = 5
+            leftX = -2
+            coordinates = [0, 0]
+
+            aprint("Enter E 5 times to pick up the cake...\n", interval)
             while not finished_e:
                 for _ in range(0, 5):
                     usrinput = input("Press > ").lower()
                     if usrinput != "e":
-                        print("You must press E!")
+                        aprint("You must press E!\n", interval)
                         time.sleep(1.5)
-                        os.system("clear")
+                        os.system(clear)
                         break
                     elif usrinput == "e":
                         Es = Es + 1
@@ -1443,20 +1450,11 @@ def startQuest():
                 if Es == 5:
                     break
 
-            text = "Use the WASD keys in order to move..."
-            got = False
-            for char in text:
-                sys.stdout.write(char)
-                sys.stdout.flush()
-                time.sleep(.07)
-
+            aprint("Use the WASD keys in order to move...\n", interval)
             time.sleep(2)
 
-            leftY = 5
-            leftX = -2
-            coordinates = [0, 0]
             while not got:
-                os.system("clear")
+                os.system(clear)
                 print("Y left: " + str(leftY) + "\nX left: " + str(leftX) + ".")
                 key = input("> ").lower()
                 if key == "w" and coordinates[1] < 5:
@@ -1502,21 +1500,17 @@ def startQuest():
                 else:
                     pass
 
-            text = "Enter E 5 times to throw away the cake...\n"
-            for char in text:
-                sys.stdout.write(char)
-                sys.stdout.flush()
-                time.sleep(.07)
+            aprint("Enter E 5 times to throw away the cake\n", interval)
 
             finished_e = False
             Es = 0
             while not finished_e:
                 for _ in range(0, 5):
-                    usrinput = input("Press > ").lower()
+                    usrinput = input("> ").lower()
                     if usrinput != "e":
-                        print("You must press E!")
+                        aprint("You must press E!\n", interval)
                         time.sleep(1.5)
-                        os.system("clear")
+                        os.system(clear)
                         break
                     elif usrinput == "e":
                         Es = Es + 1
@@ -1524,29 +1518,24 @@ def startQuest():
                 if Es == 5:
                     break
 
-            os.system("clear")
+            os.system(clear)
 
             xp = xp + 50
 
             for element in quests_in_progress:
                 if element == "Throw away the cake on the table":
-
                     quests_in_progress.remove(element)
 
-            print("Successfully finished the quest! +50XP")
-            input("Press any key to continue... ")
-            finished = True
+            aprint("Successfully finished the quest! +50XP\n", interval)
+            aprint("Press any key to continue... \n", interval)
+            input()
             break
 
     elif questType == "Clean up the table":
         done = False
         os.system(clear)
 
-        text = "Use the Q and E keys to wipe the table\n"
-        for char in text:
-            sys.stdout.write(char)
-            sys.stdout.flush()
-            time.sleep(0.07)
+        aprint("Use the Q and E keys to wipe the table\n", interval)
 
         wipesLeft = random.randint(5, 10)
         while not done:
@@ -1556,35 +1545,24 @@ def startQuest():
             if usrinput == "q":
                 wipesLeft = wipesLeft - 1
                 if wipesLeft == 0:
-                    os.system("clear")
-                    print("Wipes left: 0")
+                    os.system(clear)
+                    aprint("Wipes left: 0\n", 0.07)
                     xp = xp + 50
-                    text = "Successfully finished the quest! +50XP\n"
-                    for char in text:
-                        sys.stdout.write(char)
-                        sys.stdout.flush()
-                        time.sleep(0.07)
-                    time.sleep(2)
+                    aprint("Successfully finished the quest! +50XP\n", interval)
+                    time.sleep(1)
                     break
             elif usrinput == "e":
                 wipesLeft = wipesLeft - 1
                 if wipesLeft == 0:
-                    os.system("clear")
+                    os.system(clear)
                     print("Wipes left: 0")
                     xp = xp + 50
-                    text = "Successfully finished the quest! +50XP\n"
-                    for char in text:
-                        sys.stdout.write(char)
-                        sys.stdout.flush()
-                        time.sleep(0.07)
-                    time.sleep(2)
+
+                    aprint("Successfully finished the quest! +50XP\n", interval)
+                    time.sleep(1)
                     break
             else:
-                text = "You have to enter either Q or E\n"
-                for char in text:
-                    sys.stdout.write(char)
-                    sys.stdout.flush()
-                    time.sleep(0.07)
+                aprint("You have to enter either Q or E\n", interval)
                 time.sleep(1)
 
     elif questType == "Make a sandwich":
@@ -1592,11 +1570,7 @@ def startQuest():
         os.system(clear)
         ingredients_left = ["bread", "cucumbers", "cheese", "butter", "meat"]
 
-        text = "Take the ingredients from the fridge by typing their name..."
-        for char in text:
-            sys.stdout.write(char)
-            sys.stdout.flush()
-            time.sleep(0.07)
+        aprint("Take the ingredients from the fridge by typing their name", interval)
 
         while not done:
             os.system(clear)
@@ -1609,12 +1583,10 @@ def startQuest():
                 if not ingredients_left:
                     os.system(clear)
                     xp = xp + 50
-                    text = "Successfully finished the quest! +50XP\n"
-                    for char in text:
-                        sys.stdout.write(char)
-                        sys.stdout.flush()
-                        time.sleep(0.07)
-                    input("Enter any key to continue... ")
+                    aprint("Successfully finished the quest! +50XP\n", interval)
+
+                    aprint("Enter any key to continue... ", interval)
+                    input()
                     play()
                     break
             elif usrinput == "cucumbers" and any("cucumbers" in s for s in ingredients_left):
@@ -1622,11 +1594,8 @@ def startQuest():
                 if not ingredients_left:
                     os.system(clear)
                     xp = xp + 50
-                    text = "Successfully finished the quest! +50XP\n"
-                    for char in text:
-                        sys.stdout.write(char)
-                        sys.stdout.flush()
-                        time.sleep(0.07)
+                    aprint("Successfully finished the quest! +50XP\n", interval)
+
                     input("Enter any key to continue... ")
                     play()
                     break
@@ -1635,12 +1604,10 @@ def startQuest():
                 if not ingredients_left:
                     os.system(clear)
                     xp = xp + 50
-                    text = "Successfully finished the quest! +50XP\n"
-                    for char in text:
-                        sys.stdout.write(char)
-                        sys.stdout.flush()
-                        time.sleep(0.07)
-                    input("Enter any key to continue... ")
+                    aprint("Successfully finished the quest! +50XP\n", interval)
+
+                    aprint("Enter any key to continue... ", interval)
+                    input()
                     play()
                     break
             elif usrinput == "butter" and any("butter" in s for s in ingredients_left):
@@ -1648,12 +1615,10 @@ def startQuest():
                 if not ingredients_left:
                     os.system(clear)
                     xp = xp + 50
-                    text = "Successfully finished the quest! +50XP\n"
-                    for char in text:
-                        sys.stdout.write(char)
-                        sys.stdout.flush()
-                        time.sleep(0.07)
-                    input("Enter any key to continue... ")
+                    aprint("Successfully finished the quest! +50XP\n", interval)
+
+                    aprint("Enter any key to continue... ", interval)
+                    input()
                     play()
                     break
             elif usrinput == "meat" and any("meat" in s for s in ingredients_left):
@@ -1661,41 +1626,29 @@ def startQuest():
                 if not ingredients_left:
                     os.system(clear)
                     xp = xp + 50
-                    text = "Successfully finished the quest! +50XP\n"
-                    for char in text:
-                        sys.stdout.write(char)
-                        sys.stdout.flush()
-                        time.sleep(0.07)
-                    input("Enter any key to continue... ")
+                    aprint("Successfully finished the quest! +50XP\n", interval)
+
+                    aprint("Enter any key to continue... ", interval)
+                    input()
                     play()
                     break
             else:
-                text = "Please enter a valid ingredient"
-                for char in text:
-                    sys.stdout.write(char)
-                    sys.stdout.flush()
-                    time.sleep(0.07)
+                aprint("Please enter a valid ingredient\n", interval)
+
                 time.sleep(1)
 
     elif questType == "Clean the dishes":
         done = False
         os.system(clear)
-
         obj_num = 1
-        text = "Complete the objectives by typing their number... "
-        for char in text:
-            sys.stdout.write(char)
-            sys.stdout.flush()
-            time.sleep(0.07)
+
+        aprint("Complete the objectives by typing their number\n", interval)
 
         objectives = ["take soap", "take a sponge"]
         while not done:
             os.system(clear)
-            text = "Objectives left: \n"
-            for char in text:
-                sys.stdout.write(char)
-                sys.stdout.flush()
-                time.sleep(0.07)
+            print("Objectives left:\n", interval)
+
             for objective in objectives:
                 print(str(obj_num) + objective)
                 obj_num = obj_num + 1
@@ -1709,209 +1662,194 @@ def startQuest():
                 if not objectives:
                     continue
 
-            text = "Use the A and D keys to clean the dishes...\n"
-            dishesLeft = 5
-            wipesLeft = round(abs(dishesLeft * 5))
+            dishesLeft = 10
             cleanDone = False
-            for char in text:
-                sys.stdout.write(char)
-                sys.stdout.flush()
-                time.sleep(0.07)
+
+            aprint("Use the A and D keys to clean the dishes...\n", interval)
             time.sleep(1)
 
             while not cleanDone:
                 os.system(clear)
-                print("Dishes left: " + str(dishesLeft) + "\nWipes left: " + str(wipesLeft))
+                print("Dishes left: " + str(dishesLeft) + "\n", interval)
                 usrinput = input("> ").lower()
                 if usrinput == "a":
-                    wipesLeft = wipesLeft - 1
-                    if wipesLeft == 0:
+                    dishesLeft = dishesLeft - 1
+                    if dishesLeft == 0:
                         os.system(clear)
-                        text = "Successfully finished the quest! +50XP\n"
-                        for char in text:
-                            sys.stdout.write(char)
-                            sys.stdout.flush()
-                            time.sleep(0.07)
+                        aprint("Successfully finished the quest! +50XP\n", interval)
+
                 elif usrinput == "d":
-                    wipesLeft = wipesLeft - 1
-                    if wipesLeft == 0:
+                    dishesLeft = dishesLeft - 1
+                    if dishesLeft == 0:
                         os.system(clear)
-                        text = "Successfully finished the quest! +50XP\n"
-                        for char in text:
-                            sys.stdout.write(char)
-                            sys.stdout.flush()
-                            time.sleep(0.07)
+                        aprint("Successfully finished the quest! +50XP\n")
                 else:
-                    text = "Please enter either A or D\n"
-                    for char in text:
-                        sys.stdout.write(char)
-                        sys.stdout.flush()
-                        time.sleep(0.07)
+                    aprint("Enter either A or D.\n", interval)
                     time.sleep(1)
+    elif questType == "Fix the faucet":
+        done = False
+        os.system(clear)
+        left = 10
+
+        aprint("Enter E to use the wrench\n", interval)
+
+        while not done:
+            os.system(clear)
+            print("Left: " + str(left))
+            usrinput = input("> ").lower()
+            if usrinput == "e":
+                left = left - 1
+                if left == 0:
+                    os.system(clear)
+                    xp = xp + 50
+                    aprint("Successfully finished the quest! +50XP\n", interval)
+                    time.sleep(1)
+                    break
+            else:
+                aprint("You have to enter E to use the wrench\n", interval)
+
 
 
 def eat(foodtype):
-    global hunger
-    global beef
-    global chicken
-    global carrot
-    global potato
-    global oranges
-    global banana
-    global water
+    global hunger, beef, chicken, carrot, potato, oranges, banana, water, interval
 
     if foodtype == 'beef':
         if beef > 0:
-            print("Before: hunger - ", hunger, "; water - ", water, ".")
+            aprint("Before: hunger - " +  hunger +  "; water - " +  water +  ".\n", interval)
             hunger = hunger + 7
             water = water - 2
-            print("After: hunger - ", hunger, "; water - ", water, ".")
+            aprint("After: hunger - " +  hunger +  "; water - " +  water +  ".\n", interval)
             play()
         else:
-            print("You have 0 beef chops.")
+            aprint("You have 0 beef chops.")
             play()
     elif foodtype == "chicken":
         if chicken > 0:
-            print("Before: hunger - ", hunger, "; water - ", water, ".")
+            aprint("Before: hunger - " +  hunger + "; water - " + water + ".\n", interval)
             hunger = hunger + 6
             water = water - 1
-            print("After: hunger - ", hunger, "; water - ", water, ".")
+            aprint("After: hunger - " + hunger + "; water - " + water + ".\n", interval)
             play()
         else:
-            print("You have 0 chicken chops.")
+            aprint("You have 0 chicken chops.\n", 0.07)
             play()
     elif foodtype == "carrot":
         if carrot > 0:
-            print("Before: hunger - ", hunger, "; water - ", water, ".")
+            aprint("Before: hunger - " +  hunger +  "; water - " +  water +  ".\n", interval)
             hunger = hunger + 4
-            print("After: hunger - ", hunger, "; water - ", water, ".")
+            aprint("After: hunger - " +  hunger +  "; water - " +  water +  ".\n", interval)
             play()
         else:
-            print("You have 0 carrots.")
+            aprint("You have 0 carrots.\n", 0.07)
             play()
     elif foodtype == "potato":
         if potato > 0:
-            print("Before: hunger - ", hunger, "; water - ", water, ".")
+            aprint("Before: hunger - " +  hunger +  "; water - " +  water +  ".\n", interval)
             hunger = hunger + 3
-            print("After: hunger - ", hunger, "; water - ", water, ".")
+            aprint("After: hunger - " +  hunger +  "; water - " +  water +  ".\n", interval)
             play()
         else:
-            print("You have 0 potatoes.")
+            aprint("You have 0 potatoes.\n", 0.07)
             play()
     elif foodtype == "orange":
         if oranges > 0:
-            print("Before: hunger - ", hunger, "; water - ", water, ".")
+            aprint("Before: hunger - " +  hunger +  "; water - " +  water +  ".\n", interval)
             hunger = hunger + 2
             water = water + 3
-            print("After: hunger - ", hunger, "; water - ", water, ".")
+            aprint("After: hunger - " +  hunger +  "; water - " +  water +  ".\n", interval)
             play()
         else:
-            print("You have 0 oranges.")
+            aprint("You have 0 oranges.\n", 0.07)
             play()
     elif foodtype == "banana":
         if banana > 0:
-            print("Before: hunger - ", hunger, "; water - ", water, ".")
+            aprint("Before: hunger - " +  hunger +  "; water - " +  water +  ".\n", interval)
             hunger = hunger + 1
-            print("After: hunger - ", hunger, "; water - ", water, ".")
+            aprint("After: hunger - " +  hunger +  "; water - " +  water +  ".\n", interval)
             play()
         else:
-            print("You have 0 bananas.")
+            aprint("You have 0 bananas.\n", interval)
             play()
     else:
-        print("Please enter a valid argument for the eat() function!")
+        aprint("Please enter a valid argument.\n", interval)
         play()
 
 
-# Exits the game
-def exitGame():
-    if hasUnsavedProgress:
-        usrinput = " "
-        while usrinput not in ["s", "q"]:
-            usrinput = input("You have unsaved progress!\nAre you sure you want to quit the game? [S-Save and quit/Q-Quit] ").lower()
-            if usrinput == "s":
-                save()
-                exit()
-            elif usrinput == "q":
-                exit()
-            else:
-                print("Enter a valid choice!\nS to save the game or Q to quit")
-
-
-
 def drink(beveragetype):
-    global hunger
-    global water
-    global waterBottles
-    global seaWaterBottles
-    global orangeJuiceBottles
-    global appleJuiceBottles
-    global tea
+    global hunger, water, waterBottles, seaWaterBottles, orangeJuiceBottles, appleJuiceBottles, tea, interval
     if beveragetype == 'waterbottle':
         if waterBottles > 0:
-            print("Before: water - ", water, ".")
+            aprint("Before: water - " + water + ".\n", interval)
             water = water + 5
-            print("After: water - ", water, ".")
+            aprint("After: water - " + water + ".\n", interval)
             play()
         else:
-            print("You have 0 water bottles.")
+            aprint("You have 0 water bottles.")
             play()
     elif beveragetype == "seawaterbottle":
         if seaWaterBottles > 0:
-            print("Before: water - ", water, ".")
+            aprint("Before: water - " + water + ".\n", interval)
             water = water - 3
-            print("After: water - ", water, ".")
+            aprint("After: water - " + water +  ".\n", interval)
             play()
         else:
-            print("You have 0 sea water bottles.")
+            aprint("You have 0 sea water bottles.\n", interval)
             play()
     elif beveragetype == "orangejuicebottle":
         if orangeJuiceBottles > 0:
-            print("Before: water - ", water, ".")
+            aprint("Before: water - " + water + ".\n", interval)
             water = water + 3
-            print("After: water - ", water, ".")
+            aprint("After: water - " + water + ".\n", interval)
             play()
         else:
-            print("You have 0 orange juice bottles.")
+            aprint("You have 0 orange juice bottles.\n", interval)
             play()
     elif beveragetype == "applejuicebottle":
         if appleJuiceBottles > 0:
-            print("Before: water - ", water, ".")
+            aprint("Before: water - " + water + ".\n", interval)
             water = water + 3
-            print("After: water - ", water, ".")
+            aprint("After: water - " + water + ".\n", interval)
             play()
         else:
-            print("You have 0 apple juice bottles.")
+            aprint("You have 0 apple juice bottles.\n", interval)
             play()
     elif beveragetype == "tea":
         if tea > 0:
-            print("Before: water - ", water, ".")
+            aprint("Before: water - " + water + ".\n", interval)
             water = water + 2
-            print("After: water - ", water, ".")
+            aprint("After: water - " + water + ".\n", interval)
             play()
         else:
-            print("You have 0 tea.")
+            aprint("You have 0 tea.\n", 0.07)
             play()
     else:
-        print("Please enter a valid argument for the drink() function!")
+        aprint("Please enter a valid argument for the drink() function!\n", interval)
         play()
 
 
 def start():
-    global firstTime
-    global startInputActive
-    global startChoice
-    system(clear)
-    load()
-    changeLevel()
-    print("========================== Menu ==========================")
-    print(" Hello!")
-    print(" Choose an option:")
-    print(" 1. Start playing the game,")
-    print(" 2. Open the help menu,")
-    print(" 3. View your statistics and inventory,")
-    print(" 4. Open commands reference manual.")
+    global firstTime, startInputActive, startChoice, clear, prompt, interval
     startInputActive = True
+
     while startInputActive:
+        system(clear)
+        if hasProgress:
+            aprint("Would you like to load your progress? [Y/n] ", interval)
+            pin = input().lower()
+            if pin == 'y':
+                load()
+            else:
+                pass
+
+        changeLevel()
+        print("========================== Menu ==========================")
+        print("Hello!")
+        print("Choose an option:")
+        print(" 1. Start playing the game,")
+        print(" 2. Open the help menu,")
+        print(" 3. View your statistics and inventory,")
+        print(" 4. Open commands reference manual.")
+        print(" 5. Customize the game")
         startChoice = 0
         startChoice = input("[root@game/start]$ ")
         if startChoice == '1':
@@ -1926,8 +1864,44 @@ def start():
         elif startChoice == '4':
             Commands()
             startInputActive = False
+        elif startChoice == '5':
+            os.system(clear)
+            aprint("Choose the thing you want to change: \n", interval)
+            print("1. The prompt")
+            print("2. The interval between printing letters")
+            aprint("Enter an option [1, 2] ", interval)
+            cin = input()
+            if cin == '1':
+                os.system(clear)
+                aprint("There are currently 4 types of prompts you can choose.\n", interval)
+                print("1. [root@game/LOCATION LVL | XY(0, 0)]$ - bash")
+                print("2. PS C:\game\LOCATION\LVL\XY(0,0) - windows powershell")
+                print("3. C:\game\LOCATION\LVL\XY(0,0) - windows command line")
+                print("4. Game-LVL-XY(0,0):~ LOCATION$ - mac command line")
+                aprint("Choose the one you like... ", interval)
+                pin = ""
+                while pin not in ['1', '2', '3', '4']:
+                    pin = input()
+                    if pin == '1':
+                        prompt = 1
+                    elif pin == '2':
+                        prompt = 2
+                    elif pin == '3':
+                        prompt = 3
+                    elif pin == '4':
+                        prompt = 4
+                    else:
+                        aprint("Enter a valid number\n", interval)
+            elif cin == '2':
+                os.system(clear)
+                aprint("Enter the interval in seconds between each printed letter (default: 0.038)... ", 0.038)
+                pin = float(input())
+                interval = pin
+                aprint("Successfully set interval! Enter any key to continue... ", interval)
+                input()
+                os.system(clear)
         else:
-            print('Please enter a valid number!')
+            aprint('Please enter a valid number!\n', interval)
 
 
 start()
@@ -1936,8 +1910,8 @@ h = True
 while True:
     if Play and not play_freezed:
         if h:
-            print("You were spawned in the " + area + ".")
-            print("Remember: you can get help by typing gameHelp or commands to view commands!\nEnjoy!\n")
+            aprint("You were spawned in the " + area + ".\n", interval)
+            aprint("Remember: you can get help by typing gameHelp or commands to view commands!\nEnjoy!\n", interval)
             h = False
         while Play:
             changeLevel()
@@ -1956,7 +1930,18 @@ while True:
                                     "look", "look()", "lookaround", "lookaround()", "startquest()",
                                     "startquest", 'listquests', 'listquests()']:
                 changeLevel()
-                playInput = input("[root@game/" + area + " lvl" + str(level) + "]$ ").lower()
+                if prompt == 1:
+                    playInput = input("[root@game/" + area + " lvl" + str(level) + " | XY(" + str(X) + ", " + str(Y) + ")]$ ").lower()
+                    pass
+                elif prompt == 2:
+                    playInput = input("PS C:\\game\\" + str(area) + "\\lvl" + str(level) + "\\XY(" + str(X) + "," + str(Y) + ") ")
+                    pass
+                elif prompt == 3:
+                    playInput = input("C:\\game\\" + str(area) + "\\lvl" + str(level) + "\\XY(" + str(X) + "," + str(Y) + ") ")
+                    pass
+                elif prompt == 4:
+                    playInput = input("Game-lvl" + str(level) + "-XY(" + str(X) + "," + str(Y) + "):~ " + area + "$ ")
+                    pass
 
                 if playInput in ["help", "gamehelp", "help()", "gamehelp()"]:
                     Play = False
@@ -1981,8 +1966,13 @@ while True:
                     goWest()
 
                 elif playInput in ["exit", "exit()"]:
-                    save()
-                    exitGame()
+                    aprint("You have unsaved progress. Would you like to save it? [Y/n] ", interval)
+                    usrinput = input()
+                    if usrinput in ["y", "yes", ""]:
+                        save()
+                        exit()
+                    else:
+                        exit()
 
                 elif playInput in ["save", "save()"]:
                     save()
@@ -2001,8 +1991,11 @@ while True:
                         quests_in_progress[0]
                     # If yes,
                     except:
-                        print("You don't have any quests.")
-                        blabla = True
+                        try:
+                            quests_in_progress[1]
+                        except:
+                            aprint("You don't have any quests.\n", interval)
+                            blabla = True
                         break
 
                     if not blabla:
@@ -2016,7 +2009,8 @@ while True:
                     play_freezed = True
                     usrinput = "123"
                     while usrinput not in ['y', 'n', '']:
-                        usrinput = input("Would you like to save your progress before viewing your stats? [Y/n] ")
+                        aprint("Would you like to save your progress before viewing your stats? [Y/n] ", interval)
+                        usrinput = input()
                         if usrinput == 'y' or usrinput == '':
                             save()
                         else:
@@ -2024,20 +2018,20 @@ while True:
                     viewStats()
 
                 elif playInput == "eat":
-                    print("  Please enter the argument for the function eat()")
+                    aprint("  Please enter the type of food (can be found in commands list) ", interval)
                     Foodtype = ""
                     while Foodtype not in ['beef', 'chicken', 'carrot',
                                            'potato', 'orange', 'banana',
                                            "sandwiches"]:
-                        Foodtype = input("  >>> [Eat argument]$ ").lower()
+                        Foodtype = input("").lower()
                         eat(Foodtype)
 
                 elif playInput == "drink":
-                    print("  Please enter the argument for the function drink()")
+                    print("  Please enter the type of beverage (can be found in commands list) ", interval)
                     BeverageType = ""
                     while BeverageType not in ['waterbottle', 'seawaterbottle', 'tea', 'orangejuicebottle',
                                                'applejuicebottle']:
-                        BeverageType = input("  >>> [Drink argument]$ ").lower()
+                        BeverageType = input("").lower()
                         drink(BeverageType)
 
                 elif playInput in ["clear", "clear()"]:
@@ -2047,4 +2041,4 @@ while True:
                     startQuest()
 
                 else:
-                    print("I don't know the phrase '" + playInput + "'. Please read the manual.")
+                    aprint("I don't know the phrase '" + playInput + "'. Please read the manual.\n", interval)

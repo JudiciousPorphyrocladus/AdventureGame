@@ -37,13 +37,16 @@
             "hunger": 35,
             "water": 20,
             "xp": 0,
+            "level": 2,
             "x": 0,
             "y": 0,
             "area": "hall"
         },
         "playerInfo": {
             "firstTime": true,
-            "hasProgress": false
+            "hasProgress": false,
+            "promptType": 1,
+            "interval": 0.038
         }
     }
 }
